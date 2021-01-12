@@ -1,25 +1,74 @@
-import 'package:flutter/cupertino.dart';
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone_mobile/src/blocs/blocs.dart';
-import 'package:capstone_mobile/src/data/repositories/repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:capstone_mobile/src/ui/widgets/widgets.dart';
 
 class App extends StatelessWidget {
-  final WeatherRepository weatherRepository;
-
-  App({Key key, @required this.weatherRepository})
-      : assert(weatherRepository != null),
+  const App({
+    Key key,
+    @required this.authenticationRepository,
+    @required this.userRepository,
+  })  : assert(authenticationRepository != null),
+        assert(userRepository != null),
         super(key: key);
+
+  final AuthenticationBloc authenticationRepository;
+  final UserRepository userRepository;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider.value(
+      value: authenticationRepository,
+      child: BlocProvider(
+        create: (_) => AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+          userRepository: userRepository,
+        ),
+        child: AppView(),
+      ),
+    );
+  }
+}
+
+class AppView extends StatefulWidget {
+  @override
+  _AppViewState createState() => _AppViewState();
+}
+
+class _AppViewState extends State<AppView> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Weather',
-      home: BlocProvider(
-        create: (context) => WeatherBloc(weatherRepository: weatherRepository),
-        child: Weather(),
-      ),
+      navigatorKey: _navigatorKey,
+      builder: (context, child) {
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  HomePage.route(),
+                  (route) => false,
+                );
+                break;
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          child: child,
+        );
+      },
+      onGenerateRoute: (_) => SplashPage.route(),
     );
   }
 }

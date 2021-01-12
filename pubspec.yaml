@@ -35,6 +35,9 @@ dependencies:
   hydrated_bloc: ^6.0.0
   json_annotation: ^3.0.1
   pedantic: ^1.9.0
+  meta: ^1.1.8
+  uuid: ^2.1.0
+  formz: ^0.3.2
 
 dev_dependencies:
   flutter_test:
