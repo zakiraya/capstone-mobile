@@ -7,7 +7,7 @@ import 'Exceptions.dart';
 class ApiBase {
   final String _baseUrl = "";
 
-  Map<String, String> generateHeader(Map<String, String> opts) {
+  Map<String, String> generateHeader([Map<String, String> opts]) {
     return {'Content-Type': 'application/json; charset=UTF-8', ...opts};
   }
 
@@ -23,8 +23,8 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> post(
-      String url, dynamic body, Map<String, String> opts) async {
+  Future<dynamic> post(String url, dynamic body,
+      {Map<String, String> opts}) async {
     var responseJson;
     try {
       final response = await http.post(_baseUrl + url,
@@ -38,8 +38,8 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> put(
-      String url, dynamic body, Map<String, String> opts) async {
+  Future<dynamic> put(String url, dynamic body,
+      {Map<String, String> opts}) async {
     var responseJson;
     try {
       final response = await http.put(_baseUrl + url,
@@ -53,7 +53,7 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> delete(String url, Map<String, String> opts) async {
+  Future<dynamic> delete(String url, {Map<String, String> opts}) async {
     var responseJson;
     try {
       final response = await http.delete(
