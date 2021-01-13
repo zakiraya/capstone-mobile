@@ -1,6 +1,9 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +16,7 @@ class App extends StatelessWidget {
         assert(userRepository != null),
         super(key: key);
 
-  final AuthenticationBloc authenticationRepository;
+  final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
 
   @override
@@ -51,13 +54,13 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  HomePage.route(),
+                  HomeScreen.route(),
                   (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
+                  LoginScreen.route(),
                   (route) => false,
                 );
                 break;
@@ -68,7 +71,7 @@ class _AppViewState extends State<AppView> {
           child: child,
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
+      onGenerateRoute: (_) => SplashScreen.route(),
     );
   }
 }
