@@ -7,6 +7,10 @@ import 'Exceptions.dart';
 class ApiBase {
   final String _baseUrl = "";
 
+  Map<String, String> generateHeader(Map<String, String> opts) {
+    return {'Content-Type': 'application/json; charset=UTF-8', ...opts};
+  }
+
   Future<dynamic> get(String url) async {
     var responseJson;
     try {
@@ -19,13 +23,12 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> post(String url, dynamic body) async {
+  Future<dynamic> post(
+      String url, dynamic body, Map<String, String> opts) async {
     var responseJson;
     try {
       final response = await http.post(_baseUrl + url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          headers: generateHeader(opts),
           body: jsonEncode(<String, String>{...body}));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -35,13 +38,12 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> put(String url, dynamic body) async {
+  Future<dynamic> put(
+      String url, dynamic body, Map<String, String> opts) async {
     var responseJson;
     try {
       final response = await http.put(_baseUrl + url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          headers: generateHeader(opts),
           body: jsonEncode(<String, String>{...body}));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -51,14 +53,12 @@ class ApiBase {
     return responseJson;
   }
 
-  Future<dynamic> delete(String url) async {
+  Future<dynamic> delete(String url, Map<String, String> opts) async {
     var responseJson;
     try {
       final response = await http.delete(
         _baseUrl + url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: generateHeader(opts),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -69,16 +69,17 @@ class ApiBase {
   }
 
   dynamic _returnResponse(http.Response response) {
+    String body = response.body.toString();
     switch (response.statusCode) {
       case 200:
-        var responseJson = json.decode(response.body.toString());
+        var responseJson = json.decode(body);
         print(responseJson);
         return responseJson;
       case 400:
-        throw BadRequestException(response.body.toString());
+        throw BadRequestException(body);
       case 401:
       case 403:
-        throw UnauthorisedException(response.body.toString());
+        throw UnauthorisedException(body);
       case 500:
       default:
         throw FetchDataException(
