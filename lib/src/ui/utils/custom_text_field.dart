@@ -4,7 +4,7 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key key,
     @required this.label,
-    @required this.placeholder,
+    this.placeholder,
     @required this.isHidden,
   }) : super(key: key);
 
@@ -38,7 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelText: widget.label,
         // contentPadding: EdgeInsets.only(bottom: 3),
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintText: widget.placeholder,
+        hintText: widget.placeholder ?? '',
         hintStyle: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w200,

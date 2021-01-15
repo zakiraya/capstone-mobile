@@ -55,7 +55,6 @@ class _NavigationBarState extends State<NavigationBar> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
         onTap: _onItemTapped,
       ),
     );

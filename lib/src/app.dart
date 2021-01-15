@@ -50,15 +50,22 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     var themeData = ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.lightBlue[800],
-      accentColor: Colors.cyan[600],
+      primaryColor: Colors.deepPurple,
+      // accentColor: Colors.cyan[600],
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: Colors.deepPurple,
+        // backgroundColor: Colors.deepPurple,
+      ),
 
       // fontFamily: 'Georgia',
 
       textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        // bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        headline1: TextStyle(
+          fontSize: 36.0,
+          fontWeight: FontWeight.bold,
+        ),
+        headline6: TextStyle(fontSize: 20.0),
+        bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         button:
             TextStyle(fontSize: 16, letterSpacing: 1.5, color: Colors.white),
       ),
