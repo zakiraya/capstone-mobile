@@ -18,15 +18,18 @@ class LoginForm extends StatelessWidget {
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _UsernameInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _PasswordInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _LoginButton(),
-          ],
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _UsernameInput(),
+              const Padding(padding: EdgeInsets.all(12)),
+              _PasswordInput(),
+              const Padding(padding: EdgeInsets.all(12)),
+              _LoginButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -82,14 +85,31 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : RaisedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                child: const Text('Login'),
-                onPressed: state.status.isValidated
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
-                    : null,
+            : Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: ElevatedButton(
+                  key: const Key('loginForm_continue_raisedButton'),
+                  child: const Text(
+                    'SIGN IN',
+                    style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  onPressed: state.status.isValidated
+                      ? () {
+                          context.read<LoginBloc>().add(const LoginSubmitted());
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    onPrimary: Colors.red,
+                    primary: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
               );
       },
     );

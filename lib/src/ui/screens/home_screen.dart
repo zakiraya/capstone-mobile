@@ -1,6 +1,5 @@
-import 'package:capstone_mobile/src/blocs/blocs.dart';
+import 'package:capstone_mobile/src/ui/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -9,31 +8,32 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Builder(
-              builder: (context) {
-                final userId = context.select(
-                  (AuthenticationBloc bloc) => bloc.state.user.id,
-                );
-                return Text('UserID: $userId');
-              },
-            ),
-            RaisedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested());
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    return NavigationBar();
+    // Scaffold(
+    //   appBar: AppBar(title: const Text('Home')),
+    //   body: Center(
+    //     child: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: <Widget>[
+    //         Builder(
+    //           builder: (context) {
+    //             final userId = context.select(
+    //               (AuthenticationBloc bloc) => bloc.state.user.id,
+    //             );
+    //             return Text('UserID: $userId');
+    //           },
+    //         ),
+    //         RaisedButton(
+    //           child: const Text('Logout'),
+    //           onPressed: () {
+    //             context
+    //                 .read<AuthenticationBloc>()
+    //                 .add(AuthenticationLogoutRequested());
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

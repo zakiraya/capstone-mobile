@@ -1,8 +1,10 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/change_password_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/settings_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +48,26 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = ThemeData(
+      brightness: Brightness.light,
+      primaryColor: Colors.lightBlue[800],
+      accentColor: Colors.cyan[600],
+
+      // fontFamily: 'Georgia',
+
+      textTheme: TextTheme(
+        headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+        headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+        // bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        button:
+            TextStyle(fontSize: 16, letterSpacing: 1.5, color: Colors.white),
+      ),
+      // primaryColorDark: Colors.black87,
+    );
+
     return MaterialApp(
+      theme: themeData,
+      debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
