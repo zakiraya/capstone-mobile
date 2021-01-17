@@ -50,10 +50,10 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     var themeData = ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.deepPurple,
+      primaryColor: Colors.pink,
       // accentColor: Colors.cyan[600],
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: Colors.deepPurple,
+        selectedItemColor: Colors.pink,
         // backgroundColor: Colors.deepPurple,
       ),
 
@@ -69,7 +69,6 @@ class _AppViewState extends State<AppView> {
         button:
             TextStyle(fontSize: 16, letterSpacing: 1.5, color: Colors.white),
       ),
-      // primaryColorDark: Colors.black87,
     );
 
     return MaterialApp(
@@ -79,21 +78,16 @@ class _AppViewState extends State<AppView> {
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            switch (state.status) {
-              case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  HomeScreen.route(),
-                  (route) => false,
-                );
-                break;
-              case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginScreen.route(),
-                  (route) => false,
-                );
-                break;
-              default:
-                break;
+            if (state.token != '') {
+              _navigator.pushAndRemoveUntil<void>(
+                HomeScreen.route(),
+                (route) => false,
+              );
+            } else {
+              _navigator.pushAndRemoveUntil<void>(
+                LoginScreen.route(),
+                (route) => false,
+              );
             }
           },
           child: child,

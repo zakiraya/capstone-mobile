@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:uuid/uuid.dart';
+import 'package:capstone_mobile/src/data/repositories/user/userApi.dart';
 import '../../models/models.dart';
 
 class UserRepository {
   User _user;
+  final UserApi userApi;
 
-  Future<User> getUser() async {
-    if (_user != null) return _user;
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _user = User(Uuid().v4()),
-    );
+  UserRepository({this.userApi});
+
+  Future<User> getUser(email, password) async {
+    return _user =
+        _user != null ? _user : await userApi.signIn(email, password);
   }
 }

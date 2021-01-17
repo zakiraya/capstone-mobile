@@ -15,6 +15,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
     return Container(
       padding: EdgeInsets.only(left: 16, top: 25, right: 16),
       child: ListView(
@@ -68,7 +69,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           SizedBox(
-            height: 35,
+            height: 25,
+          ),
+          Center(
+            child: Text('${user.username ?? 'Some name'}'),
+          ),
+          SizedBox(
+            height: 15,
           ),
           Row(
             children: [
