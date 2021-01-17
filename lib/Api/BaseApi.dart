@@ -11,10 +11,11 @@ class ApiBase {
     return {'Content-Type': 'application/json; charset=UTF-8', ...opts};
   }
 
-  Future<dynamic> get(String url) async {
+  Future<dynamic> get(String url, {Map<String, String> opts}) async {
     var responseJson;
     try {
-      final response = await http.get(_baseUrl + url);
+      final response =
+          await http.get(_baseUrl + url, headers: generateHeader(opts));
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
