@@ -48,41 +48,25 @@ class AuthenticationBloc
     return super.close();
   }
 
-  // Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
-  //   AuthenticationStatusChanged event,
-  // ) async {
-  //   switch (event.status) {
-  //     case AuthenticationStatus.unauthenticated:
-  //       return const AuthenticationState.unauthenticated();
-  //     case AuthenticationStatus.authenticated:
-  //       final user = await _tryGetUser();
-  //       return user != null
-  //           ? AuthenticationState.authenticated(user)
-  //           : const AuthenticationState.unauthenticated();
-  //     default:
-  //       return const AuthenticationState.unknown();
-  //   }
-  // }
-
   Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
   ) async {
     if (event.token == '') {
       return const AuthenticationState.unauthenticated();
     } else {
-      final user = await _tryGetUser();
+      final user = await _tryGetUser(event.token);
       return user != null
           ? AuthenticationState.authenticated(user, event.token)
           : const AuthenticationState.unauthenticated();
     }
   }
 
-  Future<User> _tryGetUser() async {
+  Future<User> _tryGetUser(String token) async {
     try {
-      final user = await _userRepository.getUser("hiep51@gmail.com", "123456");
+      final user = await _userRepository.getUser("9", token);
       return user;
     } catch (e) {
-      print('try to get user: ' + e);
+      print(e);
       return null;
     }
   }

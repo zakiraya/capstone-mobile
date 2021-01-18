@@ -9,8 +9,9 @@ class UserRepository {
 
   UserRepository({this.userApi});
 
-  Future<User> getUser(email, password) async {
-    return _user =
-        _user != null ? _user : await userApi.getProfile(email, password);
+  Future<User> getUser(String id, String token) async {
+    return _user = _user != null
+        ? _user
+        : await userApi.getProfile(id, opts: <String, String>{'token': token});
   }
 }

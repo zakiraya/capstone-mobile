@@ -72,7 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             height: 25,
           ),
           Center(
-            child: Text('${user.username ?? 'Some name'}'),
+            child: Text('${user.fullName ?? 'Some name'}'),
           ),
           SizedBox(
             height: 15,
