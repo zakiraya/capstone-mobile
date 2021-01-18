@@ -66,7 +66,7 @@ class _PasswordInput extends StatelessWidget {
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
               context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-          // obscureText: true,
+          obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
             errorText: state.password.invalid ? 'invalid password' : null,

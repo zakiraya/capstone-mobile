@@ -6,7 +6,6 @@ import 'Exceptions.dart';
 
 class BaseApi {
   final String _baseUrl = "https://d73798c70eb8.ngrok.io";
-  final String _testUrl = "https://r-clothing-apis.herokuapp.com";
 
   Map<String, String> generateHeader([Map<String, String> opts]) {
     return {'Content-Type': 'application/json; charset=UTF-8', ...?opts};
