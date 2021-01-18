@@ -11,6 +11,6 @@ class UserRepository {
 
   Future<User> getUser(email, password) async {
     return _user =
-        _user != null ? _user : await userApi.signIn(email, password);
+        _user != null ? _user : await userApi.getProfile(email, password);
   }
 }

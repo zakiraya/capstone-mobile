@@ -6,28 +6,26 @@ class User extends Equatable {
     this.id,
     this.password,
     this.username,
-    this.token,
   });
 
   final String id;
   final String email;
   final String password;
   final String username;
-  final String token;
 
   @override
-  List<Object> get props => [id, email, password, username, token];
+  List<Object> get props => [id, email, password, username];
 
-  static const empty = User(username: 'some name');
+  static const empty = User(username: 'empty');
 
   static User fromJson(dynamic json) {
-    // final userInfo = json['user'];
+    final userInfo = json['user'];
     // final token = json['token'];
     return User(
-        // id: userInfo['_id'],
-        // email: userInfo['email'],
-        // password: userInfo['password'],
-        // username: userInfo['firstName'],
-        token: json['token']);
+      id: userInfo['_id'],
+      email: userInfo['email'],
+      password: userInfo['password'],
+      username: userInfo['firstName'],
+    );
   }
 }

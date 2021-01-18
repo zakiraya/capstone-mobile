@@ -72,16 +72,17 @@ class AuthenticationBloc
     } else {
       final user = await _tryGetUser();
       return user != null
-          ? AuthenticationState.authenticated(user)
+          ? AuthenticationState.authenticated(user, event.token)
           : const AuthenticationState.unauthenticated();
     }
   }
 
   Future<User> _tryGetUser() async {
     try {
-      final user = await _userRepository.getUser("admin", "123456");
+      final user = await _userRepository.getUser("hiep51@gmail.com", "123456");
       return user;
-    } on Exception {
+    } catch (e) {
+      print('try to get user: ' + e);
       return null;
     }
   }

@@ -37,8 +37,9 @@ class AuthenticationRepository {
     assert(password != null);
 
     try {
-      final user = await userApi.signIn(username, password);
-      user != null ? _controller.add(user.token) : _controller.add('');
+      final token = await userApi.signIn(username, password);
+      print(token);
+      token != '' ? _controller.add(token) : _controller.add('');
     } catch (e) {
       print(e);
       // SignInFailure();
