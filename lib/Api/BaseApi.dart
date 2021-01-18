@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 
 import 'Exceptions.dart';
 
-class ApiBase {
-  final String _baseUrl = "";
+class BaseApi {
+  final String _baseUrl = "https://d73798c70eb8.ngrok.io";
 
   Map<String, String> generateHeader([Map<String, String> opts]) {
-    return {'Content-Type': 'application/json; charset=UTF-8', ...opts};
+    return {'Content-Type': 'application/json; charset=UTF-8', ...?opts};
   }
 
   Future<dynamic> get(String url, {Map<String, String> opts}) async {
@@ -32,8 +32,9 @@ class ApiBase {
           headers: generateHeader(opts),
           body: jsonEncode(<String, String>{...body}));
       responseJson = _returnResponse(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      // throw FetchDataException(e);
+      print(e);
     }
 
     return responseJson;
@@ -73,12 +74,13 @@ class ApiBase {
     String body = response.body.toString();
     switch (response.statusCode) {
       case 200:
-        var responseJson = json.decode(body);
+        var responseJson = jsonDecode(body);
         print(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(body);
       case 401:
+        throw BadRequestException(body);
       case 403:
         throw UnauthorisedException(body);
       case 500:

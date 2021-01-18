@@ -17,8 +17,10 @@ class _NavigationBarState extends State<NavigationBar> {
   static List<Widget> _widgetOptions = <Widget>[
     ReportsScreen(),
     CamerasScreens(),
-    SettingsScreens(),
+    SettingsScreen(),
   ];
+
+  static List<String> _titles = ['Reports', 'Cameras', 'Profile'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,9 +30,11 @@ class _NavigationBarState extends State<NavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    String title = _titles[_selectedIndex];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar'),
+        title: Text('$title'),
+        centerTitle: true,
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -51,7 +55,6 @@ class _NavigationBarState extends State<NavigationBar> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
         onTap: _onItemTapped,
       ),
     );
