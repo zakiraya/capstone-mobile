@@ -12,17 +12,18 @@ class UserApi {
   }) : assert(httpClient != null);
 
   Future<String> signIn(String username, String password) async {
-    final authenUrl = '/auth/login-mobile';
+    final authenUrl = '/api/Auth/login';
     final body = <String, dynamic>{'username': username, 'password': password};
 
     final userJson =
         await baseApi.post(authenUrl, body) as Map<String, dynamic>;
 
-    return userJson['token'];
+    print(userJson['data']['accessToken']);
+    return userJson['data']['accessToken'];
   }
 
   Future<User> getProfile(String id, {Map<String, String> opts}) async {
-    final userUrl = '/api/employee/$id';
+    final userUrl = '/api/employees/$id';
 
     final userJson =
         await baseApi.get(userUrl, opts: opts) as Map<String, dynamic>;

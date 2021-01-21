@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:capstone_mobile/src/data/models/login/email.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
@@ -38,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginUsernameChanged event,
     LoginState state,
   ) {
-    final username = Email.dirty(event.username);
+    final username = Username.dirty(event.username);
     return state.copyWith(
       username: username,
       status: Formz.validate([state.password, username]),
