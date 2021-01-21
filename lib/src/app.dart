@@ -4,8 +4,10 @@ import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart'
 import 'package:capstone_mobile/src/ui/screens/change_password_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/reports_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/settings_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,7 +63,7 @@ class _AppViewState extends State<AppView> {
 
       textTheme: TextTheme(
         headline1: TextStyle(
-          fontSize: 36.0,
+          fontSize: 40.0,
           fontWeight: FontWeight.bold,
         ),
         headline6: TextStyle(fontSize: 20.0),
@@ -85,7 +87,7 @@ class _AppViewState extends State<AppView> {
               );
             } else {
               _navigator.pushAndRemoveUntil<void>(
-                LoginScreen.route(),
+                ReportsScreen.route(),
                 (route) => false,
               );
             }
