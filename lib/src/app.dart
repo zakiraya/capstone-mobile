@@ -52,12 +52,12 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     var themeData = ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.pink,
-      // accentColor: Colors.cyan[600],
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: Colors.pink,
-        // backgroundColor: Colors.deepPurple,
-      ),
+      primaryColor: Colors.blue[900],
+      accentColor: Colors.purple,
+      // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      //   selectedItemColor: ,
+      //   // backgroundColor: Colors.deepPurple,
+      // ),
 
       // fontFamily: 'Georgia',
 
@@ -87,7 +87,7 @@ class _AppViewState extends State<AppView> {
               );
             } else {
               _navigator.pushAndRemoveUntil<void>(
-                ReportsScreen.route(),
+                LoginScreen.route(),
                 (route) => false,
               );
             }

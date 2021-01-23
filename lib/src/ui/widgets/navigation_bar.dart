@@ -32,10 +32,10 @@ class _NavigationBarState extends State<NavigationBar> {
   Widget build(BuildContext context) {
     String title = _titles[_selectedIndex];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$title'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text('$title'),
+      //   centerTitle: true,
+      // ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

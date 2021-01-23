@@ -54,20 +54,31 @@ class AuthenticationBloc
     if (event.token == '') {
       return const AuthenticationState.unauthenticated();
     } else {
-      final user = await _tryGetUser(event.token);
+      // final user = await _tryGetUser(event.token);
+      final user = await _tryGetUser();
+
       return user != null
-          ? AuthenticationState.authenticated(user, event.token)
+          ? AuthenticationState.authenticated(user, token: event.token)
           : const AuthenticationState.unauthenticated();
     }
   }
 
-  Future<User> _tryGetUser(String token) async {
+  Future<User> _tryGetUser() async {
     try {
-      final user = await _userRepository.getUser("9", token);
+      final user = await _userRepository.getUser();
       return user;
-    } catch (e) {
-      print(e);
+    } on Exception {
       return null;
     }
   }
+
+  // Future<User> _tryGetUser(String token) async {
+  //   try {
+  //     final user = await _userRepository.getUser("9", token);
+  //     return user;
+  //   } catch (e) {
+  //     print(e);
+  //     return null;
+  //   }
+  // }
 }

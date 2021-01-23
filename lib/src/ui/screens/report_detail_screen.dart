@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 class ReportDetailScreen extends StatefulWidget {
   static Route route() {
@@ -13,36 +14,52 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    String text = loremIpsum(words: 60);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Report detail'),
+        elevation: 0,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        // title: Text('Report detail'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: theme.primaryColor,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+        padding: EdgeInsets.only(left: 16, top: 8, right: 16),
         child: ListView(
           children: [
-            SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: Container(
-                child: Text(
-                  'Report title',
-                  style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: theme.textTheme.headline1.fontSize),
+            Container(
+              child: Text(
+                'Report of 01213231',
+                style: TextStyle(
+                  color: theme.primaryColor,
+                  fontSize: theme.textTheme.headline5.fontSize,
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Text("Created by: Lai Van Some"),
+                ),
+                Container(
+                  child: Text("Status: "),
+                ),
+              ],
+            ),
+            Divider(
+              color: Colors.black,
+            ),
             SizedBox(
-              height: 15,
+              height: 16,
             ),
             Container(
               child: Column(
@@ -51,85 +68,135 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   Container(
                     child: Text("Branch: "),
                   ),
+                  Text('Kichi Kichi - Branch 01'),
                   SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    child: Text("Created by: "),
-                  ),
-                  SizedBox(
-                    height: 15,
+                    height: 16,
                   ),
                   Container(
                     child: Text("Created on: "),
                   ),
+                  Text('28/12/1998'),
                   SizedBox(
-                    height: 15,
+                    height: 16,
+                  ),
+                  Container(
+                    child: Text("Submitted on: "),
+                  ),
+                  Text('30/12/1998'),
+                  SizedBox(
+                    height: 16,
                   ),
                   Container(
                     child: Text("Description: "),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 8,
                   ),
-                  TextField(
-                    maxLines: 8,
-                    decoration: InputDecoration.collapsed(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(new Radius.circular(5.0))),
-                        hintText: "Enter your text here"),
-                  ),
+                  Text("$text"),
                 ],
               ),
             ),
             SizedBox(
               height: 15,
             ),
-            GestureDetector(
-              onTap: () {
-                // Navigator.push(context, ChangePasswordScreen.route());
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'List violations',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                  )
-                ],
-              ),
+            Container(
+              child: Text("Violation list: "),
             ),
             SizedBox(
-              height: 100,
+              height: 16,
             ),
-            Container(
-              // padding: EdgeInsets.symmetric(horizontal: 40),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  onPrimary: Colors.red,
-                  primary: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  'Edit',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {},
-              ),
+            ViolationCard(),
+            ViolationCard(),
+            ViolationCard(),
+            SizedBox(
+              height: 32,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ViolationCard extends StatelessWidget {
+  const ViolationCard({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shadowColor: Colors.purple[300],
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {},
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/avt.jpg'),
+                    ),
+                  ),
+                ),
+              ),
+              // SizedBox(
+              //   width: 16,
+              // ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("#error code"),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text("Violation name"),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        "Violator: Hoang Gia Bao",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Violated date: 28/12/1998",
+                            style: TextStyle(fontSize: 8),
+                          ),
+                          Text("Status: Rejected",
+                              style: TextStyle(fontSize: 8)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.edit_outlined,
+                size: 16.0,
+              ),
+            ],
+          ),
         ),
       ),
     );

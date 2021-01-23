@@ -19,7 +19,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   int groupValue = 0;
 
   final Map<int, Widget> segments = <int, Widget>{
-    0: Container(child: Text('Reports')),
+    0: Container(child: Text('Submited Reports')),
     1: Container(child: Text('Drafts'))
   };
 
@@ -28,151 +28,238 @@ class _ReportsScreenState extends State<ReportsScreen> {
     var theme = Theme.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'Search',
-              onPressed: () {},
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search_outlined,
+              color: theme.primaryColor,
             ),
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              tooltip: 'Notifications',
-              onPressed: () {},
+            tooltip: 'Search',
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: theme.primaryColor,
             ),
-          ],
-          // title: Text('Reports'),
-          // centerTitle: true,
-        ),
-        body: BlocProvider(
-          create: (context) => ReportBloc(reportRepository: ReportRepository())
-            ..add(ReportRequested(token: "token")),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              'Report',
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: theme.textTheme.headline1.fontSize),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              'List',
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: theme.textTheme.headline1.fontSize),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        child: Center(
-                            child: IconButton(
-                          icon: Icon(Icons.add),
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.push(context, CreateReportScreen.route());
-                          },
-                        )),
-                        height: 50,
-                        width: 75,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
-                                topLeft: Radius.circular(10.0)),
-                            color: Colors.orange),
-                      ),
-                    ]),
-                SizedBox(
-                  height: 15,
+            tooltip: 'Notifications',
+            onPressed: () {},
+          ),
+        ],
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, CreateReportScreen.route());
+            },
+            child: Container(
+              width: 156,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.blue[900],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: Text(
+                  "CREATE NEW +",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-                Builder(
-                  builder: (BuildContext context) {
-                    return Center(
-                      child: Container(
-                        width: 400,
-                        child: CupertinoSegmentedControl(
-                          borderColor: Colors.orange,
-                          selectedColor: Colors.orange,
-                          groupValue: groupValue,
-                          children: segments,
-                          onValueChanged: (value) {
-                            setState(() {
-                              groupValue = value;
-                            });
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: BlocProvider(
+        create: (context) => ReportBloc(reportRepository: ReportRepository())
+          ..add(ReportRequested(token: "token")),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        'Report',
+                        style: TextStyle(
+                            color: theme.primaryColor,
+                            fontSize: theme.textTheme.headline1.fontSize),
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        'List',
+                        style: TextStyle(
+                            color: theme.primaryColor,
+                            fontSize: theme.textTheme.headline1.fontSize),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  child: Center(
+                      child: IconButton(
+                    icon: Icon(Icons.camera_alt_outlined),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.push(context, ReportDetailScreen.route());
+                    },
+                  )),
+                  height: 50,
+                  width: 75,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10.0),
+                          topLeft: Radius.circular(10.0)),
+                      color: theme.accentColor),
+                ),
+              ]),
+              SizedBox(
+                height: 15,
+              ),
+              Builder(
+                builder: (BuildContext context) {
+                  return Center(
+                    child: Container(
+                      width: 400,
+                      child: CupertinoSegmentedControl(
+                        borderColor: Colors.orange[300],
+                        selectedColor: Colors.orange[300],
+                        groupValue: groupValue,
+                        children: segments,
+                        onValueChanged: (value) {
+                          setState(() {
+                            groupValue = value;
+                          });
 
-                            context.read<ReportBloc>().add(ReportRequested(
-                                token: "token",
-                                status: value == 0 ? null : "drafts"));
-                          },
-                        ),
+                          context.read<ReportBloc>().add(ReportRequested(
+                              token: "token",
+                              status: value == 0 ? null : "drafts"));
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              BlocBuilder<ReportBloc, ReportState>(
+                builder: (context, state) {
+                  if (state is ReportLoadInProgress) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            theme.primaryColor),
                       ),
                     );
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                BlocBuilder<ReportBloc, ReportState>(
-                  builder: (context, state) {
-                    if (state is ReportLoadInProgress) {
+                  } else if (state is ReportLoadFailure) {
+                    return Center(
+                      child: Text('failed to fetch branch'),
+                    );
+                  } else if (state is ReportLoadSuccess) {
+                    if (state.reports.isEmpty) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: Text('There is no reports'),
                       );
-                    } else if (state is ReportLoadFailure) {
-                      return Center(
-                        child: Text('failed to fetch branch'),
-                      );
-                    } else if (state is ReportLoadSuccess) {
-                      if (state.reports.isEmpty) {
-                        return Center(
-                          child: Text('There is no reports'),
-                        );
-                      }
+                    }
 
-                      return Expanded(
-                        child: ListView.separated(
-                          itemCount: state.reports.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: Icon(Icons.assignment_outlined),
-                              title: Text("Branch ${state.reports[index]}"),
-                              subtitle: Text("#$index"),
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: state.reports.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 4,
+                            shadowColor: Colors.purple[300],
+                            child: InkWell(
+                              splashColor: Colors.blue.withAlpha(30),
                               onTap: () {
                                 Navigator.push(
                                     context, ReportDetailScreen.route());
                               },
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              Divider(
-                            height: 0,
-                          ),
-                        ),
-                      );
-                    }
-                    return Center(
-                      child: Center(
-                        child: Text("initial"),
+                              child: ClipPath(
+                                clipper: ShapeBorderClipper(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                                child: Container(
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      left: BorderSide(
+                                          color: Colors.green, width: 5),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("KichiKichi - Branch 01"),
+                                            Text("Status"),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text("Report name"),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("5 mistakes"),
+                                            Text("28/12/1998"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     );
-                  },
-                )
-              ],
-            ),
+                  }
+                  return Center(
+                    child: Center(
+                      child: Text("initial"),
+                    ),
+                  );
+                },
+              ),
+              // Container(
+              //   height: 64,
+              // ),
+            ],
           ),
-          // )
-        ));
+        ),
+        // )
+      ),
+    );
   }
 }

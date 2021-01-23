@@ -30,7 +30,8 @@ class AuthenticationRepository {
     assert(password != null);
 
     try {
-      final token = await userApi.signIn(username, password);
+      // final token = await userApi.signIn(username, password);
+      final token = 'authen_repo';
       print('token: ' + token);
       token != '' ? _controller.add(token) : null;
     } catch (e) {
