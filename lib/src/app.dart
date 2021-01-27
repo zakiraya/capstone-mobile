@@ -1,13 +1,9 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/change_password_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/reports_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/settings_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,16 +46,18 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
+    var blue = Color(0xff2329D6);
+    var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
-      brightness: Brightness.light,
-      primaryColor: Colors.blue[900],
-      accentColor: Colors.purple,
+      primaryColor: Colors.blue[800],
+      // accentColor: Colors.purple[400],
+
       // bottomNavigationBarTheme: BottomNavigationBarThemeData(
       //   selectedItemColor: ,
       //   // backgroundColor: Colors.deepPurple,
       // ),
 
-      // fontFamily: 'Georgia',
+      fontFamily: 'Montserrat',
 
       textTheme: TextTheme(
         headline1: TextStyle(

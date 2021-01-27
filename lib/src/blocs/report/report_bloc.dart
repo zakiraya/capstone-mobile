@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/data/models/report/report_name.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
 
 part 'report_event.dart';
 part 'report_state.dart';

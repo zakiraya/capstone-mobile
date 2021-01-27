@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/reports_screen.dart';
+import '../screens/report/reports_screen.dart';
 import '../screens/cameras_screen.dart';
 import '../screens/settings_screen.dart';
 

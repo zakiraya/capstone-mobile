@@ -22,3 +22,26 @@ class ReportLoadSuccess extends ReportState {
 }
 
 class ReportLoadFailure extends ReportState {}
+
+class ReportCreateState extends ReportState {
+  const ReportCreateState({
+    this.status = FormzStatus.pure,
+    this.reportName = const ReportName.pure(),
+  });
+
+  final FormzStatus status;
+  final ReportName reportName;
+
+  ReportCreateState copyWith({
+    FormzStatus status,
+    ReportName reportName,
+  }) {
+    return ReportCreateState(
+      status: status ?? this.status,
+      reportName: reportName ?? this.reportName,
+    );
+  }
+
+  @override
+  List<Object> get props => [status, reportName];
+}

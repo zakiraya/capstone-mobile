@@ -1,10 +1,12 @@
-import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
-import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/report_create_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/report_detail_screen.dart';
+import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_create_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
 
 class ReportsScreen extends StatefulWidget {
   static Route route() {
@@ -61,7 +63,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               width: 156,
               height: 32,
               decoration: BoxDecoration(
-                color: Colors.blue[900],
+                color: theme.primaryColor,
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Center(
@@ -88,46 +90,71 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Report',
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: theme.textTheme.headline1.fontSize),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Report',
+                          style: TextStyle(
+                              color: theme.primaryColor,
+                              fontSize: theme.textTheme.headline1.fontSize),
+                        ),
                       ),
-                    ),
-                    Container(
-                      child: Text(
-                        'List',
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: theme.textTheme.headline1.fontSize),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              'List',
+                              style: TextStyle(
+                                  color: theme.primaryColor,
+                                  fontSize: theme.textTheme.headline1.fontSize),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                height:
+                                    (theme.textTheme.headline1.fontSize + 15) /
+                                        2,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, width: 2),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                  child: Center(
-                      child: IconButton(
-                    icon: Icon(Icons.camera_alt_outlined),
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.push(context, ReportDetailScreen.route());
-                    },
-                  )),
-                  height: 50,
-                  width: 75,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10.0),
-                          topLeft: Radius.circular(10.0)),
-                      color: theme.accentColor),
-                ),
-              ]),
+                    ],
+                  ),
+                  Container(
+                    child: Center(
+                        child: IconButton(
+                      icon: Icon(Icons.camera_alt_outlined),
+                      color: Colors.white,
+                      onPressed: () {},
+                    )),
+                    height: 50,
+                    width: 75,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10.0),
+                            topLeft: Radius.circular(10.0)),
+                        color: theme.accentColor),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 15,
               ),
@@ -162,14 +189,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 builder: (context, state) {
                   if (state is ReportLoadInProgress) {
                     return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                            theme.primaryColor),
-                      ),
+                      child: SkeletonLoading(),
                     );
                   } else if (state is ReportLoadFailure) {
                     return Center(
-                      child: Text('failed to fetch branch'),
+                      child: Text('failed to fetch reports'),
                     );
                   } else if (state is ReportLoadSuccess) {
                     if (state.reports.isEmpty) {
@@ -177,7 +201,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         child: Text('There is no reports'),
                       );
                     }
-
                     return Expanded(
                       child: ListView.builder(
                         itemCount: state.reports.length,
@@ -245,11 +268,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       ),
                     );
                   }
-                  return Center(
-                    child: Center(
-                      child: Text("initial"),
-                    ),
-                  );
+                  return Container();
                 },
               ),
               // Container(
