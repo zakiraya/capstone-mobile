@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +149,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     height: 50,
                     width: 75,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(10.0),
                             topLeft: Radius.circular(10.0)),
                         color: theme.accentColor),
@@ -188,7 +189,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               BlocBuilder<ReportBloc, ReportState>(
                 builder: (context, state) {
                   if (state is ReportLoadInProgress) {
-                    return Center(
+                    return const Center(
                       child: SkeletonLoading(),
                     );
                   } else if (state is ReportLoadFailure) {
@@ -201,9 +202,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         child: Text('There is no reports'),
                       );
                     }
+                    List<Report> reports = state.reports;
+
                     return Expanded(
                       child: ListView.builder(
-                        itemCount: state.reports.length,
+                        itemCount: reports.length,
                         itemBuilder: (context, index) {
                           return Card(
                             elevation: 4,
@@ -238,14 +241,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("KichiKichi - Branch 01"),
-                                            Text("Status"),
+                                            Text(
+                                                "${reports[index].branchId ?? "KichiKichi - Branch 01"}"),
+                                            Text(
+                                                "${reports[index].status ?? "Status"}"),
                                           ],
                                         ),
                                         SizedBox(
                                           height: 8,
                                         ),
-                                        Text("Report name"),
+                                        Text(
+                                            "${reports[index].name ?? "Report name"}"),
                                         SizedBox(
                                           height: 16,
                                         ),
@@ -254,7 +260,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text("5 mistakes"),
-                                            Text("28/12/1998"),
+                                            Text(
+                                                "${reports[index].createdAt ?? "28/12/1998"}"),
                                           ],
                                         ),
                                       ],

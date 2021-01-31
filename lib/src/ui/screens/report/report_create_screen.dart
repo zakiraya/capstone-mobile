@@ -1,5 +1,9 @@
-import 'package:capstone_mobile/src/ui/screens/report/report_form.dart';
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_create_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateReportScreen extends StatefulWidget {
   static Route route() {
@@ -19,7 +23,6 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
-        // title: Text('Report create'),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -30,7 +33,12 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
           },
         ),
       ),
-      body: ReportForm(),
+      body: BlocProvider(
+        create: (context) => ReportCreateBloc(
+          reportRepository: ReportRepository(),
+        ),
+        child: ReportForm(),
+      ),
     );
   }
 }

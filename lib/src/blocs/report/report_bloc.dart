@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/report/report_name.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -22,7 +23,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     if (event is ReportRequested) {
       yield ReportLoadInProgress();
       try {
-        final List<String> reports =
+        final List<Report> reports =
             await reportRepository.fetchReports("token", status: event.status);
         yield ReportLoadSuccess(reports: reports);
       } catch (e) {
