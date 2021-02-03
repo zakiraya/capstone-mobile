@@ -41,6 +41,20 @@ class ViolationCard extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Expanded(
+                flex: 1,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/avt.jpg'),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
                 flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

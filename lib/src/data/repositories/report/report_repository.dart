@@ -29,13 +29,18 @@ class ReportRepository {
         .toList();
   }
 
-  Future<String> createReport(
-      {@required String token,
-      @required Report report,
-      @required bool isDraft}) async {
+  Future<String> createReport({
+    @required String token,
+    @required Report report,
+    @required bool isDraft,
+  }) async {
     if (report == null) {
       return 'fail';
     }
+
+    report.props.forEach((element) {
+      print(element);
+    });
 
     isDraft == true
         ? _report.add(Report(
@@ -46,8 +51,6 @@ class ReportRepository {
             name: report.name,
             description: report.description,
             status: 'done'));
-
-    print("length: ${_report.length}");
 
     await Future<void>.delayed(const Duration(seconds: 2));
     return 'success';

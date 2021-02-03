@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:capstone_mobile/src/data/models/violation.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

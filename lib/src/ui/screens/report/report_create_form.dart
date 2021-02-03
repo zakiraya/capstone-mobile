@@ -1,8 +1,11 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReportForm extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _ReportFormState extends State<ReportForm> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
     return Padding(
       padding: EdgeInsets.only(left: 16, top: 8, right: 16),
       child: ListView(
@@ -25,17 +29,6 @@ class _ReportFormState extends State<ReportForm> {
                   fontSize: theme.textTheme.headline4.fontSize),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  // child: Text("Created by: Lai Van Some"),
-                  ),
-              Container(
-                  // child: Text("Status: "),
-                  ),
-            ],
-          ),
           Divider(
             color: Colors.black,
           ),
@@ -46,35 +39,14 @@ class _ReportFormState extends State<ReportForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _ReportNameInput(),
-                SizedBox(
-                  height: 15,
-                ),
+                // _ReportNameInput(),
                 Container(
-                  child: Text("Created on: "),
-                ),
-                Container(
-                  child: Text('Abc'),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(5),
+                  child: Text(
+                    "Branch: ",
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  child: Text("Submitted on: "),
-                ),
-                Container(
-                  child: Text('Abc'),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
+                _BranchDropdown(),
                 SizedBox(
                   height: 15,
                 ),
@@ -91,154 +63,12 @@ class _ReportFormState extends State<ReportForm> {
           SizedBox(
             height: 16,
           ),
-          Card(
-            elevation: 4,
-            shadowColor: Colors.purple[300],
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/avt.jpg'),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // SizedBox(
-                    //   width: 16,
-                    // ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("#error code"),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text("Violation name"),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Text(
-                              "Violator: Hoang Gia Bao",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Violated date: 28/12/1998",
-                                  style: TextStyle(fontSize: 8),
-                                ),
-                                Text("Status: Rejected",
-                                    style: TextStyle(fontSize: 8)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.edit_outlined,
-                      size: 16.0,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(),
-              Container(
-                child: IconButton(
-                  onPressed: () {
-                    showMaterialModalBottomSheet(
-                        expand: false,
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => ViolationCreateModal());
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: Colors.blue[900],
-                ),
-              ),
-            ],
-          ),
+          _ReportListViolationList(),
           SizedBox(
             height: 32,
           ),
           _CreateButton(),
         ],
-      ),
-    );
-  }
-}
-
-class ViolationCreateModal extends StatelessWidget {
-  const ViolationCreateModal({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.circular(16.0),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                // mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(child: Text('fawefafe')),
-                  Container(
-                    child: IconButton(
-                      icon: Icon(Icons.close_rounded),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -266,6 +96,74 @@ class _ReportNameInput extends StatelessWidget {
   }
 }
 
+class _BranchDropdown extends StatefulWidget {
+  _BranchDropdown({Key key}) : super(key: key);
+
+  @override
+  __BranchDropdownState createState() => __BranchDropdownState();
+}
+
+class __BranchDropdownState extends State<_BranchDropdown> {
+  BranchRepository _branchRepository = BranchRepository();
+  List<Branch> _branches = List();
+  Branch dropdownValue;
+
+  Future<String> getBranches() async {
+    // var branches = await _branchRepository.fetchBranches(
+    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI");
+
+    setState(() => _branches = [
+          Branch(id: 1, name: "Br01"),
+          Branch(id: 2, name: "Br02"),
+          Branch(id: 3, name: "Br03"),
+          Branch(id: 4, name: "Br04"),
+        ]);
+
+    return 'success';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getBranches();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      child: DropdownButton<Branch>(
+        isExpanded: true,
+        value: dropdownValue,
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 1,
+          color: Colors.black38,
+        ),
+        onChanged: (newValue) {
+          setState(() {
+            print('new value: ${newValue.name}');
+            dropdownValue = newValue;
+          });
+          context.read<ReportCreateBloc>().add(
+                ReportBranchChanged(reportBranchId: newValue.id),
+              );
+        },
+        items: _branches.map<DropdownMenuItem<Branch>>((branch) {
+          return DropdownMenuItem<Branch>(
+            value: branch,
+            child: Text(branch.name),
+          );
+        }).toList(),
+      ),
+    );
+    // });
+  }
+}
+
 class _ReportDescriptionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -281,7 +179,7 @@ class _ReportDescriptionInput extends StatelessWidget {
                           reportDescription: reportDescription),
                     ),
             decoration: InputDecoration(
-              labelText: 'Report Description',
+              labelText: 'Report Description:',
               errorText: state.reportName.invalid
                   ? 'invalid report description'
                   : null,
@@ -289,6 +187,142 @@ class _ReportDescriptionInput extends StatelessWidget {
           );
         });
   }
+}
+
+class _ReportListViolationList extends StatelessWidget {
+  final List<Violation> violationCards = List<Violation>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ReportCreateBloc, ReportCreateState>(
+        buildWhen: (previous, current) =>
+            previous.reportListViolation != current.reportListViolation,
+        builder: (contex, state) {
+          return Column(
+            children: [
+              ...buildViolationList(state.reportListViolation.value ?? []),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(),
+                  Container(
+                    child: IconButton(
+                      onPressed: () {
+                        _showModalOne(context);
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: Colors.blue[900],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+}
+
+List<Widget> buildViolationList(List<Violation> violations) {
+  if (violations == null) return null;
+
+  List<ViolationCard> violationCards = List<ViolationCard>();
+
+  for (var vio in violations) {
+    ViolationCard card = ViolationCard(
+      errorCode: vio.violationCode,
+      violationName: vio.violationName,
+    );
+    violationCards.add(card);
+  }
+  return violationCards;
+}
+
+void _showModalOne(BuildContext context) {
+  final bloc = BlocProvider.of<ReportCreateBloc>(context);
+  var size = MediaQuery.of(context).size;
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          clipBehavior: Clip.antiAlias,
+          // borderRadius: BorderRadius.circular(16.0),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Remove'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          print('asdfsd');
+                          bloc.add(
+                            ReportViolationsChanged(
+                              reportViolation:
+                                  Violation(id: 1, violationCode: "fawefw"),
+                            ),
+                          );
+                        },
+                        child: Text('Add'),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Colors.red,
+                  ),
+                  Container(
+                    child: Text('Violator: violator\'s name'),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: Text('Date of violation: 28/12/1998'),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: size.width * 0.7,
+                        height: size.height * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/avt.jpg'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      });
 }
 
 class _CreateButton extends StatelessWidget {
@@ -314,11 +348,11 @@ class _CreateButton extends StatelessWidget {
                           letterSpacing: 1.5,
                         ),
                       ),
-                      onPressed: state.status.isValidated
+                      onPressed: state.reportBranch.value > 0
                           ? () {
                               context
                                   .read<ReportCreateBloc>()
-                                  .add(ReportCreateSubmitted(isDraft: true));
+                                  .add(ReportCreateSubmitted());
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

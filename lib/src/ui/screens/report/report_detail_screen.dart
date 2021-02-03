@@ -1,5 +1,5 @@
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/data/models/violation.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';

@@ -38,7 +38,7 @@ class SkeletonLoading extends StatelessWidget {
           ],
         ),
       ),
-      items: 5,
+      items: 4,
       period: Duration(seconds: 2),
       highlightColor: Colors.lightBlue[300],
       direction: SkeletonDirection.ltr,

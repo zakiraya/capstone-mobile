@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'Exceptions.dart';
 
 class BaseApi {
-  final String _baseUrl = "https://d73798c70eb8.ngrok.io";
+  final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
 
   Map<String, String> generateHeader([Map<String, String> opts]) {
     return {'Content-Type': 'application/json; charset=UTF-8', ...?opts};
@@ -17,7 +17,8 @@ class BaseApi {
       final response =
           await http.get(_baseUrl + url, headers: generateHeader(opts));
       responseJson = _returnResponse(response);
-    } on SocketException {
+    } catch (e) {
+      print(e);
       throw FetchDataException('No Internet connection');
     }
 

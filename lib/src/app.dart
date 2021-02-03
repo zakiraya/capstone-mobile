@@ -4,6 +4,7 @@ import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart'
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
+import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,7 +50,7 @@ class _AppViewState extends State<AppView> {
     var blue = Color(0xff2329D6);
     var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
-      primaryColor: Colors.blue[800],
+      primaryColor: Colors.pink,
       // accentColor: Colors.purple[400],
 
       // bottomNavigationBarTheme: BottomNavigationBarThemeData(

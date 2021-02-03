@@ -16,6 +16,15 @@ class ReportNameChanged extends ReportCreateEvent {
   List<Object> get props => [reportName];
 }
 
+class ReportBranchChanged extends ReportCreateEvent {
+  const ReportBranchChanged({@required this.reportBranchId});
+
+  final int reportBranchId;
+
+  @override
+  List<Object> get props => [reportBranchId];
+}
+
 class ReportDescriptionChanged extends ReportCreateEvent {
   const ReportDescriptionChanged({@required this.reportDescription});
 
@@ -23,6 +32,24 @@ class ReportDescriptionChanged extends ReportCreateEvent {
 
   @override
   List<Object> get props => [reportDescription];
+}
+
+class ReportViolationsChanged extends ReportCreateEvent {
+  const ReportViolationsChanged({@required this.reportViolation});
+
+  final Violation reportViolation;
+
+  @override
+  List<Object> get props => [reportViolation];
+}
+
+class ReportViolationRemove extends ReportCreateEvent {
+  const ReportViolationRemove({@required this.position});
+
+  final int position;
+
+  @override
+  List<Object> get props => [position];
 }
 
 class ReportCreateSubmitted extends ReportCreateEvent {
