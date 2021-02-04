@@ -9,9 +9,12 @@ class BranchApi {
 
   BranchApi({@required this.httpClient});
 
-  Future<List<Branch>> getBranches({@required Map<String, String> opts}) async {
+  Future<List<Branch>> getBranches({
+    @required String token,
+    Map<String, String> opts,
+  }) async {
     final branchUrl = 'branches?Filter.IsDeleted=false';
-    final userJson = await _baseApi.get(branchUrl, opts: opts);
+    final userJson = await _baseApi.get(branchUrl, token, opts: opts);
     final branches = userJson['data']['result'] as List;
     return branches.map((branch) => Branch.fromJson(branch)).toList();
   }

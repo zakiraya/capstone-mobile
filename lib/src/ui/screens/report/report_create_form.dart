@@ -1,7 +1,5 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
-import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
@@ -9,7 +7,6 @@ import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReportForm extends StatefulWidget {
   @override

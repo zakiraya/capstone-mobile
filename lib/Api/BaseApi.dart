@@ -7,31 +7,43 @@ import 'Exceptions.dart';
 class BaseApi {
   final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
 
-  Map<String, String> generateHeader([Map<String, String> opts]) {
-    return {'Content-Type': 'application/json; charset=UTF-8', ...?opts};
+  Map<String, String> generateHeader(String token, [Map<String, String> opts]) {
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+      ...?opts,
+    };
   }
 
-  Future<dynamic> get(String url, {Map<String, String> opts}) async {
+  Future<dynamic> get(
+    String url,
+    String token, {
+    Map<String, String> opts,
+  }) async {
     var responseJson;
     try {
       final response =
-          await http.get(_baseUrl + url, headers: generateHeader(opts));
+          await http.get(_baseUrl + url, headers: generateHeader(token, opts));
       responseJson = _returnResponse(response);
     } catch (e) {
       print(e);
-      throw FetchDataException('No Internet connection');
+      // throw FetchDataException('No Internet connection');
     }
 
     return responseJson;
   }
 
-  Future<dynamic> post(String url, dynamic body,
-      {Map<String, String> opts}) async {
+  Future<dynamic> post(
+    String url,
+    dynamic body,
+    String token, {
+    Map<String, String> opts,
+  }) async {
     var responseJson;
     try {
       final response = await http.post(_baseUrl + url,
-          headers: generateHeader(opts),
-          body: jsonEncode(<String, String>{...body}));
+          headers: generateHeader(token, opts),
+          body: jsonEncode(<String, dynamic>{...body}));
       responseJson = _returnResponse(response);
     } catch (e) {
       // throw FetchDataException(e);
@@ -41,12 +53,16 @@ class BaseApi {
     return responseJson;
   }
 
-  Future<dynamic> put(String url, dynamic body,
-      {Map<String, String> opts}) async {
+  Future<dynamic> put(
+    String url,
+    dynamic body,
+    String token, {
+    Map<String, String> opts,
+  }) async {
     var responseJson;
     try {
       final response = await http.put(_baseUrl + url,
-          headers: generateHeader(opts),
+          headers: generateHeader(token, opts),
           body: jsonEncode(<String, String>{...body}));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -56,12 +72,16 @@ class BaseApi {
     return responseJson;
   }
 
-  Future<dynamic> delete(String url, {Map<String, String> opts}) async {
+  Future<dynamic> delete(
+    String url,
+    String token, {
+    Map<String, String> opts,
+  }) async {
     var responseJson;
     try {
       final response = await http.delete(
         _baseUrl + url,
-        headers: generateHeader(opts),
+        headers: generateHeader(token, opts),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -75,6 +95,10 @@ class BaseApi {
     String body = response.body.toString();
     switch (response.statusCode) {
       case 200:
+        var responseJson = jsonDecode(body);
+        print(responseJson);
+        return responseJson;
+      case 201:
         var responseJson = jsonDecode(body);
         print(responseJson);
         return responseJson;

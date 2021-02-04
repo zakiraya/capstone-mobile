@@ -9,10 +9,16 @@ class RegulationApi {
 
   RegulationApi({@required this.httpClient});
 
-  Future<List<Regulation>> getRegulations(
-      {@required Map<String, String> opts}) async {
+  Future<List<Regulation>> getRegulations({
+    @required String token,
+    Map<String, String> opts,
+  }) async {
     final regulationUrl = 'regulations?Filter.IsDeleted=false';
-    final userJson = await _baseApi.get(regulationUrl, opts: opts);
+    final userJson = await _baseApi.get(
+      regulationUrl,
+      token,
+      opts: opts,
+    );
     final regulations = userJson['data']['result'] as List;
     return regulations
         .map((regulation) => Regulation.fromJson(regulation))

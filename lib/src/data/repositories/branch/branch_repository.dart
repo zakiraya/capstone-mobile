@@ -11,10 +11,10 @@ class BranchRepository {
   BranchRepository();
 
   Future<List<Branch>> fetchBranches(String token) async {
-    String bearer = 'Bearer $token';
     return _branches = _branches != null
         ? _branches
-        : await _branchApi
-            .getBranches(opts: <String, String>{'Authorization': bearer});
+        : await _branchApi.getBranches(
+            token: token,
+          );
   }
 }

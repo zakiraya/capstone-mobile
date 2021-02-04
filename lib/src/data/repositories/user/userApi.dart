@@ -16,16 +16,20 @@ class UserApi {
     final body = <String, dynamic>{'username': username, 'password': password};
 
     final userJson =
-        await baseApi.post(authenUrl, body) as Map<String, dynamic>;
+        await baseApi.post(authenUrl, body, null) as Map<String, dynamic>;
 
     return userJson['token'];
   }
 
-  Future<User> getProfile(String id, {Map<String, String> opts}) async {
+  Future<User> getProfile(
+    String id,
+    String token, {
+    Map<String, String> opts,
+  }) async {
     final userUrl = '/api/employee/$id';
 
     final userJson =
-        await baseApi.get(userUrl, opts: opts) as Map<String, dynamic>;
+        await baseApi.get(userUrl, token, opts: opts) as Map<String, dynamic>;
     return User.fromJson(userJson);
   }
 }

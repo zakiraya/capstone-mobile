@@ -56,8 +56,11 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     // state.props.remove(state?.reportBranch);
     return state.copyWith(
       reportBranch: reportBranch,
-      status: Formz.validate(
-          [state.reportDescription, state.reportListViolation, reportBranch]),
+      status: Formz.validate([
+        state.reportDescription,
+        state.reportListViolation,
+        reportBranch,
+      ]),
     );
   }
 
@@ -92,7 +95,11 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     print('new list: ${list.length}');
     return state.copyWith(
       reportListViolation: reportViolations,
-      status: Formz.validate([reportViolations, state.reportDescription]),
+      status: Formz.validate([
+        reportViolations,
+        state.reportDescription,
+        state.reportBranch,
+      ]),
     );
   }
 
@@ -106,15 +113,15 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
       try {
         DateTime date = DateTime.now();
         var result = await reportRepository.createReport(
-            token: "token",
+            token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI",
             report: Report(
-                name: reportNameGenerate(state.reportBranch.value, date, 1),
-                branchId: state.reportBranch.value,
-                description: state.reportDescription.value,
-                createdAt: formatDate(date),
-                createdBy: 1),
+              name: reportNameGenerate(state.reportBranch.value, date, 1),
+              branchId: state.reportBranch.value,
+              description: state.reportDescription.value,
+              createdBy: 11,
+            ),
             isDraft: event.isDraft);
-
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } catch (e) {
         print(e);

@@ -14,7 +14,11 @@ class RegulationRepository {
     String bearer = 'Bearer $token';
     return _regulations = _regulations != null
         ? _regulations
-        : await _regulationApi
-            .getRegulations(opts: <String, String>{'Authorization': bearer});
+        : await _regulationApi.getRegulations(
+            token: token,
+            opts: <String, String>{
+              'Authorization': bearer,
+            },
+          );
   }
 }
