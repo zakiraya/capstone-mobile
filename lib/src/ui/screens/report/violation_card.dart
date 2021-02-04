@@ -9,14 +9,14 @@ class ViolationCard extends StatelessWidget {
     this.errorCode,
     this.violationName,
     this.violator,
-    this.violationDate,
+    this.createdDate,
     this.status,
   }) : super(key: key);
 
   final String errorCode;
   final String violationName;
   final String violator;
-  final DateTime violationDate;
+  final String createdDate;
   final String status;
 
   @override
@@ -80,7 +80,7 @@ class ViolationCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Violated date: ${violationDate.toString() ?? 01 / 01 / 2021}",
+                            "Violated date: ${createdDate ?? "01 / 01 / 2021"}",
                             style: TextStyle(fontSize: 8),
                           ),
                           Text("Status: ${status ?? "Status"}",

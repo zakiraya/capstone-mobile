@@ -67,7 +67,12 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     return state.copyWith(
       reportDescription: reportDescription,
       status: Formz.validate(
-          [reportDescription, state.reportListViolation, state.reportBranch]),
+        [
+          reportDescription,
+          state.reportListViolation,
+          state.reportBranch,
+        ],
+      ),
     );
   }
 

@@ -3,9 +3,13 @@ import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
+import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
+import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReportForm extends StatefulWidget {
   @override
@@ -46,7 +50,7 @@ class _ReportFormState extends State<ReportForm> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                _BranchDropdown(),
+                BranchDropdown(),
                 SizedBox(
                   height: 15,
                 ),
@@ -96,74 +100,6 @@ class _ReportNameInput extends StatelessWidget {
   }
 }
 
-class _BranchDropdown extends StatefulWidget {
-  _BranchDropdown({Key key}) : super(key: key);
-
-  @override
-  __BranchDropdownState createState() => __BranchDropdownState();
-}
-
-class __BranchDropdownState extends State<_BranchDropdown> {
-  BranchRepository _branchRepository = BranchRepository();
-  List<Branch> _branches = List();
-  Branch dropdownValue;
-
-  Future<String> getBranches() async {
-    // var branches = await _branchRepository.fetchBranches(
-    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI");
-
-    setState(() => _branches = [
-          Branch(id: 1, name: "Br01"),
-          Branch(id: 2, name: "Br02"),
-          Branch(id: 3, name: "Br03"),
-          Branch(id: 4, name: "Br04"),
-        ]);
-
-    return 'success';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    this.getBranches();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      child: DropdownButton<Branch>(
-        isExpanded: true,
-        value: dropdownValue,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 1,
-          color: Colors.black38,
-        ),
-        onChanged: (newValue) {
-          setState(() {
-            print('new value: ${newValue.name}');
-            dropdownValue = newValue;
-          });
-          context.read<ReportCreateBloc>().add(
-                ReportBranchChanged(reportBranchId: newValue.id),
-              );
-        },
-        items: _branches.map<DropdownMenuItem<Branch>>((branch) {
-          return DropdownMenuItem<Branch>(
-            value: branch,
-            child: Text(branch.name),
-          );
-        }).toList(),
-      ),
-    );
-    // });
-  }
-}
-
 class _ReportDescriptionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -180,7 +116,7 @@ class _ReportDescriptionInput extends StatelessWidget {
                     ),
             decoration: InputDecoration(
               labelText: 'Report Description:',
-              errorText: state.reportName.invalid
+              errorText: state.reportDescription.invalid
                   ? 'invalid report description'
                   : null,
             ),
@@ -209,6 +145,14 @@ class _ReportListViolationList extends StatelessWidget {
                     child: IconButton(
                       onPressed: () {
                         _showModalOne(context);
+                        // showMaterialModalBottomSheet(
+                        //   expand: false,
+                        //   context: context,
+                        //   backgroundColor: Colors.transparent,
+                        //   builder: (context) => ViolationCreateModal(
+                        //     context: context,
+                        //   ),
+                        // );
                       },
                       icon: Icon(
                         Icons.add,
@@ -236,7 +180,7 @@ List<Widget> buildViolationList(List<Violation> violations) {
   for (var vio in violations) {
     ViolationCard card = ViolationCard(
       errorCode: vio.violationCode,
-      violationName: vio.violationName,
+      violationName: vio.regulationId.toString(),
     );
     violationCards.add(card);
   }
@@ -246,83 +190,27 @@ List<Widget> buildViolationList(List<Violation> violations) {
 void _showModalOne(BuildContext context) {
   final bloc = BlocProvider.of<ReportCreateBloc>(context);
   var size = MediaQuery.of(context).size;
-  showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      builder: (BuildContext context) {
-        return Material(
-          clipBehavior: Clip.antiAlias,
-          // borderRadius: BorderRadius.circular(16.0),
-          child: SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Remove'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          print('asdfsd');
-                          bloc.add(
-                            ReportViolationsChanged(
-                              reportViolation:
-                                  Violation(id: 1, violationCode: "fawefw"),
-                            ),
-                          );
-                        },
-                        child: Text('Add'),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    color: Colors.red,
-                  ),
-                  Container(
-                    child: Text('Violator: violator\'s name'),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    child: Text('Date of violation: 28/12/1998'),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: size.width * 0.7,
-                        height: size.height * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/avt.jpg'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      });
+  Future<Violation> future = showModalBottomSheet(
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    context: context,
+    builder: (BuildContext context) {
+      return ModalBody(bloc: bloc, size: size);
+    },
+  );
+  future.then((value) {
+    bloc.add(
+      ReportViolationsChanged(
+        reportViolation: Violation(
+          violationCode: "fawefw",
+          createdDate: Utils.formatDate(DateTime.now()),
+          violationName: value.violationName,
+          description: value.description,
+          regulationId: value.regulationId,
+        ),
+      ),
+    );
+  });
 }
 
 class _CreateButton extends StatelessWidget {
