@@ -38,6 +38,10 @@ dependencies:
   meta: ^1.1.8
   uuid: ^2.1.0
   formz: ^0.3.2
+  lorem_ipsum: ^0.0.1
+  modal_bottom_sheet: ^1.0.0+1
+  skeleton_loader: ^1.0.2+2
+  image_picker: 0.6.7+22
 
 dev_dependencies:
   flutter_test:
