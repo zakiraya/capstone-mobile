@@ -56,15 +56,18 @@ class Report extends Equatable {
     String description,
   }) {
     return Report(
-        status: status ?? this.status,
-        branchId: branchId ?? this.branchId,
-        createdBy: createdBy ?? this.createdBy,
-        name: name ?? this.name,
-        description: description ?? this.description);
+      status: status ?? this.status,
+      branchId: branchId ?? this.branchId,
+      createdBy: createdBy ?? this.createdBy,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      id: id ?? this.id,
+    );
   }
 
   @override
   List<Object> get props => [
+        id,
         name,
         status,
         branchId,

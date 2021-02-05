@@ -38,40 +38,48 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     TextEditingController descriptionTextFieldController =
         TextEditingController(text: report.description);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        // title: Text('Report detail'),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: theme.primaryColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
+    return BlocProvider(
+      create: (context) => ReportCreateBloc(
+        branchRepository: BranchRepository(),
+        reportRepository: ReportRepository(),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          // title: Text('Report detail'),
+          leading: IconButton(
             icon: Icon(
-              Icons.edit,
+              Icons.arrow_back_ios,
               color: theme.primaryColor,
             ),
             onPressed: () {
-              setState(() {
-                editable = true;
-              });
+              Navigator.pop(context);
             },
-          )
-        ],
-      ),
-      body: BlocProvider(
-        create: (context) => ReportCreateBloc(
-          branchRepository: BranchRepository(),
-          reportRepository: ReportRepository(),
+          ),
+          actions: [
+            Builder(builder: (context) {
+              return IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: theme.primaryColor,
+                ),
+                onPressed: () {
+                  setState(() {
+                    editable = true;
+                  });
+
+                  context.read<ReportCreateBloc>().add(
+                        ReportEditing(
+                          report: report,
+                        ),
+                      );
+                },
+              );
+            })
+          ],
         ),
-        child: ReportEditForm(
+        body: ReportEditForm(
             report: report,
             theme: theme,
             descriptionTextFieldController: descriptionTextFieldController,

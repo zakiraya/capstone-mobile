@@ -2,11 +2,10 @@ import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart'
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ReportListViolationList extends StatelessWidget {
+class ReportListViewViolation extends StatelessWidget {
   final List<Violation> violationCards = List<Violation>();
 
   @override
@@ -74,6 +73,7 @@ void showModalOne(BuildContext context) {
   future.then((value) {
     bloc.add(
       ReportViolationsChanged(
+        isEditing: true,
         reportViolation: Violation(
           violationName: value.violationName,
           description: value.description,
