@@ -7,7 +7,10 @@ import 'Exceptions.dart';
 class BaseApi {
   final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
 
-  Map<String, String> generateHeader(String token, [Map<String, String> opts]) {
+  Map<String, String> generateHeader(
+    String token, [
+    Map<String, String> opts,
+  ]) {
     return {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token',

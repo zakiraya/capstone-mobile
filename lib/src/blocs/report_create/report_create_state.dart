@@ -7,26 +7,33 @@ class ReportCreateState extends Equatable {
     this.reportDescription = const ReportDescription.pure(),
     this.reportBranch = const ReportBranch.pure(),
     this.reportListViolation = const ReportListViolation.pure(),
+    this.report,
+    this.isEditing = false,
   });
 
+  final Report report;
+  final bool isEditing;
   final FormzStatus status;
   final ReportName reportName;
   final ReportDescription reportDescription;
   final ReportBranch reportBranch;
   final ReportListViolation reportListViolation;
 
-  ReportCreateState copyWith(
-      {FormzStatus status,
-      ReportName reportName,
-      ReportDescription reportDescription,
-      ReportBranch reportBranch,
-      ReportListViolation reportListViolation}) {
+  ReportCreateState copyWith({
+    FormzStatus status,
+    ReportName reportName,
+    ReportDescription reportDescription,
+    ReportBranch reportBranch,
+    ReportListViolation reportListViolation,
+    bool isEditing,
+  }) {
     return ReportCreateState(
       status: status ?? this.status,
       reportName: reportName ?? this.reportName,
       reportDescription: reportDescription ?? this.reportDescription,
       reportBranch: reportBranch ?? this.reportBranch,
       reportListViolation: reportListViolation ?? this.reportListViolation,
+      isEditing: isEditing ?? this.isEditing,
     );
   }
 
@@ -36,6 +43,8 @@ class ReportCreateState extends Equatable {
         reportName,
         reportDescription,
         reportBranch,
-        reportListViolation
+        reportListViolation,
+        isEditing,
+        report,
       ];
 }

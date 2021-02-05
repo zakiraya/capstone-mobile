@@ -1,9 +1,12 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/data/models/report/report_list_violation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class ReportEditForm extends StatelessWidget {
   const ReportEditForm({
@@ -72,10 +75,11 @@ class ReportEditForm extends StatelessWidget {
                   height: 16,
                 ),
                 _ReportDescriptionInput(
-                    descriptionTextFieldController:
-                        descriptionTextFieldController,
-                    report: report,
-                    editable: editable),
+                  descriptionTextFieldController:
+                      descriptionTextFieldController,
+                  report: report,
+                  editable: editable,
+                ),
               ],
             ),
           ),
@@ -88,19 +92,26 @@ class ReportEditForm extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          buildViolationList([
-            Violation(id: 1),
-            Violation(id: 1),
-            Violation(id: 1),
-            Violation(id: 1),
-          ]),
+          // buildViolationList([
+          //   Violation(id: 1),
+          //   Violation(id: 1),
+          //   Violation(id: 1),
+          //   Violation(id: 1),
+          // ]),
+          ReportListViewViolation(),
           editable == false
               ? Container()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _SaveButton(size: size),
-                    _SubmitButton(size: size),
+                    _SaveButton(
+                      size: size,
+                      report: report,
+                    ),
+                    _SubmitButton(
+                      size: size,
+                      report: report,
+                    ),
                   ],
                 ),
           SizedBox(
@@ -142,9 +153,12 @@ class _ReportDescriptionInput extends StatelessWidget {
             ),
           ),
           onChanged: (description) {
-            context.read<ReportCreateBloc>().add(ReportDescriptionChanged(
-                  reportDescription: description,
-                ));
+            context.read<ReportCreateBloc>().add(
+                  ReportDescriptionChanged(
+                    reportDescription: description,
+                    isEditing: true,
+                  ),
+                );
           },
           enabled: editable,
           maxLines: 5,
@@ -157,10 +171,12 @@ class _ReportDescriptionInput extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key key,
+    @required this.report,
     @required this.size,
   }) : super(key: key);
 
   final Size size;
+  final Report report;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +194,9 @@ class _SubmitButton extends StatelessWidget {
                 letterSpacing: 1.5,
               ),
             ),
-            onPressed: () {},
+            onPressed: state.status.isValidated && state.isEditing == true
+                ? () {}
+                : null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,
               primary: Theme.of(context).primaryColor,
@@ -197,19 +215,21 @@ class _SaveButton extends StatelessWidget {
   const _SaveButton({
     Key key,
     @required this.size,
+    this.report,
   }) : super(key: key);
 
   final Size size;
+  final Report report;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReportCreateBloc, ReportCreateState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) => previous.isEditing != current.isEditing,
       builder: (context, state) {
         return Container(
           width: size.width * 0.4,
           child: ElevatedButton(
-            key: const Key('reportForm_edit_raisedButton'),
+            key: const Key('reportForm_saveDraft_raisedButton'),
             child: const Text(
               'Save',
               style: TextStyle(
@@ -217,7 +237,18 @@ class _SaveButton extends StatelessWidget {
                 letterSpacing: 1.5,
               ),
             ),
-            onPressed: () {},
+            onPressed: state.isEditing == true
+                ? () {
+                    context.read<ReportCreateBloc>().add(
+                          ReportEdited(
+                            report: report,
+                            isDraft: true,
+                          ),
+                        );
+
+                    Navigator.pop(context);
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,
               primary: Theme.of(context).primaryColor,

@@ -70,4 +70,30 @@ class ReportRepository {
 
     return result == 201 ? 'success' : 'fail';
   }
+
+  Future<String> editReport({
+    @required String token,
+    @required Report report,
+    bool isDraft = true,
+  }) async {
+    if (report == null) {
+      return 'fail';
+    }
+
+    isDraft
+        ? report = report.copyWith(status: 'Draft')
+        : report = report.copyWith(status: 'Pending');
+
+    print("here");
+    print(report.name);
+    print(report.branchId);
+    print(report.description);
+
+    var result = await _reportApi.editReport(
+      token: token,
+      report: report,
+    );
+
+    return result == 200 ? 'success' : 'fail';
+  }
 }

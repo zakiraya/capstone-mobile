@@ -65,7 +65,7 @@ class _ReportFormState extends State<ReportForm> {
           SizedBox(
             height: 16,
           ),
-          ReportListViolationList(),
+          ReportListViewViolation(),
           SizedBox(
             height: 32,
           ),

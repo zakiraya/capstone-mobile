@@ -24,6 +24,29 @@ class ReportApi {
     return reports.map((report) => Report.fromJson(report)).toList();
   }
 
+  Future<int> editReport({
+    @required String token,
+    @required Report report,
+    Map<String, String> opts,
+  }) async {
+    final url = reportUrl + '/' + report.id.toString();
+    print(url);
+    final body = <String, dynamic>{
+      'name': report.name,
+      'description': report.description,
+      'status': report.status,
+    };
+
+    final result = await _baseApi.put(
+      url,
+      body,
+      token,
+      opts: opts,
+    );
+
+    return result['code'];
+  }
+
   Future<int> createReport({
     @required String token,
     @required Map<String, String> opts,
