@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ReportRepository {
-  List<Report> _report = [
+  List<Report> _reportFake = [
     Report(name: "report 1", status: "done"),
     Report(name: "report 2", status: "rejected"),
     Report(name: "report 3", status: "draft"),
@@ -15,38 +15,34 @@ class ReportRepository {
   ReportRepository();
   ReportApi _reportApi = ReportApi(httpClient: http.Client());
 
-  Future<List<Report>> fetchReports(String token, {String status}) async {
-    return _report
-        .where((element) =>
-            element.status == "done" || element.status == "rejected")
-        .toList();
-  }
-
-  Future<String> createReportFake({
+  Future<List<Report>> fetchReports({
     @required String token,
-    @required Report report,
-    @required bool isDraft,
+    @required String status,
   }) async {
-    if (report == null) {
-      return 'fail';
+    if (status == 'Draft') {
+      return await _reportApi.getReports(
+        token: token,
+        status: status,
+      );
     }
 
-    report.props.forEach((element) {
-      print(element);
-    });
+    List<Report> pendingReports = List();
 
-    isDraft == true
-        ? _report.add(Report(
-            name: report.name,
-            description: report.description,
-            status: 'draft'))
-        : _report.add(Report(
-            name: report.name,
-            description: report.description,
-            status: 'done'));
+    pendingReports = await _reportApi.getReports(
+      token: token,
+      status: 'Pending',
+    );
 
-    await Future<void>.delayed(const Duration(seconds: 2));
-    return 'success';
+    List<Report> doneReports = List();
+    doneReports = await _reportApi.getReports(
+      token: token,
+      status: 'Done',
+    );
+
+    return <Report>[
+      ...pendingReports,
+      ...doneReports,
+    ];
   }
 
   Future<String> createReport({
@@ -63,10 +59,6 @@ class ReportRepository {
     isDraft
         ? report = report.copyWith(status: 'Draft')
         : report = report.copyWith(status: 'Pending');
-
-    // report.props.forEach((element) {
-    //   print(element);
-    // });
 
     var result = await _reportApi.createReport(
       token: token,

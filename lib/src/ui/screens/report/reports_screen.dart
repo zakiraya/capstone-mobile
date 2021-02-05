@@ -170,13 +170,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         groupValue: groupValue,
                         children: segments,
                         onValueChanged: (value) {
+                          print('fawef');
                           setState(() {
                             groupValue = value;
                           });
 
-                          context.read<ReportBloc>().add(ReportRequested(
-                              token: "token",
-                              status: value == 0 ? null : "drafts"));
+                          context.read<ReportBloc>().add(
+                                ReportRequested(
+                                    token: "token",
+                                    status: value == 0 ? null : "Draft"),
+                              );
                         },
                       ),
                     ),
@@ -242,7 +245,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                "${reports[index].branchId ?? "KichiKichi - Branch 01"}"),
+                                                "${reports[index].branchId ?? "branch id"}"),
                                             Text(
                                                 "${reports[index].status ?? "Status"}"),
                                           ],
@@ -261,7 +264,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           children: [
                                             Text("5 mistakes"),
                                             Text(
-                                                "${reports[index].createdAt ?? "28/12/1998"}"),
+                                                "${reports[index].createdAt ?? "date time"}"),
                                           ],
                                         ),
                                       ],
@@ -278,9 +281,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   return Container();
                 },
               ),
-              // Container(
-              //   height: 64,
-              // ),
             ],
           ),
         ),
