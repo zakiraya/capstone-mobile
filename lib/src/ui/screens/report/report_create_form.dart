@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
@@ -64,7 +65,7 @@ class _ReportFormState extends State<ReportForm> {
           SizedBox(
             height: 16,
           ),
-          _ReportListViolationList(),
+          ReportListViolationList(),
           SizedBox(
             height: 32,
           ),
@@ -105,7 +106,7 @@ class _ReportDescriptionInput extends StatelessWidget {
             previous.reportDescription != current.reportDescription,
         builder: (contex, state) {
           return TextField(
-            key: const Key('reportForm_reportDescriptionInput_textField'),
+            key: const Key('createForm_reportDescriptionInput_textField'),
             onChanged: (reportDescription) =>
                 context.read<ReportCreateBloc>().add(
                       ReportDescriptionChanged(
@@ -120,94 +121,6 @@ class _ReportDescriptionInput extends StatelessWidget {
           );
         });
   }
-}
-
-class _ReportListViolationList extends StatelessWidget {
-  final List<Violation> violationCards = List<Violation>();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ReportCreateBloc, ReportCreateState>(
-        buildWhen: (previous, current) =>
-            previous.reportListViolation != current.reportListViolation,
-        builder: (contex, state) {
-          return Column(
-            children: [
-              ...buildViolationList(state.reportListViolation.value ?? []),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  Container(
-                    child: IconButton(
-                      onPressed: () {
-                        _showModalOne(context);
-                        // showMaterialModalBottomSheet(
-                        //   expand: false,
-                        //   context: context,
-                        //   backgroundColor: Colors.transparent,
-                        //   builder: (context) => ViolationCreateModal(
-                        //     context: context,
-                        //   ),
-                        // );
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: Colors.blue[900],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        });
-  }
-}
-
-List<Widget> buildViolationList(List<Violation> violations) {
-  if (violations == null) return null;
-
-  List<ViolationCard> violationCards = List<ViolationCard>();
-
-  for (var vio in violations) {
-    ViolationCard card = ViolationCard(
-      errorCode: vio.violationCode,
-      violationName: vio.regulationId.toString(),
-    );
-    violationCards.add(card);
-  }
-  return violationCards;
-}
-
-void _showModalOne(BuildContext context) {
-  final bloc = BlocProvider.of<ReportCreateBloc>(context);
-  var size = MediaQuery.of(context).size;
-  Future<Violation> future = showModalBottomSheet(
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    context: context,
-    builder: (BuildContext context) {
-      return ModalBody(bloc: bloc, size: size);
-    },
-  );
-  future.then((value) {
-    bloc.add(
-      ReportViolationsChanged(
-        reportViolation: Violation(
-          violationCode: "fawefw",
-          createdDate: Utils.formatDate(DateTime.now()),
-          violationName: value.violationName,
-          description: value.description,
-          regulationId: value.regulationId,
-        ),
-      ),
-    );
-  });
 }
 
 class _CreateButton extends StatelessWidget {
@@ -225,7 +138,7 @@ class _CreateButton extends StatelessWidget {
                   Container(
                     width: size.width * 0.4,
                     child: ElevatedButton(
-                      key: const Key('reportForm_saveDraft_raisedButton'),
+                      key: const Key('createForm_saveDraft_raisedButton'),
                       child: const Text(
                         'Save Draft',
                         style: TextStyle(
@@ -238,6 +151,7 @@ class _CreateButton extends StatelessWidget {
                               context
                                   .read<ReportCreateBloc>()
                                   .add(ReportCreateSubmitted());
+                              Navigator.pop(context);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
@@ -252,7 +166,7 @@ class _CreateButton extends StatelessWidget {
                   Container(
                     width: size.width * 0.4,
                     child: ElevatedButton(
-                      key: const Key('reportForm_submit_raisedButton'),
+                      key: const Key('createForm_submit_raisedButton'),
                       child: const Text(
                         'Submit',
                         style: TextStyle(
@@ -265,6 +179,8 @@ class _CreateButton extends StatelessWidget {
                               context
                                   .read<ReportCreateBloc>()
                                   .add(ReportCreateSubmitted(isDraft: false));
+
+                              Navigator.pop(context);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

@@ -38,6 +38,7 @@ class Report extends Equatable {
 
   static Report fromJson(dynamic json) {
     return Report(
+      name: json['name'],
       id: json['id'],
       branchId: json['branch']['id'],
       branchName: json['branch']['name'],

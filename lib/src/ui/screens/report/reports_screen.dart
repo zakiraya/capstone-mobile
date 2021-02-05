@@ -22,7 +22,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   int groupValue = 0;
 
   final Map<int, Widget> segments = <int, Widget>{
-    0: Container(child: Text('Submited Reports')),
+    0: Container(child: Text('Submitted Reports')),
     1: Container(child: Text('Drafts'))
   };
 
@@ -170,7 +170,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         groupValue: groupValue,
                         children: segments,
                         onValueChanged: (value) {
-                          print('fawef');
                           setState(() {
                             groupValue = value;
                           });
@@ -218,7 +217,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               splashColor: Colors.blue.withAlpha(30),
                               onTap: () {
                                 Navigator.push(
-                                    context, ReportDetailScreen.route());
+                                  context,
+                                  ReportDetailScreen.route(
+                                    report: reports[index],
+                                  ),
+                                );
                               },
                               child: ClipPath(
                                 clipper: ShapeBorderClipper(
@@ -245,16 +248,30 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                "${reports[index].branchId ?? "branch id"}"),
+                                                "${'Branch: ' + reports[index].branchName ?? "branch name"}"),
                                             Text(
-                                                "${reports[index].status ?? "Status"}"),
+                                              "${reports[index].status ?? "Status"}",
+                                              style: TextStyle(
+                                                color: reports[index]
+                                                            .status
+                                                            .toLowerCase() ==
+                                                        'draft'
+                                                    ? Colors.grey
+                                                    : (reports[index]
+                                                                .status
+                                                                .toLowerCase() ==
+                                                            'pending'
+                                                        ? Colors.blue
+                                                        : Colors.green),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(
                                           height: 8,
                                         ),
                                         Text(
-                                            "${reports[index].name ?? "Report name"}"),
+                                            "${'Report: ' + reports[index].name ?? "Report name"}"),
                                         SizedBox(
                                           height: 16,
                                         ),
