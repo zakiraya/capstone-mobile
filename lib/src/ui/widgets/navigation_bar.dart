@@ -20,7 +20,7 @@ class _NavigationBarState extends State<NavigationBar> {
     SettingsScreen(),
   ];
 
-  static List<String> _titles = ['Reports', 'Cameras', 'Profile'];
+  static List<String> _titles = ['Reports', 'Cameras', 'Settings'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,18 +40,18 @@ class _NavigationBarState extends State<NavigationBar> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Reports',
+            label: title,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.control_camera),
-            label: 'Cameras',
+            label: title,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: title,
           ),
         ],
         currentIndex: _selectedIndex,

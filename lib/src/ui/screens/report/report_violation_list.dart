@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReportListViewViolation extends StatelessWidget {
+  final bool isEditing;
   final List<Violation> violationCards = List<Violation>();
+
+  ReportListViewViolation({Key key, this.isEditing = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +20,29 @@ class ReportListViewViolation extends StatelessWidget {
           return Column(
             children: [
               ...buildViolationList(state.reportListViolation.value ?? []),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: Colors.blue[900],
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        showModalOne(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              isEditing == true
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Colors.blue[900],
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              showModalOne(context);
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           );
         });

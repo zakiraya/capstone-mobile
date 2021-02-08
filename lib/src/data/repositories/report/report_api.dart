@@ -66,4 +66,18 @@ class ReportApi {
 
     return result['code'];
   }
+
+  Future<int> deleteReport({
+    @required String token,
+    @required int id,
+  }) async {
+    final url = reportUrl + '/' + id.toString();
+
+    token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiMiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6ImMxZDVmYTQ5LThhN2MtNDAwNS04YTdmLWEzNzQ5Mjg5YmMwNSIsIm5iZiI6MTYxMjc3MDY4OSwiZXhwIjoxNjEyNzcwOTg5LCJpYXQiOjE2MTI3NzA2ODksImF1ZCI6Ik1hdmNhIn0.vOISaOZJ17BTAElaRRWEi5YgDCgM3pNgePitWbn1Nc4';
+
+    final result = await _baseApi.delete(url, token);
+
+    return result['code'];
+  }
 }

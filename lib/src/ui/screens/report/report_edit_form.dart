@@ -14,14 +14,14 @@ class ReportEditForm extends StatelessWidget {
     @required this.report,
     @required this.theme,
     @required this.descriptionTextFieldController,
-    @required this.editable,
+    @required this.isEditing,
     @required this.size,
   }) : super(key: key);
 
   final Report report;
   final ThemeData theme;
   final TextEditingController descriptionTextFieldController;
-  final bool editable;
+  final bool isEditing;
   final Size size;
 
   @override
@@ -78,7 +78,7 @@ class ReportEditForm extends StatelessWidget {
                   descriptionTextFieldController:
                       descriptionTextFieldController,
                   report: report,
-                  editable: editable,
+                  editable: isEditing,
                 ),
               ],
             ),
@@ -92,14 +92,10 @@ class ReportEditForm extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          // buildViolationList([
-          //   Violation(id: 1),
-          //   Violation(id: 1),
-          //   Violation(id: 1),
-          //   Violation(id: 1),
-          // ]),
-          ReportListViewViolation(),
-          editable == false
+          ReportListViewViolation(
+            isEditing: isEditing,
+          ),
+          isEditing == false
               ? Container()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -195,7 +191,11 @@ class _SubmitButton extends StatelessWidget {
               ),
             ),
             onPressed: state.status.isValidated && state.isEditing == true
-                ? () {}
+                ? () {
+                    context.read<ReportCreateBloc>().add(
+                          ReportEdited(report: report),
+                        );
+                  }
                 : null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,

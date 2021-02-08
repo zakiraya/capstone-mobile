@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -139,21 +140,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       ),
                     ],
                   ),
-                  Container(
-                    child: Center(
-                        child: IconButton(
-                      icon: Icon(Icons.camera_alt_outlined),
-                      color: Colors.white,
-                      onPressed: () {},
-                    )),
-                    height: 50,
-                    width: 75,
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0),
-                            topLeft: Radius.circular(10.0)),
-                        color: theme.accentColor),
-                  ),
+                  ImagePickerButton(),
                 ],
               ),
               SizedBox(
@@ -220,6 +207,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   context,
                                   ReportDetailScreen.route(
                                     report: reports[index],
+                                    isEditable:
+                                        reports[index].status.toLowerCase() ==
+                                                'draft'
+                                            ? true
+                                            : false,
                                   ),
                                 );
                               },

@@ -6,9 +6,10 @@ class Violation extends Equatable {
   final String status;
   final String violationCode;
   final String createdDate;
-  final String imageUrl;
+  final String imagePath;
   final String description;
   final int regulationId;
+  final int branchId;
 
   Violation({
     this.id,
@@ -16,9 +17,10 @@ class Violation extends Equatable {
     this.status,
     this.violationCode,
     this.createdDate,
-    this.imageUrl,
+    this.imagePath,
     this.description,
     this.regulationId,
+    this.branchId,
   });
 
   @override
@@ -28,9 +30,10 @@ class Violation extends Equatable {
         status,
         violationCode,
         createdDate,
-        imageUrl,
+        imagePath,
         description,
-        regulationId
+        regulationId,
+        branchId,
       ];
 
   static Violation fromJson(dynamic json) {

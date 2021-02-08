@@ -26,14 +26,49 @@ class Report extends Equatable {
     this.violations,
   });
 
+  List<Map<String, dynamic>> convertListViolationToMap(
+      List<Violation> violations) {
+    List<Map<String, dynamic>> list = List();
+
+    violations.forEach((violation) {
+      list.add(<String, dynamic>{
+        'name': violation.violationName,
+        'description': violation.description,
+        'imagePath': violation.imagePath,
+        'regulationId': violation.regulationId,
+        'branchId': violation.branchId,
+      });
+    });
+
+    return list;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'createdBy': this.createdBy,
       'branchId': this.branchId,
       'name': this.name,
       'description': this.description,
-      'status': this.status
+      'status': this.status,
+      'violationCreate': [
+        ...convertListViolationToMap(this.violations),
+      ],
     };
+  }
+
+  List<Violation> jsonToListViolation(List<Map> list) {
+    List<Violation> parsedList;
+
+    list.forEach((violation) {
+      parsedList.add(Violation(
+        violationName: violation['name'],
+        description: violation['description'],
+        status: violation['status'],
+        imagePath: violation['violation'],
+        createdDate: violation['createdDate'],
+        branchId: violation['branchId'],
+      ));
+    });
   }
 
   static Report fromJson(dynamic json) {
@@ -45,6 +80,7 @@ class Report extends Equatable {
       description: json['description'],
       createdAt: json['createdAt'],
       status: json['status'],
+      violations: json['violationCreate'],
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class App extends StatelessWidget {
   const App({
