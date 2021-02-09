@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:flutter/material.dart';
 import '../screens/report/reports_screen.dart';
 import '../screens/cameras_screen.dart';
@@ -11,9 +12,9 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
+  final FirebaseNotification firebaseNotification = FirebaseNotification();
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static List<Widget> _widgetOptions = <Widget>[
     ReportsScreen(),
     CamerasScreens(),
@@ -26,6 +27,13 @@ class _NavigationBarState extends State<NavigationBar> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firebaseNotification.configFireBaseMessaging();
   }
 
   @override

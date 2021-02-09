@@ -1,8 +1,10 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/notification/notification_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +88,7 @@ class _AppViewState extends State<AppView> {
               );
             } else {
               _navigator.pushAndRemoveUntil<void>(
-                LoginScreen.route(),
+                MessagingWidget.route(),
                 (route) => false,
               );
             }
