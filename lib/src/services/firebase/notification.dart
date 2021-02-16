@@ -11,7 +11,9 @@ class FirebaseNotification {
   FirebaseMessaging firebaseMessaging;
   List<Message> messages;
 
-  configFireBaseMessaging() {
+  configFirebaseMessaging() {
+    firebaseMessaging.subscribeToTopic('test');
+
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage: $message');

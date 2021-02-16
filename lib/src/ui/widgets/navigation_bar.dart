@@ -33,7 +33,7 @@ class _NavigationBarState extends State<NavigationBar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    firebaseNotification.configFireBaseMessaging();
+    firebaseNotification.configFirebaseMessaging();
   }
 
   @override
