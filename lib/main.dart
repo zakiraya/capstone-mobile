@@ -6,6 +6,8 @@ import 'src/app.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(App(
     authenticationRepository: AuthenticationRepository(
       userApi: UserApi(

@@ -42,8 +42,8 @@ dependencies:
   modal_bottom_sheet: ^1.0.0+1
   skeleton_loader: ^1.0.2+2
   image_picker: 0.6.7+22
-  firebase_core: "^0.7.0"
-  firebase_messaging:
+  firebase_core: "^0.5.0+1"
+  firebase_messaging: "^7.0.3"
 
 
 dev_dependencies:

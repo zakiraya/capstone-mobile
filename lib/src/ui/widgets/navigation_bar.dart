@@ -12,8 +12,11 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
-  final FirebaseNotification firebaseNotification = FirebaseNotification();
+  // final FirebaseNotification firebaseNotification = FirebaseNotification();
+  // final _navigatorKey = GlobalKey<NavigatorState>();
+
   int _selectedIndex = 0;
+  // NavigatorState get _navigator => _navigatorKey.currentState;
 
   static List<Widget> _widgetOptions = <Widget>[
     ReportsScreen(),
@@ -33,7 +36,7 @@ class _NavigationBarState extends State<NavigationBar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    firebaseNotification.configFirebaseMessaging();
+    // firebaseNotification.configFirebaseMessaging();
   }
 
   @override

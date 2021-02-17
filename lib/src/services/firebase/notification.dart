@@ -1,6 +1,8 @@
 import 'package:capstone_mobile/src/services/firebase/message.dart';
+import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class FirebaseNotification {
   FirebaseNotification() {
@@ -8,18 +10,25 @@ class FirebaseNotification {
     messages = [];
   }
 
+  static Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    print('on background $message');
+    return null;
+  }
+
   FirebaseMessaging firebaseMessaging;
   List<Message> messages;
 
-  configFirebaseMessaging() {
+  Future configFirebaseMessaging(NavigatorState navigator) async {
     firebaseMessaging.subscribeToTopic('test');
 
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage: $message');
       },
+      onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch: $message');
+        navigator.push(LoginScreen.route());
       },
       onResume: (Map<String, dynamic> message) async {
         print('onResume: $message');
@@ -46,6 +55,12 @@ class MessagingWidget extends StatefulWidget {
 class _MessagingWidgetState extends State<MessagingWidget> {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final List<Message> messages = [];
+  static Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    print('on background $message');
+    return null;
+  }
+
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   void initState() {
@@ -62,6 +77,7 @@ class _MessagingWidgetState extends State<MessagingWidget> {
               title: notification['title'], body: notification['body']));
         });
       },
+      onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch: $message');
       },
@@ -73,15 +89,32 @@ class _MessagingWidgetState extends State<MessagingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: messages
-            .map((message) => ListTile(
-                  title: Text(message.title),
-                  subtitle: Text(message.body),
-                ))
-            .toList(),
-      ),
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Container(
+              child: Text('Error'),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            body: ListView(
+              children: messages
+                  .map((message) => ListTile(
+                        title: Text(message.title ?? 'test'),
+                        subtitle: Text(message.body ?? 'test'),
+                      ))
+                  .toList(),
+            ),
+          );
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -43,9 +44,18 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final FirebaseNotification firebaseNotification = FirebaseNotification();
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   NavigatorState get _navigator => _navigatorKey.currentState;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firebaseNotification.configFirebaseMessaging(_navigator);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,29 +84,46 @@ class _AppViewState extends State<AppView> {
       ),
     );
 
-    return MaterialApp(
-      theme: themeData,
-      debugShowCheckedModeBanner: false,
-      navigatorKey: _navigatorKey,
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state.token != '') {
-              _navigator.pushAndRemoveUntil<void>(
-                HomeScreen.route(),
-                (route) => false,
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('Error'),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            theme: themeData,
+            debugShowCheckedModeBanner: false,
+            navigatorKey: _navigatorKey,
+            builder: (context, child) {
+              return BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+                  if (state.token != '') {
+                    _navigator.pushAndRemoveUntil<void>(
+                      HomeScreen.route(),
+                      (route) => false,
+                    );
+                  } else {
+                    _navigator.pushAndRemoveUntil<void>(
+                      LoginScreen.route(),
+                      (route) => false,
+                    );
+                  }
+                },
+                child: child,
               );
-            } else {
-              _navigator.pushAndRemoveUntil<void>(
-                MessagingWidget.route(),
-                (route) => false,
-              );
-            }
-          },
-          child: child,
-        );
+            },
+            onGenerateRoute: (_) => SplashScreen.route(),
+          );
+        }
+
+        return CircularProgressIndicator();
       },
-      onGenerateRoute: (_) => SplashScreen.route(),
     );
   }
 }
