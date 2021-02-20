@@ -60,8 +60,8 @@ class BranchDropdownState extends State<BranchDropdown> {
             print('new value: ${newValue.name}');
             dropdownValue = newValue;
           });
-          context.read<ReportCreateBloc>().add(
-                ReportBranchChanged(reportBranchId: newValue.id),
+          context.read<ViolationCreateBloc>().add(
+                ViolationBranchChanged(branchId: newValue.id),
               );
         },
         items: _branches.map<DropdownMenuItem<Branch>>((branch) {

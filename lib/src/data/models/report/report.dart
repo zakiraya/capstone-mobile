@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:equatable/equatable.dart';
 
 class Report extends Equatable {
@@ -11,7 +12,7 @@ class Report extends Equatable {
   final String createdAt;
   final String updatedAt;
   final int createdBy;
-  final List<Violation> violations;
+  List<Violation> violations;
 
   Report({
     this.id,
@@ -32,7 +33,7 @@ class Report extends Equatable {
 
     violations.forEach((violation) {
       list.add(<String, dynamic>{
-        'name': violation.violationName,
+        'name': violation.name,
         'description': violation.description,
         'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
@@ -50,9 +51,6 @@ class Report extends Equatable {
       'name': this.name,
       'description': this.description,
       'status': this.status,
-      'violationCreate': [
-        ...convertListViolationToMap(this.violations),
-      ],
     };
   }
 
@@ -61,11 +59,11 @@ class Report extends Equatable {
 
     list.forEach((violation) {
       parsedList.add(Violation(
-        violationName: violation['name'],
+        name: violation['name'],
         description: violation['description'],
         status: violation['status'],
         imagePath: violation['violation'],
-        createdDate: violation['createdDate'],
+        createdAt: violation['createdDate'],
         branchId: violation['branchId'],
       ));
     });
@@ -78,7 +76,7 @@ class Report extends Equatable {
       branchId: json['branch']['id'],
       branchName: json['branch']['name'],
       description: json['description'],
-      createdAt: json['createdAt'],
+      createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
       status: json['status'],
       violations: json['violationCreate'],
     );
@@ -90,6 +88,7 @@ class Report extends Equatable {
     int branchId,
     int createdBy,
     String description,
+    List<Violation> violations,
   }) {
     return Report(
       status: status ?? this.status,
@@ -97,6 +96,7 @@ class Report extends Equatable {
       createdBy: createdBy ?? this.createdBy,
       name: name ?? this.name,
       description: description ?? this.description,
+      violations: violations ?? this.violations,
       id: id ?? this.id,
     );
   }

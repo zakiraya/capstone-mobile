@@ -1,94 +1,14 @@
 import 'dart:io';
 
-import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_create/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:formz/formz.dart';
-
-class ViolationCreateModal extends StatefulWidget {
-  const ViolationCreateModal({Key key, this.context}) : super(key: key);
-
-  final BuildContext context;
-
-  @override
-  _ViolationCreateModalState createState() => _ViolationCreateModalState();
-}
-
-class _ViolationCreateModalState extends State<ViolationCreateModal> {
-  @override
-  Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<ReportCreateBloc>(widget.context);
-    var size = MediaQuery.of(context).size;
-    var theme = Theme.of(context);
-    return Material(
-      clipBehavior: Clip.antiAlias,
-      // borderRadius: BorderRadius.circular(16.0),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel'),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.red,
-              ),
-              Container(
-                child: Text('Violator: violator\'s name'),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                child: Text('Date of violation: 28/12/1998'),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: size.width * 0.7,
-                    height: size.height * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/avt.jpg'),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class ModalBody extends StatefulWidget {
   const ModalBody({
@@ -97,7 +17,7 @@ class ModalBody extends StatefulWidget {
     @required this.size,
   }) : super(key: key);
 
-  final ReportCreateBloc bloc;
+  final ViolationListBloc bloc;
   final Size size;
 
   @override
@@ -150,7 +70,8 @@ class _ModalBodyState extends State<ModalBody> {
                           var bloc =
                               BlocProvider.of<ViolationCreateBloc>(context);
                           return ElevatedButton(
-                            onPressed: bloc.state.status.isValid
+                            onPressed: bloc.state.status.isValid &&
+                                    _image != null
                                 ? () async {
                                     // bloc.add(ViolationAdded());
                                     var state = bloc.state;
@@ -174,14 +95,13 @@ class _ModalBodyState extends State<ModalBody> {
                                     Navigator.pop<Violation>(
                                       context,
                                       Violation(
-                                        violationCode: "fawefw",
-                                        createdDate:
-                                            Utils.formatDate(DateTime.now()),
-                                        violationName: state.name,
+                                        name: state.name,
                                         description:
                                             state.violationDescription.value,
                                         regulationId:
                                             state.violationRegulation.value,
+                                        imagePath: _image.path,
+                                        branchId: state.violationBranch.value,
                                       ),
                                     );
                                   }
@@ -203,6 +123,12 @@ class _ModalBodyState extends State<ModalBody> {
                 ),
                 Container(
                   child: RegulationDropdown(),
+                ),
+                Container(
+                  child: Text('Branch:'),
+                ),
+                Container(
+                  child: BranchDropdown(),
                 ),
                 Container(
                   child: _ViolationDescriptionInput(),
@@ -261,11 +187,15 @@ class _ViolationDescriptionInput extends StatelessWidget {
                           violationDescription: violationDescription),
                     ),
             decoration: InputDecoration(
-              labelText: 'Violation Description:',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              labelText: 'Description:',
               errorText: state.violationDescription.invalid
                   ? 'invalid violation description'
                   : null,
             ),
+            maxLines: 5,
           );
         });
   }

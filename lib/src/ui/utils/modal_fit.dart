@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalFit extends StatelessWidget {
-  const ModalFit({Key key}) : super(key: key);
+  const ModalFit({Key key, @required this.violation}) : super(key: key);
+
+  final Violation violation;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,7 @@ class ModalFit extends StatelessWidget {
               ),
               Container(
                 child: Text(
-                  'Name error',
+                  '${violation.name ?? 'Violation name'}',
                   style: theme.textTheme.headline6,
                 ),
               ),
@@ -50,13 +55,13 @@ class ModalFit extends StatelessWidget {
                 color: Colors.red,
               ),
               Container(
-                child: Text('Violator: violator\'s name'),
+                child: Text('Branch: ${violation.branchId}'),
               ),
               SizedBox(
                 height: 8,
               ),
               Container(
-                child: Text('Date of violation: 28/12/1998'),
+                child: Text('Regulation: ${violation.regulationId}'),
               ),
               SizedBox(
                 height: 16,
@@ -71,7 +76,9 @@ class ModalFit extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/avt.jpg'),
+                        image: violation.imagePath == null
+                            ? AssetImage('assets/avt.jpg')
+                            : FileImage(File(violation.imagePath)),
                       ),
                     ),
                   ),

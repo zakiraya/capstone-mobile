@@ -22,7 +22,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
       yield ViolationLoadInProgress();
       try {
         final List<Violation> violations =
-            await violationRepository.fetchViolations(token: "token");
+            await violationRepository.fetchViolations(token: event.token);
         yield ViolationLoadSuccess(violations: violations);
       } catch (e) {
         print(e);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../screens/violation/violation_screen.dart';
 import '../screens/report/reports_screen.dart';
-import '../screens/cameras_screen.dart';
 import '../screens/settings_screen.dart';
 
 class NavigationBar extends StatefulWidget {
@@ -16,11 +17,11 @@ class _NavigationBarState extends State<NavigationBar> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     ReportsScreen(),
-    CamerasScreens(),
+    ViolationScreen(),
     SettingsScreen(),
   ];
 
-  static List<String> _titles = ['Reports', 'Cameras', 'Settings'];
+  static List<String> _titles = ['Reports', 'Violations', 'Settings'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,7 +31,6 @@ class _NavigationBarState extends State<NavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    String title = _titles[_selectedIndex];
     return Scaffold(
       // appBar: AppBar(
       //   title: Text('$title'),
@@ -43,15 +43,15 @@ class _NavigationBarState extends State<NavigationBar> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: title,
+            label: _titles[0],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.control_camera),
-            label: title,
+            label: _titles[1],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: title,
+            label: _titles[2],
           ),
         ],
         currentIndex: _selectedIndex,

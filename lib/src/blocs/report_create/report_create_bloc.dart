@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
+
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/report/report_branch.dart';
 import 'package:capstone_mobile/src/data/models/report/report_description.dart';
@@ -9,10 +13,6 @@ import 'package:capstone_mobile/src/data/models/report/report_name.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:formz/formz.dart';
 
 part 'report_create_event.dart';
 part 'report_create_state.dart';
@@ -72,7 +72,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
   ReportCreateState _mapReportDesriptionChangeToState(
       ReportDescriptionChanged event, ReportCreateState state) {
     final reportDescription = ReportDescription.dirty(event.reportDescription);
-    print(event.isEditing);
     return state.copyWith(
       reportDescription: reportDescription,
       isEditing: event.isEditing,
@@ -88,24 +87,25 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
 
   ReportCreateState _mapReportViolationListChangeToState(
       ReportViolationsChanged event, ReportCreateState state) {
-    List<Violation> list = state.reportListViolation.value
-        ?.map((violation) => violation)
-        ?.toList();
+    List<Violation> list = state.reportListViolation.value;
+    // ?.map((violation) => violation)
+    // ?.toList();
 
-    print(event.isEditing);
     if (list == null) {
       list = List();
     }
 
+    print(list.length);
+
     list.add(event.reportViolation);
 
-    final reportViolations = ReportListViolation.dirty(list);
+    final reportListViolation = ReportListViolation.dirty(list);
 
     return state.copyWith(
-      reportListViolation: reportViolations,
+      reportListViolation: reportListViolation,
       isEditing: event.isEditing,
       status: Formz.validate([
-        reportViolations,
+        reportListViolation,
         state.reportDescription,
         state.reportBranch,
       ]),
@@ -125,6 +125,7 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
                   state.reportBranch.value, DateTime.now(), 1),
               branchId: state.reportBranch.value,
               description: state.reportDescription.value,
+              violations: state.reportListViolation.value,
               createdBy: 11,
             ),
             isDraft: event.isDraft);

@@ -59,7 +59,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, CreateReportScreen.route());
+              Navigator.push(
+                context,
+                CreateReportScreen.route(),
+              );
             },
             child: Container(
               width: 156,
@@ -88,7 +91,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
         create: (context) => ReportBloc(reportRepository: ReportRepository())
           ..add(ReportRequested(token: "token")),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

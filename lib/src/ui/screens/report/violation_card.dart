@@ -1,23 +1,21 @@
-import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ViolationCard extends StatelessWidget {
   const ViolationCard({
     Key key,
-    this.errorCode,
-    this.violationName,
-    this.violator,
-    this.createdDate,
-    this.status,
+    this.position,
+    this.violation,
   }) : super(key: key);
 
-  final String errorCode;
-  final String violationName;
-  final String violator;
-  final String createdDate;
-  final String status;
+  final int position;
+  final Violation violation;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,9 @@ class ViolationCard extends StatelessWidget {
             expand: false,
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context) => ModalFit(),
+            builder: (context) => ModalFit(
+              violation: violation,
+            ),
           );
         },
         child: Padding(
@@ -61,16 +61,16 @@ class ViolationCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("#${errorCode ?? "error code"}"),
+                      Text("#${violation.violationCode ?? "error code"}"),
                       SizedBox(
                         height: 8,
                       ),
-                      Text("${violationName ?? "Violation name"}"),
+                      Text("${violation.name ?? "Violation name"}"),
                       SizedBox(
                         height: 12,
                       ),
                       Text(
-                        "Violator: ${violator ?? "Hoang Gia Bao"}",
+                        "Branch: ${violation.branchId ?? ""}",
                         style: TextStyle(fontSize: 12),
                       ),
                       SizedBox(
@@ -80,10 +80,10 @@ class ViolationCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Violated date: ${createdDate ?? "01 / 01 / 2021"}",
+                            "Violated date: ${"01 / 01 / 2021"}",
                             style: TextStyle(fontSize: 8),
                           ),
-                          Text("Status: ${status ?? "Status"}",
+                          Text("Regulation: ${violation.regulationId ?? ""}",
                               style: TextStyle(fontSize: 8)),
                         ],
                       ),
@@ -91,9 +91,17 @@ class ViolationCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(
-                Icons.edit_outlined,
-                size: 16.0,
+              IconButton(
+                icon: const Icon(
+                  Icons.delete_outlined,
+                  size: 16.0,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  context
+                      .read<ViolationListBloc>()
+                      .add(ViolationListRemove(position: position));
+                },
               ),
             ],
           ),

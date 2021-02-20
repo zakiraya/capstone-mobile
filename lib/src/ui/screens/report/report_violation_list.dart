@@ -1,7 +1,7 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,38 +14,40 @@ class ReportListViewViolation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReportCreateBloc, ReportCreateState>(
-        buildWhen: (previous, current) =>
-            previous.reportListViolation != current.reportListViolation,
-        builder: (contex, state) {
-          return Column(
-            children: [
-              ...buildViolationList(state.reportListViolation.value ?? []),
-              isEditing == true
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
-                            color: Colors.blue[900],
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              showModalOne(context);
-                            },
-                          ),
+        // buildWhen: (previous, current) =>
+        //     previous.reportListViolation != current.reportListViolation ||
+        //     previous.reportListViolation.value.length !=
+        //         previous.reportListViolation.value.length,
+        builder: (context, state) {
+      return Column(
+        children: [
+          ...buildViolationList(state.reportListViolation.value ?? []),
+          isEditing == true
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Colors.blue[900],
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
                         ),
-                      ],
-                    )
-                  : Container(),
-            ],
-          );
-        });
+                        onPressed: () {
+                          showModalOne(context);
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              : Container(),
+        ],
+      );
+    });
   }
 }
 
@@ -56,9 +58,9 @@ List<Widget> buildViolationList(List<Violation> violations) {
 
   for (var vio in violations) {
     ViolationCard card = ViolationCard(
-      errorCode: vio.violationCode,
-      violationName: vio.regulationId.toString(),
-    );
+        // errorCode: vio.violationCode,
+        // violationName: vio.regulationId.toString(),
+        );
     violationCards.add(card);
   }
   return violationCards;
@@ -72,7 +74,8 @@ void showModalOne(BuildContext context) {
     backgroundColor: Colors.transparent,
     context: context,
     builder: (BuildContext context) {
-      return ModalBody(bloc: bloc, size: size);
+      return Container();
+      // return ModalBody(bloc: bloc, size: size);
     },
   );
   future.then((value) {
@@ -80,9 +83,9 @@ void showModalOne(BuildContext context) {
       ReportViolationsChanged(
         isEditing: true,
         reportViolation: Violation(
-          violationName: value.violationName,
           description: value.description,
           regulationId: value.regulationId,
+          imagePath: value.imagePath,
         ),
       ),
     );

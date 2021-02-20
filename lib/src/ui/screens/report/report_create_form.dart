@@ -1,10 +1,6 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
-import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -19,60 +15,76 @@ class _ReportFormState extends State<ReportForm> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return Padding(
-      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
-      child: ListView(
-        children: [
-          Container(
-            child: Text(
-              'New report',
-              style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: theme.textTheme.headline4.fontSize),
-            ),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocListener<ReportCreateBloc, ReportCreateState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            return SimpleDialog(
+              title: const Text('Submitting...'),
               children: [
-                // _ReportNameInput(),
-                Container(
-                  child: Text(
-                    "Branch: ",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                BranchDropdown(),
-                SizedBox(
-                  height: 15,
-                ),
-                _ReportDescriptionInput(),
+                Center(
+                  child: CircularProgressIndicator(),
+                )
               ],
-            ),
+            );
+          }
+          if (state.status.isSubmissionSuccess) {
+            Navigator.pop(context);
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+          child: ListView(
+            children: [
+              Container(
+                child: Text(
+                  'New report',
+                  style: TextStyle(
+                      color: theme.primaryColor,
+                      fontSize: theme.textTheme.headline4.fontSize),
+                ),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // _ReportNameInput(),
+                    Container(
+                      child: Text(
+                        "Branch: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    BranchDropdown(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    _ReportDescriptionInput(),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: Text("Violation list: "),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              ReportListViewViolation(),
+              SizedBox(
+                height: 32,
+              ),
+              _CreateButton(),
+            ],
           ),
-          SizedBox(
-            height: 15,
-          ),
-          Container(
-            child: Text("Violation list: "),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          ReportListViewViolation(),
-          SizedBox(
-            height: 32,
-          ),
-          _CreateButton(),
-        ],
-      ),
-    );
+        ));
   }
 }
 
@@ -151,7 +163,7 @@ class _CreateButton extends StatelessWidget {
                               context
                                   .read<ReportCreateBloc>()
                                   .add(ReportCreateSubmitted());
-                              Navigator.pop(context);
+                              // Navigator.pop(context);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

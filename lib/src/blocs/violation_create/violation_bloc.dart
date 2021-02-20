@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_description.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_regulation.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
@@ -23,14 +23,16 @@ class ViolationCreateBloc
     if (event is ViolationDescriptionChanged) {
       yield _mapViolationDescriptionToState(event, state);
     } else if (event is ViolationRegulationChanged) {
-      yield _mapReportRegulationChangetoState(event, state);
+      yield _mapViolationRegulationChangetoState(event, state);
+    } else if (event is ViolationBranchChanged) {
+      yield _mapViolationBranchChangetoState(event, state);
     } else if (event is ViolationAdded) {
       yield* _mapViolationCreateAddedToState(event, state);
     }
   }
 }
 
-ViolationCreateState _mapReportRegulationChangetoState(
+ViolationCreateState _mapViolationRegulationChangetoState(
     ViolationRegulationChanged event, ViolationCreateState state) {
   final regulationId = ViolationRegulation.dirty(event.violationRegulation);
   // state.props.remove(state?.reportBranch);
@@ -39,6 +41,20 @@ ViolationCreateState _mapReportRegulationChangetoState(
     status: Formz.validate([
       state.violationDescription,
       regulationId,
+      state.violationBranch,
+    ]),
+  );
+}
+
+ViolationCreateState _mapViolationBranchChangetoState(
+    ViolationBranchChanged event, ViolationCreateState state) {
+  final branchId = ViolationBranch.dirty(event.branchId);
+  return state.copyWith(
+    violationBranch: branchId,
+    status: Formz.validate([
+      state.violationDescription,
+      state.violationRegulation,
+      branchId,
     ]),
   );
 }
@@ -52,7 +68,8 @@ ViolationCreateState _mapViolationDescriptionToState(
     status: Formz.validate(
       [
         violationDescription,
-        // state.violationRegulation,
+        state.violationRegulation,
+        state.violationBranch,
       ],
     ),
   );
