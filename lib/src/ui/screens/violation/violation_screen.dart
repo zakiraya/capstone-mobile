@@ -25,8 +25,18 @@ class _ViolationScreenState extends State<ViolationScreen> {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 5,
         backgroundColor: theme.scaffoldBackgroundColor,
+        title: FlutterLogo(),
+        actions: [
+          Icon(
+            Icons.filter_list_outlined,
+            color: Colors.black,
+          ),
+          Container(
+            width: 16.0,
+          ),
+        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

@@ -22,22 +22,10 @@ class ReportRepository {
       );
     }
 
-    List<Report> pendingReports = List();
-    pendingReports = await _reportApi.getReports(
-      token: token,
-      status: 'Pending',
-    );
-
-    List<Report> doneReports = List();
-    doneReports = await _reportApi.getReports(
+    return await _reportApi.getReports(
       token: token,
       status: 'Done',
     );
-
-    return <Report>[
-      ...pendingReports,
-      ...doneReports,
-    ];
   }
 
   Future<String> createReport({

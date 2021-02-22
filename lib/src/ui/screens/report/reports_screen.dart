@@ -35,6 +35,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: theme.scaffoldBackgroundColor,
+        title: FlutterLogo(),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -54,39 +55,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
           ),
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                CreateReportScreen.route(),
-              );
-            },
-            child: Container(
-              width: 156,
-              height: 32,
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Text(
-                  "CREATE NEW +",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocProvider(
         create: (context) => ReportBloc(reportRepository: ReportRepository())
           ..add(ReportRequested(token: "token")),
@@ -148,37 +116,37 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ImagePickerButton(),
                 ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              Builder(
-                builder: (BuildContext context) {
-                  return Center(
-                    child: Container(
-                      width: 400,
-                      child: CupertinoSegmentedControl(
-                        borderColor: Colors.orange[300],
-                        selectedColor: Colors.orange[300],
-                        groupValue: groupValue,
-                        children: segments,
-                        onValueChanged: (value) {
-                          setState(() {
-                            groupValue = value;
-                          });
+              // SizedBox(
+              //   height: 15,
+              // ),
+              // Builder(
+              //   builder: (BuildContext context) {
+              //     return Center(
+              //       child: Container(
+              //         width: 400,
+              //         child: CupertinoSegmentedControl(
+              //           borderColor: Colors.orange[300],
+              //           selectedColor: Colors.orange[300],
+              //           groupValue: groupValue,
+              //           children: segments,
+              //           onValueChanged: (value) {
+              //             setState(() {
+              //               groupValue = value;
+              //             });
 
-                          context.read<ReportBloc>().add(
-                                ReportRequested(
-                                    token: "token",
-                                    status: value == 0 ? null : "Draft"),
-                              );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
+              //             context.read<ReportBloc>().add(
+              //                   ReportRequested(
+              //                       token: "token",
+              //                       status: value == 0 ? null : "Draft"),
+              //                 );
+              //           },
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
               SizedBox(
-                height: 15,
+                height: 16,
               ),
               BlocBuilder<ReportBloc, ReportState>(
                 builder: (context, state) {
