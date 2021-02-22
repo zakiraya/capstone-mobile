@@ -10,6 +10,7 @@ class Violation extends Equatable {
   String imagePath;
   final String description;
   final int regulationId;
+  final String regulationName;
   int branchId;
   final branchName;
 
@@ -22,6 +23,7 @@ class Violation extends Equatable {
     this.imagePath,
     this.description,
     this.regulationId,
+    this.regulationName,
     this.branchId,
     this.branchName,
   });
@@ -36,6 +38,7 @@ class Violation extends Equatable {
         imagePath,
         description,
         regulationId,
+        regulationName,
         branchId,
         branchName,
       ];
@@ -50,6 +53,7 @@ class Violation extends Equatable {
       createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
       status: json['status'],
       regulationId: json['regulation']['id'],
+      regulationName: json['regulation']['name'],
       imagePath: json['imagePath'],
     );
   }

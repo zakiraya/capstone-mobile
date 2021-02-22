@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
+import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_description.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_regulation.dart';
@@ -34,13 +36,13 @@ class ViolationCreateBloc
 
 ViolationCreateState _mapViolationRegulationChangetoState(
     ViolationRegulationChanged event, ViolationCreateState state) {
-  final regulationId = ViolationRegulation.dirty(event.violationRegulation);
+  final regulation = ViolationRegulation.dirty(event.regulation);
   // state.props.remove(state?.reportBranch);
   return state.copyWith(
-    violationRegulation: regulationId,
+    violationRegulation: regulation,
     status: Formz.validate([
       state.violationDescription,
-      regulationId,
+      regulation,
       state.violationBranch,
     ]),
   );
@@ -48,13 +50,13 @@ ViolationCreateState _mapViolationRegulationChangetoState(
 
 ViolationCreateState _mapViolationBranchChangetoState(
     ViolationBranchChanged event, ViolationCreateState state) {
-  final branchId = ViolationBranch.dirty(event.branchId);
+  final branch = ViolationBranch.dirty(event.branch);
   return state.copyWith(
-    violationBranch: branchId,
+    violationBranch: branch,
     status: Formz.validate([
       state.violationDescription,
       state.violationRegulation,
-      branchId,
+      branch,
     ]),
   );
 }

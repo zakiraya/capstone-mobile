@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ViolationApi {
   final http.Client httpClient;
   BaseApi _baseApi = BaseApi();
-  final violationUrl = 'violations';
+  final violationUrl = 'violations?Filter.IsDeleted=false';
 
   ViolationApi({@required this.httpClient});
 
@@ -27,8 +27,18 @@ class ViolationApi {
   Future<List<Violation>> getViolations({
     @required String token,
     Map<String, String> opts,
+    String sort,
+    double page,
   }) async {
     String url = violationUrl;
+    if (sort != null) {
+      url += '&Sort.Orders=$sort';
+    }
+    if (page != null) {
+      print(page);
+      url += '&PageIndex=${page.toInt()}';
+    }
+
     String token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiMiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjRlOTczM2Q1LTNjNGUtNDBhOC1hNDRlLTNlYjM0Y2M2NzVhZiIsIm5iZiI6MTYxMjQ5Nzc4MywiZXhwIjoxNjEyNDk4MDgzLCJpYXQiOjE2MTI0OTc3ODMsImF1ZCI6Ik1hdmNhIn0.q2VKRIrZHQLwjG3b9XWscGYW8GDmIN3kDwsRL87oiXg';
     final violationJson = await _baseApi.get(url, token);

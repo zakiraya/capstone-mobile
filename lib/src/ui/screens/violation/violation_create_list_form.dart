@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:cool_alert/cool_alert.dart';
+
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 
 class ViolationListForm extends StatelessWidget {
   const ViolationListForm({
@@ -20,24 +21,27 @@ class ViolationListForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ViolationListBloc, ViolationListState>(
-        listener: (context, state) {
-      if (state.status.isSubmissionInProgress) {
-        showDialog(
+    return BlocListener<ViolationListBloc, ViolationListState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.pop(context);
+          CoolAlert.show(
             context: context,
-            builder: (context) {
-              return SimpleDialog(
-                title: const Text('Submitting...'),
-                children: [
-                  Center(
-                    child: CircularProgressIndicator(),
-                  )
-                ],
-              );
-            });
-      }
-    }, builder: (context, state) {
-      return Padding(
+            type: CoolAlertType.success,
+            text: "Transaction completed successfully!",
+          );
+        }
+        if (state.status.isSubmissionFailure) {
+          Navigator.pop(context);
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.error,
+            title: "Oops...",
+            text: "Sorry, something went wrong",
+          );
+        }
+      },
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
@@ -65,7 +69,10 @@ class ViolationListForm extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      showModalOne(context);
+                      showModalOne(
+                        context,
+                        isEditing: false,
+                      );
                     },
                   ),
                 ),
@@ -74,8 +81,9 @@ class ViolationListForm extends StatelessWidget {
             _SubmitButton(size: size),
           ],
         ),
-      );
-    });
+      ),
+      // }
+    );
   }
 }
 
@@ -112,6 +120,18 @@ class _SubmitButton extends StatelessWidget {
                                   .state
                                   .token),
                         );
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SimpleDialog(
+                            title: const Text('Submitting...'),
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            ],
+                          );
+                        });
                   }
                 : null,
             style: ElevatedButton.styleFrom(
@@ -166,30 +186,41 @@ List<Widget> buildViolationList(List<Violation> violations) {
   return violationCards;
 }
 
-void showModalOne(BuildContext context) {
+void showModalOne(
+  BuildContext context, {
+  Violation violation,
+  int position,
+  bool isEditing = false,
+}) {
   final bloc = BlocProvider.of<ViolationListBloc>(context);
   var size = MediaQuery.of(context).size;
-  Future<Violation> future = showModalBottomSheet(
+  showModalBottomSheet<List>(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     context: context,
     builder: (BuildContext context) {
-      return ModalBody(bloc: bloc, size: size);
-    },
-  );
-  future.then((value) {
-    if (value != null) {
-      bloc.add(
-        ViolationListChanged(
-          violation: Violation(
-            branchId: value.branchId,
-            name: value.name,
-            imagePath: value.imagePath,
-            regulationId: value.regulationId,
-            description: value.description,
-          ),
-        ),
+      return ModalBody(
+        bloc: bloc,
+        size: size,
+        isEditing: isEditing,
+        violation: violation,
+        position: position,
       );
+    },
+  ).then((value) {
+    if (value != null && value[0] != null) {
+      value[1] == null
+          ? bloc.add(
+              ViolationListChanged(
+                violation: value[0],
+              ),
+            )
+          : bloc.add(
+              ViolationUpdate(
+                position: value[1],
+                violation: value[0],
+              ),
+            );
     }
   });
 }

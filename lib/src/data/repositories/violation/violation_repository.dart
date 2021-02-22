@@ -11,8 +11,16 @@ class ViolationRepository {
 
   ViolationRepository();
 
-  Future<List<Violation>> fetchViolations({@required String token}) async {
-    return await _violationApi.getViolations(token: token);
+  Future<List<Violation>> fetchViolations({
+    @required String token,
+    String sort,
+    double page,
+  }) async {
+    return await _violationApi.getViolations(
+      token: token,
+      sort: sort,
+      page: page,
+    );
   }
 
   Future<String> createViolation({

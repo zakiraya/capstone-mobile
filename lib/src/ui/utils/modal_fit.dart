@@ -55,13 +55,33 @@ class ModalFit extends StatelessWidget {
                 color: Colors.red,
               ),
               Container(
-                child: Text('Branch: ${violation.branchId}'),
+                child: Text('Branch: ${violation.branchName}'),
               ),
               SizedBox(
                 height: 8,
               ),
               Container(
-                child: Text('Regulation: ${violation.regulationId}'),
+                child: Text('Regulation: ${violation.regulationName}'),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                initialValue: violation.description,
+                decoration: InputDecoration(
+                  labelText: 'Description: ',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                    borderSide: BorderSide(color: Colors.black38),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+                onChanged: (description) {},
+                enabled: false,
+                maxLines: 5,
               ),
               SizedBox(
                 height: 16,

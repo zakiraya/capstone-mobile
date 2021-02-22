@@ -79,14 +79,21 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                   Container(
                     child: Text("Branch: "),
                   ),
-                  Text(violation.branchName),
+                  Text(violation.branchName ?? 'empty'),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    child: Text("Regulation: "),
+                  ),
+                  Text(violation.regulationName ?? 'empty'),
                   SizedBox(
                     height: 16,
                   ),
                   Container(
                     child: Text("Created on: "),
                   ),
-                  Text(violation.createdAt),
+                  Text(violation.createdAt ?? 'empty'),
                   SizedBox(
                     height: 16,
                   ),

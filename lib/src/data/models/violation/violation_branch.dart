@@ -1,13 +1,15 @@
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:formz/formz.dart';
 
 enum ViolationBranchValidationError { empty }
 
-class ViolationBranch extends FormzInput<int, ViolationBranchValidationError> {
-  const ViolationBranch.pure() : super.pure(-1);
-  const ViolationBranch.dirty([int value = -1]) : super.dirty(value);
+class ViolationBranch
+    extends FormzInput<Branch, ViolationBranchValidationError> {
+  const ViolationBranch.pure() : super.pure(null);
+  const ViolationBranch.dirty([Branch value]) : super.dirty(value);
 
   @override
-  ViolationBranchValidationError validator(int value) {
-    return value > -1 ? null : ViolationBranchValidationError.empty;
+  ViolationBranchValidationError validator(Branch value) {
+    return value != null ? null : ViolationBranchValidationError.empty;
   }
 }

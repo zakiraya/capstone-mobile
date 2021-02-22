@@ -16,6 +16,16 @@ class ViolationListChanged extends ViolationListEvent {
   List<Object> get props => [violation];
 }
 
+class ViolationUpdate extends ViolationListEvent {
+  const ViolationUpdate({@required this.position, @required this.violation});
+
+  final Violation violation;
+  final int position;
+
+  @override
+  List<Object> get props => [position, violation];
+}
+
 class ViolationListRemove extends ViolationListEvent {
   const ViolationListRemove({@required this.position});
 

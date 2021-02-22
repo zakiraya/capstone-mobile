@@ -8,10 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BranchDropdown extends StatefulWidget {
-  BranchDropdown({Key key}) : super(key: key);
+  BranchDropdown({Key key, this.initValue}) : super(key: key);
+
+  final Branch initValue;
 
   @override
-  BranchDropdownState createState() => BranchDropdownState();
+  BranchDropdownState createState() =>
+      BranchDropdownState(dropdownValue: initValue);
 }
 
 class BranchDropdownState extends State<BranchDropdown> {
@@ -19,17 +22,13 @@ class BranchDropdownState extends State<BranchDropdown> {
   List<Branch> _branches = List();
   Branch dropdownValue;
 
+  BranchDropdownState({this.dropdownValue});
+
   Future<String> getBranches() async {
     var branches = await _branchRepository.fetchBranches(
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI");
 
     setState(() => _branches = branches);
-    // [
-    //   Branch(id: 1, name: "Br01"),
-    //   Branch(id: 2, name: "Br02"),
-    //   Branch(id: 3, name: "Br03"),
-    //   Branch(id: 4, name: "Br04"),
-    // ]);
 
     return 'success';
   }
@@ -61,7 +60,11 @@ class BranchDropdownState extends State<BranchDropdown> {
             dropdownValue = newValue;
           });
           context.read<ViolationCreateBloc>().add(
-                ViolationBranchChanged(branchId: newValue.id),
+                ViolationBranchChanged(
+                    branch: Branch(
+                  id: newValue.id,
+                  name: newValue.name,
+                )),
               );
         },
         items: _branches.map<DropdownMenuItem<Branch>>((branch) {
@@ -77,16 +80,21 @@ class BranchDropdownState extends State<BranchDropdown> {
 }
 
 class RegulationDropdown extends StatefulWidget {
-  RegulationDropdown({Key key}) : super(key: key);
+  RegulationDropdown({Key key, this.initValue}) : super(key: key);
+
+  final Regulation initValue;
 
   @override
-  RegulationDropdownState createState() => RegulationDropdownState();
+  RegulationDropdownState createState() =>
+      RegulationDropdownState(dropdownValue: initValue);
 }
 
 class RegulationDropdownState extends State<RegulationDropdown> {
   RegulationRepository _regulationRepository = RegulationRepository();
   List<Regulation> _regulations = List();
   Regulation dropdownValue;
+
+  RegulationDropdownState({this.dropdownValue});
 
   Future<String> getBranches() async {
     var regulations = await _regulationRepository.fetchRegulationes(
@@ -123,8 +131,14 @@ class RegulationDropdownState extends State<RegulationDropdown> {
             print('new value: ${newValue.name}');
             dropdownValue = newValue;
           });
+
           context.read<ViolationCreateBloc>().add(
-                ViolationRegulationChanged(violationRegulation: newValue.id),
+                ViolationRegulationChanged(
+                  regulation: Regulation(
+                    id: newValue.id,
+                    name: newValue.name,
+                  ),
+                ),
               );
         },
         items: _regulations.map<DropdownMenuItem<Regulation>>((regulation) {
