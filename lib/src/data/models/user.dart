@@ -17,7 +17,7 @@ class User extends Equatable {
     this.id,
   });
 
-  final int id;
+  final String id;
   final String email;
   final String code;
   final String firstName;

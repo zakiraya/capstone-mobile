@@ -11,21 +11,42 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: BlocProvider(
-          create: (context) {
-            return LoginBloc(
-              authenticationRepository:
-                  RepositoryProvider.of<AuthenticationRepository>(context),
-            );
-          },
-          child: LoginForm(),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   title: const Text('Login'),
+      // ),
+      body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width,
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: size.width * 0.4,
+                  height: size.width * 0.4,
+                  child: FlutterLogo(),
+                ),
+                BlocProvider(
+                  create: (context) {
+                    return LoginBloc(
+                      authenticationRepository:
+                          RepositoryProvider.of<AuthenticationRepository>(
+                              context),
+                    );
+                  },
+                  child: LoginForm(),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

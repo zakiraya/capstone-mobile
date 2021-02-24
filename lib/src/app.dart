@@ -1,13 +1,16 @@
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/change_password_screen.dart';
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/settings_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -42,26 +45,37 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final FirebaseNotification firebaseNotification = FirebaseNotification();
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = ThemeData(
-      brightness: Brightness.light,
-      primaryColor: Colors.pink,
-      // accentColor: Colors.cyan[600],
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: Colors.pink,
-        // backgroundColor: Colors.deepPurple,
-      ),
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firebaseNotification.configFirebaseMessaging(_navigator);
+  }
 
-      // fontFamily: 'Georgia',
+  @override
+  Widget build(BuildContext context) {
+    var blue = Color(0xff2329D6);
+    var purple = Color(0xffAA1EFF);
+    var themeData = ThemeData(
+      primaryColor: blue,
+      accentColor: purple,
+
+      // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      //   selectedItemColor: ,
+      //   // backgroundColor: Colors.deepPurple,
+      // ),
+
+      fontFamily: 'Montserrat',
 
       textTheme: TextTheme(
         headline1: TextStyle(
-          fontSize: 36.0,
+          fontSize: 40.0,
           fontWeight: FontWeight.bold,
         ),
         headline6: TextStyle(fontSize: 20.0),
@@ -71,29 +85,60 @@ class _AppViewState extends State<AppView> {
       ),
     );
 
-    return MaterialApp(
-      theme: themeData,
-      debugShowCheckedModeBanner: false,
-      navigatorKey: _navigatorKey,
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state.token != '') {
-              _navigator.pushAndRemoveUntil<void>(
-                HomeScreen.route(),
-                (route) => false,
-              );
-            } else {
-              _navigator.pushAndRemoveUntil<void>(
-                LoginScreen.route(),
-                (route) => false,
-              );
-            }
-          },
-          child: child,
-        );
-      },
-      onGenerateRoute: (_) => SplashScreen.route(),
-    );
+    return FutureBuilder(
+        future: _initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: Scaffold(
+                body: Center(
+                  child: Text('Some thing went wrong!'),
+                ),
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return BlocProvider(
+                create: (context) => ViolationBloc(
+                      violationRepository: ViolationRepository(),
+                    )..add(ViolationRequested(
+                        token: BlocProvider.of<AuthenticationBloc>(context)
+                            .state
+                            .token,
+                      )),
+                child: MaterialApp(
+                  theme: themeData,
+                  debugShowCheckedModeBanner: false,
+                  navigatorKey: _navigatorKey,
+                  builder: (context, child) {
+                    return BlocListener<AuthenticationBloc,
+                        AuthenticationState>(
+                      listener: (context, state) {
+                        if (state.token != '') {
+                          _navigator.pushAndRemoveUntil<void>(
+                            HomeScreen.route(),
+                            (route) => false,
+                          );
+                        } else {
+                          _navigator.pushAndRemoveUntil<void>(
+                            LoginScreen.route(),
+                            (route) => false,
+                          );
+                        }
+                      },
+                      child: child,
+                    );
+                  },
+                  onGenerateRoute: (_) => SplashScreen.route(),
+                ));
+          }
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(child: Text('init')),
+            ),
+          );
+        });
   }
 }
