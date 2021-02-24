@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomeScreen());
+    return MaterialPageRoute<void>(
+      settings: RouteSettings(name: "/Home"),
+      builder: (_) => HomeScreen(),
+    );
   }
 
   @override

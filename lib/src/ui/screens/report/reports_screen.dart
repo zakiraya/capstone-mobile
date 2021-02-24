@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   int groupValue = 0;
 
   final Map<int, Widget> segments = <int, Widget>{
-    0: Container(child: Text('Submited Reports')),
+    0: Container(child: Text('Submitted Reports')),
     1: Container(child: Text('Drafts'))
   };
 
@@ -34,6 +35,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: theme.scaffoldBackgroundColor,
+        title: FlutterLogo(),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -53,41 +55,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           ),
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, CreateReportScreen.route());
-            },
-            child: Container(
-              width: 156,
-              height: 32,
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Text(
-                  "CREATE NEW +",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocProvider(
         create: (context) => ReportBloc(reportRepository: ReportRepository())
           ..add(ReportRequested(token: "token")),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -139,55 +113,40 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       ),
                     ],
                   ),
-                  Container(
-                    child: Center(
-                        child: IconButton(
-                      icon: Icon(Icons.camera_alt_outlined),
-                      color: Colors.white,
-                      onPressed: () {},
-                    )),
-                    height: 50,
-                    width: 75,
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0),
-                            topLeft: Radius.circular(10.0)),
-                        color: theme.accentColor),
-                  ),
+                  ImagePickerButton(),
                 ],
               ),
-              SizedBox(
-                height: 15,
-              ),
-              Builder(
-                builder: (BuildContext context) {
-                  return Center(
-                    child: Container(
-                      width: 400,
-                      child: CupertinoSegmentedControl(
-                        borderColor: Colors.orange[300],
-                        selectedColor: Colors.orange[300],
-                        groupValue: groupValue,
-                        children: segments,
-                        onValueChanged: (value) {
-                          print('fawef');
-                          setState(() {
-                            groupValue = value;
-                          });
+              // SizedBox(
+              //   height: 15,
+              // ),
+              // Builder(
+              //   builder: (BuildContext context) {
+              //     return Center(
+              //       child: Container(
+              //         width: 400,
+              //         child: CupertinoSegmentedControl(
+              //           borderColor: Colors.orange[300],
+              //           selectedColor: Colors.orange[300],
+              //           groupValue: groupValue,
+              //           children: segments,
+              //           onValueChanged: (value) {
+              //             setState(() {
+              //               groupValue = value;
+              //             });
 
-                          context.read<ReportBloc>().add(
-                                ReportRequested(
-                                    token: "token",
-                                    status: value == 0 ? null : "Draft"),
-                              );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
+              //             context.read<ReportBloc>().add(
+              //                   ReportRequested(
+              //                       token: "token",
+              //                       status: value == 0 ? null : "Draft"),
+              //                 );
+              //           },
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
               SizedBox(
-                height: 15,
+                height: 16,
               ),
               BlocBuilder<ReportBloc, ReportState>(
                 builder: (context, state) {
@@ -218,7 +177,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               splashColor: Colors.blue.withAlpha(30),
                               onTap: () {
                                 Navigator.push(
-                                    context, ReportDetailScreen.route());
+                                  context,
+                                  ReportDetailScreen.route(
+                                    report: reports[index],
+                                    isEditable:
+                                        reports[index].status.toLowerCase() ==
+                                                'draft'
+                                            ? true
+                                            : false,
+                                  ),
+                                );
                               },
                               child: ClipPath(
                                 clipper: ShapeBorderClipper(
@@ -245,16 +213,30 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                "${reports[index].branchId ?? "branch id"}"),
+                                                "${'Branch: ' + reports[index].branchName ?? "branch name"}"),
                                             Text(
-                                                "${reports[index].status ?? "Status"}"),
+                                              "${reports[index].status ?? "Status"}",
+                                              style: TextStyle(
+                                                color: reports[index]
+                                                            .status
+                                                            .toLowerCase() ==
+                                                        'draft'
+                                                    ? Colors.grey
+                                                    : (reports[index]
+                                                                .status
+                                                                .toLowerCase() ==
+                                                            'pending'
+                                                        ? Colors.blue
+                                                        : Colors.green),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(
                                           height: 8,
                                         ),
                                         Text(
-                                            "${reports[index].name ?? "Report name"}"),
+                                            "${'Report: ' + reports[index].name ?? "Report name"}"),
                                         SizedBox(
                                           height: 16,
                                         ),

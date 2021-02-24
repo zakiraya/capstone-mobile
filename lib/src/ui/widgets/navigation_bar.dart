@@ -1,7 +1,8 @@
 import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:flutter/material.dart';
+
+import '../screens/violation/violation_screen.dart';
 import '../screens/report/reports_screen.dart';
-import '../screens/cameras_screen.dart';
 import '../screens/settings_screen.dart';
 
 class NavigationBar extends StatefulWidget {
@@ -20,11 +21,11 @@ class _NavigationBarState extends State<NavigationBar> {
 
   static List<Widget> _widgetOptions = <Widget>[
     ReportsScreen(),
-    CamerasScreens(),
+    ViolationScreen(),
     SettingsScreen(),
   ];
 
-  static List<String> _titles = ['Reports', 'Cameras', 'Profile'];
+  static List<String> _titles = ['Reports', 'Violations', 'Settings'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -41,7 +42,6 @@ class _NavigationBarState extends State<NavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    String title = _titles[_selectedIndex];
     return Scaffold(
       // appBar: AppBar(
       //   title: Text('$title'),
@@ -51,18 +51,18 @@ class _NavigationBarState extends State<NavigationBar> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Reports',
+            label: _titles[0],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.control_camera),
-            label: 'Cameras',
+            label: _titles[1],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: _titles[2],
           ),
         ],
         currentIndex: _selectedIndex,

@@ -1,23 +1,25 @@
-import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+enum ExtraAction { remove, edit }
 
 class ViolationCard extends StatelessWidget {
   const ViolationCard({
     Key key,
-    this.errorCode,
-    this.violationName,
-    this.violator,
-    this.createdDate,
-    this.status,
+    this.position,
+    this.violation,
   }) : super(key: key);
 
-  final String errorCode;
-  final String violationName;
-  final String violator;
-  final String createdDate;
-  final String status;
+  final int position;
+  final Violation violation;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,9 @@ class ViolationCard extends StatelessWidget {
             expand: false,
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context) => ModalFit(),
+            builder: (context) => ModalFit(
+              violation: violation,
+            ),
           );
         },
         child: Padding(
@@ -40,20 +44,20 @@ class ViolationCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/avt.jpg'),
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: Container(
+              //     width: 80,
+              //     height: 80,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(2),
+              //       image: DecorationImage(
+              //         fit: BoxFit.cover,
+              //         image: AssetImage('assets/avt.jpg'),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Expanded(
                 flex: 3,
                 child: Padding(
@@ -61,16 +65,16 @@ class ViolationCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("#${errorCode ?? "error code"}"),
+                      Text("#${violation.violationCode ?? "error code"}"),
                       SizedBox(
                         height: 8,
                       ),
-                      Text("${violationName ?? "Violation name"}"),
+                      Text("${violation.name ?? "Violation name"}"),
                       SizedBox(
                         height: 12,
                       ),
                       Text(
-                        "Violator: ${violator ?? "Hoang Gia Bao"}",
+                        "Branch: ${violation.branchName ?? ""}",
                         style: TextStyle(fontSize: 12),
                       ),
                       SizedBox(
@@ -79,11 +83,11 @@ class ViolationCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Violated date: ${createdDate ?? "01 / 01 / 2021"}",
-                            style: TextStyle(fontSize: 8),
-                          ),
-                          Text("Status: ${status ?? "Status"}",
+                          // Text(
+                          //   "Violated date: ${"01 / 01 / 2021"}",
+                          //   style: TextStyle(fontSize: 8),
+                          // ),
+                          Text("Regulation: ${violation.regulationName ?? ""}",
                               style: TextStyle(fontSize: 8)),
                         ],
                       ),
@@ -91,10 +95,54 @@ class ViolationCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(
-                Icons.edit_outlined,
-                size: 16.0,
-              ),
+              PopupMenuButton(
+                onSelected: (action) {
+                  switch (action) {
+                    case ExtraAction.edit:
+                      // BlocProvider.of<ViolationListBloc>(context)
+                      //     .add(ViolationUpdate(
+                      //   position: position,
+                      //   violation: violation,
+                      // ));
+                      showModalOne(
+                        context,
+                        violation: violation,
+                        position: position,
+                        isEditing: true,
+                      );
+                      break;
+                    case ExtraAction.remove:
+                      BlocProvider.of<ViolationListBloc>(context)
+                          .add(ViolationListRemove(
+                        position: position,
+                      ));
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuItem<ExtraAction>>[
+                  PopupMenuItem<ExtraAction>(
+                    value: ExtraAction.edit,
+                    child: Text('Edit'),
+                  ),
+                  PopupMenuItem<ExtraAction>(
+                    value: ExtraAction.remove,
+                    child: Text('Remove'),
+                  ),
+                ],
+              )
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.delete_outlined,
+              //     size: 16.0,
+              //     color: Colors.red,
+              //   ),
+              //   onPressed: () {
+              //     context
+              //         .read<ViolationListBloc>()
+              //         .add(ViolationListRemove(position: position));
+              //   },
+              // ),
             ],
           ),
         ),

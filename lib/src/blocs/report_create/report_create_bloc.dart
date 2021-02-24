@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
+
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/report/report_branch.dart';
 import 'package:capstone_mobile/src/data/models/report/report_description.dart';
@@ -9,9 +13,6 @@ import 'package:capstone_mobile/src/data/models/report/report_name.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:formz/formz.dart';
 
 part 'report_create_event.dart';
 part 'report_create_state.dart';
@@ -38,6 +39,10 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
       yield _mapReportViolationListChangeToState(event, state);
     } else if (event is ReportCreateSubmitted) {
       yield* _mapReportCreateSubmittedToState(event, state);
+    } else if (event is ReportEditing) {
+      yield _mapReportEditToState(event, state);
+    } else if (event is ReportEdited) {
+      yield* _mapReportEditSubmittedToState(event, state);
     }
   }
 
@@ -69,6 +74,7 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     final reportDescription = ReportDescription.dirty(event.reportDescription);
     return state.copyWith(
       reportDescription: reportDescription,
+      isEditing: event.isEditing,
       status: Formz.validate(
         [
           reportDescription,
@@ -81,44 +87,45 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
 
   ReportCreateState _mapReportViolationListChangeToState(
       ReportViolationsChanged event, ReportCreateState state) {
-    List<Violation> list = state.reportListViolation.value
-        ?.map((violation) => violation)
-        ?.toList();
+    List<Violation> list = state.reportListViolation.value;
+    // ?.map((violation) => violation)
+    // ?.toList();
 
     if (list == null) {
       list = List();
     }
 
+    print(list.length);
+
     list.add(event.reportViolation);
 
-    final reportViolations = ReportListViolation.dirty(list);
-    print('new list: ${list.length}');
+    final reportListViolation = ReportListViolation.dirty(list);
+
     return state.copyWith(
-      reportListViolation: reportViolations,
+      reportListViolation: reportListViolation,
+      isEditing: event.isEditing,
       status: Formz.validate([
-        reportViolations,
+        reportListViolation,
         state.reportDescription,
         state.reportBranch,
       ]),
     );
   }
 
-  ReportCreateState _mapReportViolationRemoveToState(
-      ReportViolationRemove event, ReportCreateState state) {}
-
   Stream<ReportCreateState> _mapReportCreateSubmittedToState(
       ReportCreateSubmitted event, ReportCreateState state) async* {
     if (state.status.isValidated || event.isDraft) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
-        DateTime date = DateTime.now();
         var result = await reportRepository.createReport(
             token:
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI",
             report: Report(
-              name: reportNameGenerate(state.reportBranch.value, date, 1),
+              name: reportNameGenerate(
+                  state.reportBranch.value, DateTime.now(), 1),
               branchId: state.reportBranch.value,
               description: state.reportDescription.value,
+              violations: state.reportListViolation.value,
               createdBy: 11,
             ),
             isDraft: event.isDraft);
@@ -128,6 +135,52 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
+  }
+
+  Stream<ReportCreateState> _mapReportEditSubmittedToState(
+      ReportEdited event, ReportCreateState state) async* {
+    if (state.status.isValidated || event.isDraft) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      try {
+        print(event.report.id);
+        var result = await reportRepository.editReport(
+            token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI",
+            report: Report(
+              id: event.report.id,
+              name: event.report.name,
+              branchId: event.report.branchId,
+              description: state.reportDescription.value,
+            ),
+            isDraft: event.isDraft);
+        yield state.copyWith(status: FormzStatus.submissionSuccess);
+      } catch (e) {
+        print(e);
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
+    }
+  }
+
+  ReportCreateState _mapReportEditToState(
+      ReportEditing event, ReportCreateState state) {
+    final ReportBranch reportBranch = ReportBranch.dirty(event.report.branchId);
+    final ReportListViolation reportlistViolation =
+        ReportListViolation.dirty(event.report.violations);
+    final ReportDescription reportDescription =
+        ReportDescription.dirty(event.report.description);
+    return state.copyWith(
+      reportBranch: reportBranch,
+      reportListViolation: reportlistViolation,
+      reportDescription: reportDescription,
+      isEditing: false,
+      status: Formz.validate(
+        [
+          reportDescription,
+          reportBranch,
+          reportlistViolation,
+        ],
+      ),
+    );
   }
 }
 

@@ -26,21 +26,29 @@ class ReportBranchChanged extends ReportCreateEvent {
 }
 
 class ReportDescriptionChanged extends ReportCreateEvent {
-  const ReportDescriptionChanged({@required this.reportDescription});
+  const ReportDescriptionChanged({
+    @required this.reportDescription,
+    this.isEditing = false,
+  });
 
   final String reportDescription;
+  final bool isEditing;
 
   @override
-  List<Object> get props => [reportDescription];
+  List<Object> get props => [reportDescription, isEditing];
 }
 
 class ReportViolationsChanged extends ReportCreateEvent {
-  const ReportViolationsChanged({@required this.reportViolation});
+  const ReportViolationsChanged({
+    @required this.reportViolation,
+    this.isEditing = false,
+  });
 
   final Violation reportViolation;
+  final bool isEditing;
 
   @override
-  List<Object> get props => [reportViolation];
+  List<Object> get props => [reportViolation, isEditing];
 }
 
 class ReportViolationRemove extends ReportCreateEvent {
@@ -59,4 +67,23 @@ class ReportCreateSubmitted extends ReportCreateEvent {
 
   @override
   List<Object> get props => [isDraft];
+}
+
+class ReportEditing extends ReportCreateEvent {
+  const ReportEditing({@required this.report});
+
+  final Report report;
+
+  @override
+  List<Object> get props => [report];
+}
+
+class ReportEdited extends ReportCreateEvent {
+  const ReportEdited({@required this.report, this.isDraft = true});
+
+  final Report report;
+  final bool isDraft;
+
+  @override
+  List<Object> get props => [report, isDraft];
 }

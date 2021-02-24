@@ -1,104 +1,32 @@
 import 'dart:io';
 
-import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_create/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
+import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:formz/formz.dart';
 
-class ViolationCreateModal extends StatefulWidget {
-  const ViolationCreateModal({Key key, this.context}) : super(key: key);
-
-  final BuildContext context;
-
-  @override
-  _ViolationCreateModalState createState() => _ViolationCreateModalState();
-}
-
-class _ViolationCreateModalState extends State<ViolationCreateModal> {
-  @override
-  Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<ReportCreateBloc>(widget.context);
-    var size = MediaQuery.of(context).size;
-    var theme = Theme.of(context);
-    return Material(
-      clipBehavior: Clip.antiAlias,
-      // borderRadius: BorderRadius.circular(16.0),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel'),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.red,
-              ),
-              Container(
-                child: Text('Violator: violator\'s name'),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                child: Text('Date of violation: 28/12/1998'),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: size.width * 0.7,
-                    height: size.height * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/avt.jpg'),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class ModalBody extends StatefulWidget {
   const ModalBody({
     Key key,
     @required this.bloc,
     @required this.size,
+    this.isEditing = false,
+    this.violation,
+    this.position,
   }) : super(key: key);
 
-  final ReportCreateBloc bloc;
+  final ViolationListBloc bloc;
   final Size size;
+  final bool isEditing;
+  final Violation violation;
+  final int position;
 
   @override
   _ModalBodyState createState() => _ModalBodyState();
@@ -122,6 +50,12 @@ class _ModalBodyState extends State<ModalBody> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _image = widget.violation != null ? File(widget.violation.imagePath) : null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       clipBehavior: Clip.antiAlias,
@@ -141,7 +75,9 @@ class _ModalBodyState extends State<ModalBody> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        child: Text('Violation create'),
+                        child: Text(widget.isEditing
+                            ? 'Violation Edit'
+                            : 'Violation Create'),
                       ),
                       BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
                         buildWhen: (previous, current) =>
@@ -150,43 +86,34 @@ class _ModalBodyState extends State<ModalBody> {
                           var bloc =
                               BlocProvider.of<ViolationCreateBloc>(context);
                           return ElevatedButton(
-                            onPressed: bloc.state.status.isValid
+                            onPressed: bloc.state.status.isValid &&
+                                    _image != null
                                 ? () async {
-                                    // bloc.add(ViolationAdded());
                                     var state = bloc.state;
-
-                                    // if (state.status.isSubmissionInProgress) {
-                                    // widget.bloc.add(
-                                    //   ReportViolationsChanged(
-                                    //     reportViolation: Violation(
-                                    //       violationCode: "fawefw",
-                                    //       createdDate:
-                                    //           Utils.formatDate(DateTime.now()),
-                                    //       violationName: state.name,
-                                    //       description:
-                                    //           state.violationDescription.value,
-                                    //       regulationId:
-                                    //           state.violationRegulation.value,
-                                    //     ),
-                                    //   ),
-                                    // );
-                                    // }
-                                    Navigator.pop<Violation>(
+                                    Navigator.pop<List>(
                                       context,
-                                      Violation(
-                                        violationCode: "fawefw",
-                                        createdDate:
-                                            Utils.formatDate(DateTime.now()),
-                                        violationName: state.name,
-                                        description:
-                                            state.violationDescription.value,
-                                        regulationId:
-                                            state.violationRegulation.value,
-                                      ),
+                                      [
+                                        Violation(
+                                          name: state.name,
+                                          description:
+                                              state.violationDescription.value,
+                                          regulationId: state
+                                              .violationRegulation.value.id,
+                                          regulationName: state
+                                              .violationRegulation.value.name,
+                                          imagePath: _image.path,
+                                          branchId:
+                                              state.violationBranch.value.id,
+                                          branchName:
+                                              state.violationBranch.value.name,
+                                        ),
+                                        widget.position,
+                                      ],
                                     );
                                   }
                                 : null,
-                            child: Text('Add'),
+                            child: Text(
+                                '${widget.isEditing == true ? 'Save' : 'Add'}'),
                             style: ElevatedButton.styleFrom(),
                           );
                         },
@@ -202,10 +129,34 @@ class _ModalBodyState extends State<ModalBody> {
                   child: Text('Violation type:'),
                 ),
                 Container(
-                  child: RegulationDropdown(),
+                  child: RegulationDropdown(
+                    initValue: widget.isEditing == true
+                        ? Regulation(
+                            id: widget.violation.regulationId,
+                            name: widget.violation.regulationName,
+                          )
+                        : null,
+                  ),
                 ),
                 Container(
-                  child: _ViolationDescriptionInput(),
+                  child: Text('Branch:'),
+                ),
+                Container(
+                  child: BranchDropdown(
+                    initValue: widget.isEditing == true
+                        ? Branch(
+                            id: widget.violation.branchId,
+                            name: widget.violation.branchName,
+                          )
+                        : null,
+                  ),
+                ),
+                Container(
+                  child: _ViolationDescriptionInput(
+                    initValue: widget.isEditing == true
+                        ? widget.violation.description
+                        : null,
+                  ),
                 ),
                 SizedBox(
                   height: 8,
@@ -247,13 +198,18 @@ class _ModalBodyState extends State<ModalBody> {
 }
 
 class _ViolationDescriptionInput extends StatelessWidget {
+  final String initValue;
+
+  const _ViolationDescriptionInput({Key key, this.initValue}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
         buildWhen: (previous, current) =>
             previous.violationDescription != current.violationDescription,
         builder: (contex, state) {
-          return TextField(
+          return TextFormField(
+            initialValue: initValue ?? '',
             key: const Key('violationForm_violationDescriptionInput_textField'),
             onChanged: (violationDescription) =>
                 context.read<ViolationCreateBloc>().add(
@@ -261,43 +217,16 @@ class _ViolationDescriptionInput extends StatelessWidget {
                           violationDescription: violationDescription),
                     ),
             decoration: InputDecoration(
-              labelText: 'Violation Description:',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              labelText: 'Description:',
               errorText: state.violationDescription.invalid
                   ? 'invalid violation description'
                   : null,
             ),
+            maxLines: 5,
           );
         });
   }
 }
-
-// class _AddButton extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
-//       buildWhen: (previous, current) => previous.status != current.status,
-//       builder: (context, state) {
-//         return ElevatedButton(
-//                         onPressed:
-//                         state.status.isValid
-
-//                         ? () {
-//                           // widget.bloc.add(
-//                           //   ReportViolationsChanged(
-//                           //     reportViolation:
-//                           //         Violation(id: 1, violationCode: "fawefw"),
-//                           //   ),
-//                           // );
-//                           context
-//                               .read<ViolationCreateBloc>()
-//                               .add(const ViolationAdded());
-//                               var bloc = BlocProvider.of<ViolationCreateBloc>(context);
-
-//                         }
-//                         : null,
-//                         child: Text('Add'),
-//                       );
-//       },
-//     );
-//   }
-// }

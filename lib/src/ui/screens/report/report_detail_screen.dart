@@ -1,160 +1,166 @@
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
-import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
+import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/blocs/report_delete/report_delete_cubit.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 class ReportDetailScreen extends StatefulWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ReportDetailScreen());
+  const ReportDetailScreen({
+    Key key,
+    @required this.report,
+    this.isEditable = false,
+  }) : super(key: key);
+
+  static Route route({@required Report report, bool isEditable}) {
+    return MaterialPageRoute<void>(
+        builder: (_) => ReportDetailScreen(
+              report: report,
+              isEditable: isEditable,
+            ));
   }
+
+  final Report report;
+  final bool isEditable;
 
   @override
   _ReportDetailScreenState createState() => _ReportDetailScreenState();
 }
 
 class _ReportDetailScreenState extends State<ReportDetailScreen> {
+  bool isEditing = false;
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    String text = loremIpsum(words: 60);
+    var size = MediaQuery.of(context).size;
+    var report = widget.report;
+    TextEditingController descriptionTextFieldController =
+        TextEditingController(text: report.description);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        // title: Text('Report detail'),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: theme.primaryColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+    return BlocProvider(
+      create: (context) => ReportCreateBloc(
+        branchRepository: BranchRepository(),
+        reportRepository: ReportRepository(),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 16, top: 8, right: 16),
-        child: ListView(
-          children: [
-            Container(
-              child: Text(
-                'Report of 01213231',
-                style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: theme.textTheme.headline5.fontSize,
-                ),
-              ),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          // title: Text('Report detail'),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: theme.primaryColor,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: Text("Created by: Lai Van Some"),
-                ),
-                Container(
-                  child: Text("Status: "),
-                ),
-              ],
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Text("Branch: "),
-                  ),
-                  Text('Kichi Kichi - Branch 01'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    child: Text("Created on: "),
-                  ),
-                  Text('28/12/1998'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    child: Text("Submitted on: "),
-                  ),
-                  Text('30/12/1998'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    child: Text("Description: "),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text("$text"),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              child: Text("Violation list: "),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            BlocProvider(
-              create: (context) =>
-                  ViolationBloc(violationRepository: ViolationRepository())
-                    ..add(ViolationRequested(token: "token")),
-              child: BlocBuilder<ViolationBloc, ViolationState>(
-                builder: (context, state) {
-                  if (state is ViolationLoadInProgress) {
-                    return Center(
-                      child: SkeletonLoading(),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+
+          actions: widget.isEditable == true
+              ? [
+                  Builder(builder: (context) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: theme.primaryColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isEditing = true;
+                        });
+
+                        context.read<ReportCreateBloc>().add(
+                              ReportEditing(
+                                report: report,
+                              ),
+                            );
+                      },
                     );
-                  } else if (state is ViolationLoadFailure) {
-                    return Center(
-                      child: Text('Fail to fetch violations'),
-                    );
-                  } else if (state is ViolationLoadSuccess) {
-                    if (state.violations.isEmpty) {
-                      return Center(
-                        child: Text('There is no violations'),
+                  }),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete_outline_outlined,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => BlocProvider(
+                          create: (context) => ReportDeleteCubit(
+                              reportRepository: ReportRepository()),
+                          child: BlocConsumer<ReportDeleteCubit,
+                              ReportDeleteState>(
+                            listener: (context, state) {
+                              if (state is ReportDeleteSuccess) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is ReportDeleteInitial) {
+                                return AlertDialog(
+                                  title: Text('Accept?'),
+                                  content: Text(
+                                      'Do you accept to delete this report?'),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('No'),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        context
+                                            .read<ReportDeleteCubit>()
+                                            .deleteReport('token', report.id);
+                                      },
+                                      child: Text('Yes'),
+                                    ),
+                                  ],
+                                );
+                              } else if (state is ReportDeleteInProgress) {
+                                return SimpleDialog(
+                                  title: const Text('Deleting...'),
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  ],
+                                );
+                              } else {
+                                return AlertDialog(
+                                  title: Text("Error"),
+                                  // content: Text("This is my message."),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Back'),
+                                    ),
+                                  ],
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       );
-                    }
-                    return buildViolationList(state.violations);
-                  }
-                  return Container();
-                },
-              ),
-            ),
-            SizedBox(
-              height: 32,
-            ),
-          ],
+                    },
+                  ),
+                ]
+              : [],
         ),
+        body: ReportEditForm(
+            report: report,
+            theme: theme,
+            descriptionTextFieldController: descriptionTextFieldController,
+            isEditing: isEditing,
+            size: size),
       ),
     );
   }
-}
-
-Widget buildViolationList(List<Violation> violations) {
-  List<ViolationCard> violationCards = List<ViolationCard>();
-  for (var vio in violations) {
-    ViolationCard card = ViolationCard();
-    violationCards.add(card);
-  }
-  return Column(
-    children: [...violationCards],
-  );
 }
