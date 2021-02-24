@@ -88,8 +88,18 @@ class _AppViewState extends State<AppView> {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: Scaffold(
+                body: Center(
+                  child: Text('Some thing went wrong!'),
+                ),
+              ),
+            );
+          }
           if (snapshot.connectionState == ConnectionState.done) {
-            BlocProvider(
+            return BlocProvider(
                 create: (context) => ViolationBloc(
                       violationRepository: ViolationRepository(),
                     )..add(ViolationRequested(
@@ -126,7 +136,7 @@ class _AppViewState extends State<AppView> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(child: Text('init')),
             ),
           );
         });
