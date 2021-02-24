@@ -38,24 +38,6 @@ class ViolationRepository {
     String token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiMiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjRlOTczM2Q1LTNjNGUtNDBhOC1hNDRlLTNlYjM0Y2M2NzVhZiIsIm5iZiI6MTYxMjQ5Nzc4MywiZXhwIjoxNjEyNDk4MDgzLCJpYXQiOjE2MTI0OTc3ODMsImF1ZCI6Ik1hdmNhIn0.q2VKRIrZHQLwjG3b9XWscGYW8GDmIN3kDwsRL87oiXg';
 
-    // String imageUrl;
-    // try {
-    //   BaseApi baseApi = BaseApi();
-    //   final uploadImage = await baseApi.uploadImage(
-    //     'images/upload',
-    //     violations[0].imagePath,
-    //     token,
-    //   );
-    //   print('upload success: ');
-    //   print(uploadImage['data'][0]['uri']);
-    //   imageUrl = uploadImage['data'][0]['uri'];
-    // } catch (e) {
-    //   print(e);
-    //   throw Exception('upload image fail');
-    // }
-
-    // violations[0].imagePath = imageUrl;
-
     List<String> imagePaths =
         violations.map((violation) => violation.imagePath).toList();
 
@@ -67,7 +49,6 @@ class ViolationRepository {
         imagePaths,
         token,
       );
-      print('upload success: ');
       print(uploadedImages['data']);
     } catch (e) {
       print(e);
@@ -84,5 +65,38 @@ class ViolationRepository {
     );
 
     return result == 201 ? 'success' : 'fail';
+  }
+
+  Future<String> editViolation({
+    @required String token,
+    @required Violation violation,
+  }) async {
+    var uploadedImage;
+    token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiMiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjRlOTczM2Q1LTNjNGUtNDBhOC1hNDRlLTNlYjM0Y2M2NzVhZiIsIm5iZiI6MTYxMjQ5Nzc4MywiZXhwIjoxNjEyNDk4MDgzLCJpYXQiOjE2MTI0OTc3ODMsImF1ZCI6Ik1hdmNhIn0.q2VKRIrZHQLwjG3b9XWscGYW8GDmIN3kDwsRL87oiXg';
+
+    BaseApi baseApi = BaseApi();
+    uploadedImage = await baseApi.uploadImage(
+      'images/upload',
+      violation.imagePath,
+      token,
+    );
+    violation.imagePath = uploadedImage['data'][0]['uri'];
+
+    var result = await _violationApi.editViolation(
+      token: token,
+      violation: violation,
+    );
+
+    return result == 200 ? 'success' : 'fail';
+  }
+
+  Future<String> deleteViolation({
+    @required String token,
+    @required int id,
+  }) async {
+    var result = await _violationApi.deleteViolation(token: token, id: id);
+
+    return result == 200 ? 'success' : 'fail';
   }
 }

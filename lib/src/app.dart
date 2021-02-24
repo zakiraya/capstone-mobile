@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,8 +52,8 @@ class _AppViewState extends State<AppView> {
     var blue = Color(0xff2329D6);
     var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
-      primaryColor: Colors.pink,
-      // accentColor: Colors.purple[400],
+      primaryColor: blue,
+      accentColor: purple,
 
       // bottomNavigationBarTheme: BottomNavigationBarThemeData(
       //   selectedItemColor: ,
@@ -72,29 +74,36 @@ class _AppViewState extends State<AppView> {
       ),
     );
 
-    return MaterialApp(
-      theme: themeData,
-      debugShowCheckedModeBanner: false,
-      navigatorKey: _navigatorKey,
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state.token != '') {
-              _navigator.pushAndRemoveUntil<void>(
-                HomeScreen.route(),
-                (route) => false,
-              );
-            } else {
-              _navigator.pushAndRemoveUntil<void>(
-                LoginScreen.route(),
-                (route) => false,
-              );
-            }
-          },
-          child: child,
-        );
-      },
-      onGenerateRoute: (_) => SplashScreen.route(),
+    return BlocProvider(
+      create: (context) => ViolationBloc(
+        violationRepository: ViolationRepository(),
+      )..add(ViolationRequested(
+          token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+        )),
+      child: MaterialApp(
+        theme: themeData,
+        debugShowCheckedModeBanner: false,
+        navigatorKey: _navigatorKey,
+        builder: (context, child) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+              if (state.token != '') {
+                _navigator.pushAndRemoveUntil<void>(
+                  HomeScreen.route(),
+                  (route) => false,
+                );
+              } else {
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginScreen.route(),
+                  (route) => false,
+                );
+              }
+            },
+            child: child,
+          );
+        },
+        onGenerateRoute: (_) => SplashScreen.route(),
+      ),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -67,6 +67,53 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         print(e);
         yield ViolationLoadFailure();
       }
+    } else if (event is ViolationUpdate) {
+      yield* _mapViolationUpdateToState(event);
+    } else if (event is ViolationDelete) {
+      yield* _mapViolationDeleteToState(event);
+    }
+  }
+
+  Stream<ViolationState> _mapViolationUpdateToState(
+      ViolationUpdate event) async* {
+    final currentState = state;
+    try {
+      if (currentState is ViolationLoadSuccess) {
+        final List<Violation> updatedViolation =
+            (state as ViolationLoadSuccess).violations.map((violation) {
+          return violation.id == event.violation.id
+              ? event.violation
+              : violation;
+        }).toList();
+        yield currentState.copyWith(violations: updatedViolation);
+        violationRepository.editViolation(
+            token: event.token, violation: event.violation);
+      }
+    } catch (e) {
+      print(' _mapViolationUpdateToState');
+      print(e);
+    }
+  }
+
+  Stream<ViolationState> _mapViolationDeleteToState(
+      ViolationDelete event) async* {
+    try {
+      if (state is ViolationLoadSuccess) {
+        final updatedViolations = (state as ViolationLoadSuccess)
+            .violations
+            .where((violation) => violation.id != event.id)
+            .toList();
+
+        yield (state as ViolationLoadSuccess)
+            .copyWith(violations: updatedViolations);
+        violationRepository.deleteViolation(
+          token: event.token,
+          id: event.id,
+        );
+      }
+    } catch (e) {
+      print(' _mapViolationDeleteToState');
+      print(e);
     }
   }
 

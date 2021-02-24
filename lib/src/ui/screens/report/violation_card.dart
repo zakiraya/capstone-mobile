@@ -150,27 +150,3 @@ class ViolationCard extends StatelessWidget {
     );
   }
 }
-
-void showEditViolationModal(
-  BuildContext context,
-  Violation violation,
-  int position,
-  bool isEditing,
-) {
-  final bloc = BlocProvider.of<ViolationListBloc>(context);
-  var size = MediaQuery.of(context).size;
-  Future<Violation> future = showModalBottomSheet(
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    context: context,
-    builder: (BuildContext context) {
-      return ModalBody(
-        bloc: bloc,
-        size: size,
-        isEditing: isEditing,
-        violation: violation,
-        position: position,
-      );
-    },
-  );
-}

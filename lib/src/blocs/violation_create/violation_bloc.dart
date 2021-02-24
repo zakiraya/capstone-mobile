@@ -37,7 +37,6 @@ class ViolationCreateBloc
 ViolationCreateState _mapViolationRegulationChangetoState(
     ViolationRegulationChanged event, ViolationCreateState state) {
   final regulation = ViolationRegulation.dirty(event.regulation);
-  // state.props.remove(state?.reportBranch);
   return state.copyWith(
     violationRegulation: regulation,
     status: Formz.validate([

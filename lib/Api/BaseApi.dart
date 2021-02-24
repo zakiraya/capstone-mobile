@@ -127,7 +127,6 @@ class BaseApi {
           data: formData,
           options: Options(headers: {
             "Authorization": 'Bearer $token',
-            // "Content-Type": 'multipart/form-data',
           }));
       dio.interceptors.add(LogInterceptor(responseBody: true));
 
@@ -147,9 +146,11 @@ class BaseApi {
   }) async {
     var responseJson;
     try {
-      final response = await http.put(_baseUrl + url,
-          headers: generateHeader(token, opts),
-          body: jsonEncode(<String, String>{...body}));
+      final response = await http.put(
+        _baseUrl + url,
+        headers: generateHeader(token, opts),
+        body: jsonEncode(body),
+      );
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');

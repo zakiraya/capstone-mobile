@@ -121,6 +121,7 @@ class _SubmitButton extends StatelessWidget {
                                   .token),
                         );
                     showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return SimpleDialog(

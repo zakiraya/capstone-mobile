@@ -25,18 +25,9 @@ class _ViolationScreenState extends State<ViolationScreen> {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        elevation: 5,
+        elevation: 0.0,
         backgroundColor: theme.scaffoldBackgroundColor,
         title: FlutterLogo(),
-        actions: [
-          Icon(
-            Icons.filter_list_outlined,
-            color: Colors.black,
-          ),
-          Container(
-            width: 16.0,
-          ),
-        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -131,15 +122,16 @@ class _ViolationScreenState extends State<ViolationScreen> {
             SizedBox(
               height: 16,
             ),
-            BlocProvider(
-              create: (context) => ViolationBloc(
-                violationRepository: ViolationRepository(),
-              )..add(ViolationRequested(
-                  token:
-                      BlocProvider.of<AuthenticationBloc>(context).state.token,
-                )),
-              child: _ViolationList(),
-            ),
+            // BlocProvider(
+            //   create: (context) => ViolationBloc(
+            //     violationRepository: ViolationRepository(),
+            //   )..add(ViolationRequested(
+            //       token:
+            //           BlocProvider.of<AuthenticationBloc>(context).state.token,
+            //     )),
+            //   child: _ViolationList(),
+            // ),
+            _ViolationList(),
           ],
         ),
       ),
@@ -242,7 +234,9 @@ class __ViolationListState extends State<_ViolationList> {
                             Navigator.push(
                               context,
                               ViolationDetailScreen.route(
-                                  violation: violations[index]),
+                                violation: violations[index],
+                                id: violations[index].id,
+                              ),
                             );
                           },
                           child: ClipPath(

@@ -18,7 +18,7 @@ class ViolationLoadSuccess extends ViolationState {
   const ViolationLoadSuccess({@required this.violations, this.hasReachedMax});
 
   ViolationLoadSuccess copyWith({
-    List<String> violations,
+    List<Violation> violations,
     bool hasReachedMax,
   }) {
     return ViolationLoadSuccess(

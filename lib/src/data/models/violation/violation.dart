@@ -58,6 +58,32 @@ class Violation extends Equatable {
     );
   }
 
+  Violation copyWith({
+    int id,
+    String name,
+    String imagePath,
+    String description,
+    int regulationId,
+    String regulationName,
+    int branchId,
+    String branchName,
+    String status,
+  }) {
+    return Violation(
+      branchId: branchId ?? this.branchId,
+      branchName: branchName ?? this.branchName,
+      createdAt: this.createdAt,
+      description: description ?? this.description,
+      id: this.id,
+      imagePath: imagePath ?? this.imagePath,
+      name: name ?? this.name,
+      regulationId: regulationId ?? this.regulationId,
+      regulationName: regulationName ?? this.regulationName,
+      status: status ?? this.status,
+      violationCode: this.violationCode,
+    );
+  }
+
   static List<Map<String, dynamic>> convertListViolationToListMap(
       List<Violation> violations) {
     List<Map<String, dynamic>> list = List();
