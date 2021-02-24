@@ -45,6 +45,9 @@ dependencies:
   dio: ^3.0.10
   gallery_saver: ^2.0.3
   cool_alert: ^1.0.3
+  firebase_core: "^0.5.0+1"
+  firebase_messaging: "^7.0.3"
+
 
 dev_dependencies:
   flutter_test:
