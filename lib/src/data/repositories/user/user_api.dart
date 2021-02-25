@@ -12,25 +12,28 @@ class UserApi {
   }) : assert(httpClient != null);
 
   Future<String> signIn(String username, String password) async {
-    final authenUrl = '/api/Auth/login';
+    final authenUrl = 'auth/login';
     final body = <String, dynamic>{'username': username, 'password': password};
 
     final userJson =
         await baseApi.post(authenUrl, body, null) as Map<String, dynamic>;
 
-    print(userJson['data']['accessToken']);
+    if (userJson["code"] != 200) {
+      throw Exception('Unauthenticated !');
+    }
+
     return userJson['data']['accessToken'];
   }
 
   Future<User> getProfile(
-    String id,
+    String username,
     String token, {
     Map<String, String> opts,
   }) async {
-    final userUrl = '/api/employee/$id';
+    final url = 'accounts?Filter.Username=$username&IncludeProperties=Employee';
 
     final userJson =
-        await baseApi.get(userUrl, token, opts: opts) as Map<String, dynamic>;
+        await baseApi.get(url, token, opts: opts) as Map<String, dynamic>;
     return User.fromJson(userJson);
   }
 }

@@ -49,22 +49,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+                // Positioned(
+                //   bottom: 0,
+                //   right: 0,
+                //   child: Container(
+                //     height: 40,
+                //     width: 40,
+                //     decoration: BoxDecoration(
+                //       shape: BoxShape.circle,
+                //       color: Theme.of(context).primaryColor,
+                //     ),
+                //     child: Icon(
+                //       Icons.edit,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -72,7 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             height: 25,
           ),
           Center(
-            child: Text('${user.fullName ?? 'Some name'}'),
+            child: Text('${user.email ?? 'mail'}'),
           ),
           SizedBox(
             height: 15,
