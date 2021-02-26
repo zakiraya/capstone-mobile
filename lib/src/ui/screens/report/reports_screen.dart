@@ -1,13 +1,13 @@
-import 'package:capstone_mobile/src/data/models/report/report.dart';
-import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
-import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
+import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/report/report_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
 
 class ReportsScreen extends StatefulWidget {
@@ -57,7 +57,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
       ),
       body: BlocProvider(
         create: (context) => ReportBloc(reportRepository: ReportRepository())
-          ..add(ReportRequested(token: "token")),
+          ..add(ReportRequested(
+              token: BlocProvider.of<AuthenticationBloc>(context).state.token)),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
