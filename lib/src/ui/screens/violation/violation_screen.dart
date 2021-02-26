@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
@@ -12,7 +11,9 @@ import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ViolationScreen());
+    return MaterialPageRoute<void>(
+        settings: RouteSettings(name: "/ViolationScreen"),
+        builder: (_) => ViolationScreen());
   }
 
   @override
@@ -183,7 +184,7 @@ class __ViolationListState extends State<_ViolationList> {
         builder: (context, state) {
       if (state is ViolationLoadInProgress) {
         return const Center(
-          child: SkeletonLoading(),
+          child: CircularProgressIndicator(),
         );
       }
       if (state is ViolationLoadFailure) {
@@ -206,14 +207,12 @@ class __ViolationListState extends State<_ViolationList> {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
-                print('At top');
                 _violationBloc.add(ViolationRequested(
                   token:
                       BlocProvider.of<AuthenticationBloc>(context).state.token,
                   isRefresh: true,
                 ));
-              } else
-                print('At bottom');
+              } else {}
             }
             return true;
           },

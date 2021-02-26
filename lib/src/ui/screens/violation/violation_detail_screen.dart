@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_create_add_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,6 +22,7 @@ class ViolationDetailScreen extends StatefulWidget {
     @required int id,
   }) {
     return MaterialPageRoute<void>(
+        settings: RouteSettings(name: "/ViolationEditScreen"),
         builder: (_) => ViolationDetailScreen(
               violation: violation,
               id: id,
@@ -33,6 +34,7 @@ class ViolationDetailScreen extends StatefulWidget {
 }
 
 class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
+  var updatedViolation;
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -45,8 +47,6 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
           .violations
           .firstWhere((violation) => violation.id == widget.id,
               orElse: () => null);
-      bool isNetworkImage = violation.imagePath.contains('http') ? true : false;
-      TextEditingController(text: violation.description);
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -158,23 +158,6 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Text(violation.description ?? 'empty')),
-                    // TextFormField(
-                    //   initialValue: violation.description,
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Description: ',
-                    //     labelStyle: TextStyle(color: Colors.black),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(2),
-                    //       borderSide: BorderSide(color: Colors.black38),
-                    //     ),
-                    //     disabledBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.black),
-                    //     ),
-                    //   ),
-                    //   onChanged: (description) {},
-                    //   enabled: false,
-                    //   maxLines: 5,
-                    // ),
                     SizedBox(
                       height: 16,
                     ),
@@ -196,9 +179,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                               fit: BoxFit.contain,
                               image: violation.imagePath == null
                                   ? AssetImage('assets/avt.jpg')
-                                  : isNetworkImage
-                                      ? NetworkImage(violation.imagePath)
-                                      : FileImage(File(violation.imagePath))),
+                                  : NetworkImage(violation?.imagePath)),
                         ),
                         // child: Hero(
                         //   tag: 'dash',

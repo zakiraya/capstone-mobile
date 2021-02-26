@@ -15,11 +15,13 @@ class ViolationRepository {
     @required String token,
     String sort,
     double page,
+    int limit,
   }) async {
     return await _violationApi.getViolations(
       token: token,
       sort: sort,
       page: page,
+      limit: limit,
     );
   }
 
