@@ -11,14 +11,10 @@ class RegulationRepository {
   RegulationRepository();
 
   Future<List<Regulation>> fetchRegulationes(String token) async {
-    String bearer = 'Bearer $token';
     return _regulations = _regulations != null
         ? _regulations
         : await _regulationApi.getRegulations(
             token: token,
-            opts: <String, String>{
-              'Authorization': bearer,
-            },
           );
   }
 }

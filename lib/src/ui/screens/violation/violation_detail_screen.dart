@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
@@ -22,7 +20,7 @@ class ViolationDetailScreen extends StatefulWidget {
     @required int id,
   }) {
     return MaterialPageRoute<void>(
-        settings: RouteSettings(name: "/ViolationEditScreen"),
+        settings: RouteSettings(name: "/ViolationDetailScreen"),
         builder: (_) => ViolationDetailScreen(
               violation: violation,
               id: id,

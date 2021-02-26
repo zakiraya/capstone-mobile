@@ -93,7 +93,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
         yield currentState.copyWith(
           violations: updatedViolations,
-          screen: '/ViolationEditScreen',
+          screen: '/ViolationDetailScreen',
         );
       }
     } catch (e) {

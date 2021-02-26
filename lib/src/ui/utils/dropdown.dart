@@ -1,4 +1,4 @@
-import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_create/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
@@ -26,7 +26,7 @@ class BranchDropdownState extends State<BranchDropdown> {
 
   Future<String> getBranches() async {
     var branches = await _branchRepository.fetchBranches(
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI");
+        BlocProvider.of<AuthenticationBloc>(context).state.token);
 
     if (this.mounted) {
       setState(() => _branches = branches);
@@ -38,6 +38,16 @@ class BranchDropdownState extends State<BranchDropdown> {
   @override
   void initState() {
     super.initState();
+    if (this.dropdownValue != null) {
+      context.read<ViolationCreateBloc>().add(
+            ViolationBranchChanged(
+              branch: Branch(
+                id: dropdownValue.id,
+                name: dropdownValue.name,
+              ),
+            ),
+          );
+    }
     this.getBranches();
   }
 
@@ -100,7 +110,7 @@ class RegulationDropdownState extends State<RegulationDropdown> {
 
   Future<String> getBranches() async {
     var regulations = await _regulationRepository.fetchRegulationes(
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI");
+        BlocProvider.of<AuthenticationBloc>(context).state.token);
 
     if (this.mounted) {
       setState(() => _regulations = regulations);
@@ -112,6 +122,16 @@ class RegulationDropdownState extends State<RegulationDropdown> {
   @override
   void initState() {
     super.initState();
+    if (this.dropdownValue != null) {
+      context.read<ViolationCreateBloc>().add(
+            ViolationRegulationChanged(
+              regulation: Regulation(
+                id: dropdownValue.id,
+                name: dropdownValue.name,
+              ),
+            ),
+          );
+    }
     this.getBranches();
   }
 
@@ -132,7 +152,6 @@ class RegulationDropdownState extends State<RegulationDropdown> {
         ),
         onChanged: (newValue) {
           setState(() {
-            print('new value: ${newValue.name}');
             dropdownValue = newValue;
           });
 

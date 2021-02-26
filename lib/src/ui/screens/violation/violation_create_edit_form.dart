@@ -34,7 +34,6 @@ class ViolationCreateEditForm extends StatefulWidget {
 class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
   File _image;
   bool isNetworkImage;
-
   final picker = ImagePicker();
 
   Future getImage() async {
@@ -67,6 +66,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
         if (state is ViolationLoadSuccess) {
           Navigator.of(context)
               .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
+          print('aloo');
         }
       },
       child: Padding(
@@ -88,22 +88,23 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                     var bloc = BlocProvider.of<ViolationCreateBloc>(context);
 
                     return ElevatedButton(
-                      onPressed: bloc.state.status.isValid
+                      onPressed: state.status.isValid
                           ? () {
                               widget.onSaveCallBack(
                                 widget.violation.copyWith(
                                   name: widget.violation.name,
-                                  description: state.violationDescription.value,
+                                  description:
+                                      bloc.state.violationDescription.value,
                                   regulationId:
-                                      state.violationRegulation.value.id,
+                                      bloc.state.violationRegulation.value.id,
                                   regulationName:
-                                      state.violationRegulation.value.name,
+                                      bloc.state.violationRegulation.value.name,
                                   imagePath: _image.path,
-                                  branchId: state.violationBranch.value.id,
-                                  branchName: state.violationBranch.value.name,
+                                  branchId: bloc.state.violationBranch.value.id,
+                                  branchName:
+                                      bloc.state.violationBranch.value.name,
                                 ),
                               );
-                              // Navigator.pop(context);
                               showDialog(
                                   barrierDismissible: false,
                                   context: context,
@@ -204,10 +205,30 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
   }
 }
 
-class _ViolationDescriptionInput extends StatelessWidget {
+class _ViolationDescriptionInput extends StatefulWidget {
   final String initValue;
 
   const _ViolationDescriptionInput({Key key, this.initValue}) : super(key: key);
+
+  @override
+  __ViolationDescriptionInputState createState() =>
+      __ViolationDescriptionInputState();
+}
+
+class __ViolationDescriptionInputState
+    extends State<_ViolationDescriptionInput> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.initValue != null || widget.initValue != '') {
+      context.read<ViolationCreateBloc>().add(
+            ViolationDescriptionChanged(
+              violationDescription: widget.initValue,
+            ),
+          );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,14 +237,15 @@ class _ViolationDescriptionInput extends StatelessWidget {
             previous.violationDescription != current.violationDescription,
         builder: (contex, state) {
           return TextFormField(
-            initialValue: initValue ?? '',
+            initialValue: widget.initValue ?? '',
             key: const Key('violationForm_violationDescriptionInput_textField'),
-            onChanged: (violationDescription) =>
-                context.read<ViolationCreateBloc>().add(
-                      ViolationDescriptionChanged(
-                        violationDescription: violationDescription,
-                      ),
+            onChanged: (violationDescription) {
+              context.read<ViolationCreateBloc>().add(
+                    ViolationDescriptionChanged(
+                      violationDescription: violationDescription,
                     ),
+                  );
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
