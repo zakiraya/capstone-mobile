@@ -1,5 +1,5 @@
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
-import 'package:capstone_mobile/src/data/repositories/user/userApi.dart';
+import 'package:capstone_mobile/src/data/repositories/user/user_api.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'src/app.dart';

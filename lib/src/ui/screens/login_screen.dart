@@ -1,8 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+
 import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/ui/widgets/login/login_form.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
   static Route route() {
@@ -21,8 +22,8 @@ class LoginScreen extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width,
-            minHeight: MediaQuery.of(context).size.height,
+            minWidth: size.width,
+            minHeight: size.height,
           ),
           child: Padding(
             padding: const EdgeInsets.all(12),

@@ -34,27 +34,21 @@ class User extends Equatable {
   @override
   List<Object> get props => [id, email, firstName];
 
-  String get fullName => firstName + lastName;
+  String get fullName => firstName + ' ' + lastName;
 
   static const empty = User(firstName: "empty");
 
   static User fromJson(dynamic json) {
     final data = json['data'];
-    final userInfo = data['employee'];
+    final userInfo = data['result'][0]['employee'];
     // final token = json['token'];
     return User(
       email: userInfo['email'],
       code: userInfo['code'],
-      firstName: userInfo['first_name'],
-      lastName: userInfo['last_name'],
+      firstName: userInfo['firstName'],
+      lastName: userInfo['lastName'],
       address: userInfo['address'],
-      branchName: userInfo['branch_Name'],
-      imagePath: userInfo['image_path'],
-      positionId: userInfo['position_id'] as int,
-      branchId: userInfo['branch_id'] as int,
-      branchManagerId: userInfo['branch_manager_id'] as int,
-      roleId: userInfo['role_id'] as int,
-      status: userInfo['status'],
+      imagePath: userInfo['imagePath'],
     );
   }
 }

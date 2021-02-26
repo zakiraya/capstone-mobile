@@ -1,4 +1,6 @@
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -26,6 +28,7 @@ class LoginForm extends StatelessWidget {
               _UsernameInput(),
               const Padding(padding: EdgeInsets.all(12)),
               _PasswordInput(),
+              // _ErrorText(),
               const Padding(padding: EdgeInsets.all(12)),
               _LoginButton(),
             ],
@@ -35,6 +38,32 @@ class LoginForm extends StatelessWidget {
     );
   }
 }
+
+// class _ErrorText extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<LoginBloc, LoginState>(
+//       builder: (context, state) {
+//         if (state.status.isSubmissionSuccess) {
+//           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//             builder: (context, state) {
+//               if (state.status == AuthenticationStatus.unauthenticated) {
+//                 return Container(
+//                   child: Text(
+//                     'Login failed!',
+//                     style: TextStyle(color: Colors.red),
+//                   ),
+//                 );
+//               }
+//               return Container();
+//             },
+//           );
+//         }
+//         return Container();
+//       },
+//     );
+// //   }
+// }
 
 class _UsernameInput extends StatelessWidget {
   @override

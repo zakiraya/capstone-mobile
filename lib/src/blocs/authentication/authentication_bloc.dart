@@ -21,14 +21,14 @@ class AuthenticationBloc
         _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    _authenticationStatusSubscription = _authenticationRepository.token.listen(
-      (token) => add(AuthenticationStatusChanged(token: token)),
+    _authenticationStatusSubscription = _authenticationRepository.status.listen(
+      (status) => add(AuthenticationStatusChanged(status: status)),
     );
   }
 
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
-  StreamSubscription<String> _authenticationStatusSubscription;
+  StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -51,21 +51,28 @@ class AuthenticationBloc
   Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
   ) async {
-    if (event.token == '') {
-      return const AuthenticationState.unauthenticated();
-    } else {
-      // final user = await _tryGetUser(event.token);
-      final user = await _tryGetUser();
-
-      return user != null
-          ? AuthenticationState.authenticated(user, token: event.token)
-          : const AuthenticationState.unauthenticated();
+    switch (event.status) {
+      case AuthenticationStatus.unauthenticated:
+        return const AuthenticationState.unauthenticated();
+      case AuthenticationStatus.authenticated:
+        final user = await _tryGetUser();
+        return user != null
+            ? AuthenticationState.authenticated(
+                user: user,
+                token: _authenticationRepository.token,
+              )
+            : const AuthenticationState.unauthenticated();
+      default:
+        return const AuthenticationState.unknown();
     }
   }
 
   Future<User> _tryGetUser() async {
     try {
-      final user = await _userRepository.getUser();
+      final user = await _userRepository.getUser(
+        _authenticationRepository.username,
+        _authenticationRepository.token,
+      );
       return user;
     } on Exception {
       return null;

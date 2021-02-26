@@ -115,17 +115,38 @@ class _AppViewState extends State<AppView> {
                     return BlocListener<AuthenticationBloc,
                         AuthenticationState>(
                       listener: (context, state) {
-                        if (state.token != '') {
-                          _navigator.pushAndRemoveUntil<void>(
-                            HomeScreen.route(),
-                            (route) => false,
-                          );
-                        } else {
-                          _navigator.pushAndRemoveUntil<void>(
-                            LoginScreen.route(),
-                            (route) => false,
-                          );
+                        switch (state.status) {
+                          case AuthenticationStatus.authenticated:
+                            _navigator.pushAndRemoveUntil<void>(
+                              HomeScreen.route(),
+                              (route) => false,
+                            );
+                            break;
+                          case AuthenticationStatus.unauthenticated:
+                            _navigator.pushAndRemoveUntil<void>(
+                              LoginScreen.route(),
+                              (route) => false,
+                            );
+                            break;
+                          default:
+                            // _navigator.pushAndRemoveUntil<void>(
+                            //   LoginScreen.route(),
+                            //   (route) => false,
+                            // );
+                            break;
                         }
+                        // if (state.status ==
+                        //     AuthenticationStatus.authenticated) {
+                        //   _navigator.pushAndRemoveUntil<void>(
+                        //     HomeScreen.route(),
+                        //     (route) => false,
+                        //   );
+                        // } else {
+                        //   _navigator.pushAndRemoveUntil<void>(
+                        //     LoginScreen.route(),
+                        //     (route) => false,
+                        //   );
+                        // }
                       },
                       child: child,
                     );
