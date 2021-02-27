@@ -218,12 +218,19 @@ class __ViolationListState extends State<_ViolationList> {
                       BlocProvider.of<AuthenticationBloc>(context).state.token,
                   isRefresh: true,
                 ));
-              } else {}
+              } else {
+                _violationBloc.add(
+                  ViolationRequested(
+                      token: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .token),
+                );
+              }
             }
             return true;
           },
           child: ListView.builder(
-              itemCount: state.filteredViolations.length,
+              itemCount: state.filteredViolations.length + 1,
               controller: _scrollController,
               itemBuilder: (context, index) {
                 return index >= state.filteredViolations.length

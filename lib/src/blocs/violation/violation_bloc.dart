@@ -33,7 +33,10 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     ViolationEvent event,
   ) async* {
     final currentState = state;
-    if (event is ViolationRequested && !_hasReachedMax(currentState)) {
+    if ((event is ViolationRequested
+        // && !_hasReachedMax(currentState)
+
+        )) {
       try {
         if (currentState is ViolationInitial || event.isRefresh == true) {
           final List<Violation> violations =
@@ -42,13 +45,13 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             sort: 'desc id',
             page: 0,
           );
-
           yield ViolationLoadSuccess(
               violations: violations, hasReachedMax: false);
           return;
         }
 
-        if (currentState is ViolationLoadSuccess) {
+        if (currentState is ViolationLoadSuccess &&
+            !_hasReachedMax(currentState)) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
             token: event.token,
@@ -107,11 +110,6 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     final currentState = state;
     try {
       if (currentState is ViolationLoadSuccess) {
-        // final updatedViolations = (state as ViolationLoadSuccess)
-        //     .violations
-        //     .where((violation) => violation.id != event.id)
-        //     .toList();
-
         await violationRepository.deleteViolation(
           token: event.token,
           id: event.id,
