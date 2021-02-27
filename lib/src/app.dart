@@ -129,24 +129,8 @@ class _AppViewState extends State<AppView> {
                             );
                             break;
                           default:
-                            // _navigator.pushAndRemoveUntil<void>(
-                            //   LoginScreen.route(),
-                            //   (route) => false,
-                            // );
                             break;
                         }
-                        // if (state.status ==
-                        //     AuthenticationStatus.authenticated) {
-                        //   _navigator.pushAndRemoveUntil<void>(
-                        //     HomeScreen.route(),
-                        //     (route) => false,
-                        //   );
-                        // } else {
-                        //   _navigator.pushAndRemoveUntil<void>(
-                        //     LoginScreen.route(),
-                        //     (route) => false,
-                        //   );
-                        // }
                       },
                       child: child,
                     );

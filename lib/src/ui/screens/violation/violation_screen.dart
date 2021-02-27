@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -123,15 +125,15 @@ class _ViolationScreenState extends State<ViolationScreen> {
             SizedBox(
               height: 16,
             ),
-            // BlocProvider(
-            //   create: (context) => ViolationBloc(
-            //     violationRepository: ViolationRepository(),
-            //   )..add(ViolationRequested(
-            //       token:
-            //           BlocProvider.of<AuthenticationBloc>(context).state.token,
-            //     )),
-            //   child: _ViolationList(),
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                FilterButton(
+                  visible: true,
+                ),
+              ],
+            ),
             _ViolationList(),
           ],
         ),
@@ -180,26 +182,30 @@ class __ViolationListState extends State<_ViolationList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ViolationBloc, ViolationState>(
+    return BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
         builder: (context, state) {
-      if (state is ViolationLoadInProgress) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+      // if (state is ViolationLoadInProgress) {
+      //   return const Center(
+      //     child: CircularProgressIndicator(),
+      //   );
+      // }
+      // if (state is ViolationLoadFailure) {
+      //   return Center(
+      //     child: Text('Fail to fetch violations'),
+      //   );
+      // }
+      if (state is ViolationFilterInProgress) {
+        return Center(child: CircularProgressIndicator());
       }
-      if (state is ViolationLoadFailure) {
-        return Center(
-          child: Text('Fail to fetch violations'),
-        );
-      }
-      if (state is ViolationLoadSuccess) {
-        if (state.violations.isEmpty) {
+
+      if (state is ViolationFilterSucess) {
+        if (state.filteredViolations.isEmpty) {
           Center(
             child: Text('There is no violations'),
           );
         }
 
-        List<Violation> violations = state.violations;
+        List<Violation> violations = state.filteredViolations;
 
         return Expanded(
             child: NotificationListener<ScrollEndNotification>(
@@ -217,12 +223,10 @@ class __ViolationListState extends State<_ViolationList> {
             return true;
           },
           child: ListView.builder(
-              itemCount: state.hasReachedMax
-                  ? violations.length
-                  : violations.length + 1,
+              itemCount: state.filteredViolations.length,
               controller: _scrollController,
               itemBuilder: (context, index) {
-                return index >= state.violations.length
+                return index >= state.filteredViolations.length
                     ? BottomLoader()
                     : Card(
                         elevation: 4,
