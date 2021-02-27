@@ -126,49 +126,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(
             height: 35,
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.person,
-                color: Theme.of(context).primaryColor,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                'Notifications',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            ],
-          ),
-          Divider(
-            height: 15,
-            thickness: 2,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'New for you',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey,
-                ),
-              ),
-              Switch(
-                activeColor: Theme.of(context).primaryColor,
-                value: true,
-                onChanged: (bool val) {},
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Icon(
+          //       Icons.person,
+          //       color: Theme.of(context).primaryColor,
+          //     ),
+          //     SizedBox(
+          //       width: 15,
+          //     ),
+          //     Text(
+          //       'Notifications',
+          //       style: TextStyle(
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     )
+          //   ],
+          // ),
+          // Divider(
+          //   height: 15,
+          //   thickness: 2,
+          // ),
+          // SizedBox(
+          //   height: 15,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       'New for you',
+          //       style: TextStyle(
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.w500,
+          //         color: Colors.grey,
+          //       ),
+          //     ),
+          //     Switch(
+          //       activeColor: Theme.of(context).primaryColor,
+          //       value: true,
+          //       onChanged: (bool val) {},
+          //     ),
+          //   ],
+          // ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 40),
             child: ElevatedButton(

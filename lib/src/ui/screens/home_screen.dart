@@ -1,5 +1,8 @@
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -11,7 +14,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar();
+    return BlocProvider(
+      create: (context) => ViolationFilterBloc(
+          violationBloc: BlocProvider.of<ViolationBloc>(context)),
+      child: NavigationBar(),
+    );
     // Scaffold(
     //   appBar: AppBar(title: const Text('Home')),
     //   body: Center(
