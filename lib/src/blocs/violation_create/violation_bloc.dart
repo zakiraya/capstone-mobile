@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';

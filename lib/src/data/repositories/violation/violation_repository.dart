@@ -15,11 +15,13 @@ class ViolationRepository {
     @required String token,
     String sort,
     double page,
+    int limit,
   }) async {
     return await _violationApi.getViolations(
       token: token,
       sort: sort,
       page: page,
+      limit: limit,
     );
   }
 
@@ -70,13 +72,15 @@ class ViolationRepository {
   }) async {
     var uploadedImage;
 
-    BaseApi baseApi = BaseApi();
-    uploadedImage = await baseApi.uploadImage(
-      'images/upload',
-      violation.imagePath,
-      token,
-    );
-    violation.imagePath = uploadedImage['data'][0]['uri'];
+    if (!violation.imagePath.contains('http')) {
+      BaseApi baseApi = BaseApi();
+      uploadedImage = await baseApi.uploadImage(
+        'images/upload',
+        violation.imagePath,
+        token,
+      );
+      violation.imagePath = uploadedImage['data'][0]['uri'];
+    }
 
     var result = await _violationApi.editViolation(
       token: token,

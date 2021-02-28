@@ -14,16 +14,23 @@ class ViolationLoadInProgress extends ViolationState {}
 class ViolationLoadSuccess extends ViolationState {
   final List<Violation> violations;
   final bool hasReachedMax;
+  final String screen;
 
-  const ViolationLoadSuccess({@required this.violations, this.hasReachedMax});
+  const ViolationLoadSuccess({
+    @required this.violations,
+    this.hasReachedMax,
+    this.screen,
+  });
 
   ViolationLoadSuccess copyWith({
     List<Violation> violations,
     bool hasReachedMax,
+    String screen,
   }) {
     return ViolationLoadSuccess(
       violations: violations ?? this.violations,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      screen: screen,
     );
   }
 

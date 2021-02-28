@@ -1,10 +1,11 @@
+import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
@@ -12,7 +13,9 @@ import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ViolationScreen());
+    return MaterialPageRoute<void>(
+        settings: RouteSettings(name: "/ViolationScreen"),
+        builder: (_) => ViolationScreen());
   }
 
   @override
@@ -122,15 +125,15 @@ class _ViolationScreenState extends State<ViolationScreen> {
             SizedBox(
               height: 16,
             ),
-            // BlocProvider(
-            //   create: (context) => ViolationBloc(
-            //     violationRepository: ViolationRepository(),
-            //   )..add(ViolationRequested(
-            //       token:
-            //           BlocProvider.of<AuthenticationBloc>(context).state.token,
-            //     )),
-            //   child: _ViolationList(),
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                FilterButton(
+                  visible: true,
+                ),
+              ],
+            ),
             _ViolationList(),
           ],
         ),
@@ -179,26 +182,30 @@ class __ViolationListState extends State<_ViolationList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ViolationBloc, ViolationState>(
+    return BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
         builder: (context, state) {
-      if (state is ViolationLoadInProgress) {
-        return const Center(
-          child: SkeletonLoading(),
-        );
+      // if (state is ViolationLoadInProgress) {
+      //   return const Center(
+      //     child: CircularProgressIndicator(),
+      //   );
+      // }
+      // if (state is ViolationLoadFailure) {
+      //   return Center(
+      //     child: Text('Fail to fetch violations'),
+      //   );
+      // }
+      if (state is ViolationFilterInProgress) {
+        return Center(child: CircularProgressIndicator());
       }
-      if (state is ViolationLoadFailure) {
-        return Center(
-          child: Text('Fail to fetch violations'),
-        );
-      }
-      if (state is ViolationLoadSuccess) {
-        if (state.violations.isEmpty) {
+
+      if (state is ViolationFilterSucess) {
+        if (state.filteredViolations.isEmpty) {
           Center(
             child: Text('There is no violations'),
           );
         }
 
-        List<Violation> violations = state.violations;
+        List<Violation> violations = state.filteredViolations;
 
         return Expanded(
             child: NotificationListener<ScrollEndNotification>(
@@ -206,24 +213,27 @@ class __ViolationListState extends State<_ViolationList> {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
-                print('At top');
                 _violationBloc.add(ViolationRequested(
                   token:
                       BlocProvider.of<AuthenticationBloc>(context).state.token,
                   isRefresh: true,
                 ));
-              } else
-                print('At bottom');
+              } else {
+                _violationBloc.add(
+                  ViolationRequested(
+                      token: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .token),
+                );
+              }
             }
             return true;
           },
           child: ListView.builder(
-              itemCount: state.hasReachedMax
-                  ? violations.length
-                  : violations.length + 1,
+              itemCount: state.filteredViolations.length + 1,
               controller: _scrollController,
               itemBuilder: (context, index) {
-                return index >= state.violations.length
+                return index >= state.filteredViolations.length
                     ? BottomLoader()
                     : Card(
                         elevation: 4,

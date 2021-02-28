@@ -29,13 +29,18 @@ class ViolationApi {
     Map<String, String> opts,
     String sort,
     double page,
+    int limit,
   }) async {
     String url = violationUrl + '?Filter.IsDeleted=false';
     if (sort != null) {
       url += '&Sort.Orders=$sort';
     }
     if (page != null) {
-      url += '&PageIndex=${page.toInt()}';
+      url += '&PageIndex=${page.ceil()}';
+    }
+
+    if (limit != null) {
+      url += '&Limit=$limit';
     }
 
     final violationJson = await _baseApi.get(url, token);

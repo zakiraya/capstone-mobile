@@ -33,7 +33,10 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     ViolationEvent event,
   ) async* {
     final currentState = state;
-    if (event is ViolationRequested && !_hasReachedMax(currentState)) {
+    if ((event is ViolationRequested
+        // && !_hasReachedMax(currentState)
+
+        )) {
       try {
         if (currentState is ViolationInitial || event.isRefresh == true) {
           final List<Violation> violations =
@@ -42,13 +45,13 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             sort: 'desc id',
             page: 0,
           );
-
           yield ViolationLoadSuccess(
               violations: violations, hasReachedMax: false);
           return;
         }
 
-        if (currentState is ViolationLoadSuccess) {
+        if (currentState is ViolationLoadSuccess &&
+            !_hasReachedMax(currentState)) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
             token: event.token,
@@ -79,15 +82,22 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     final currentState = state;
     try {
       if (currentState is ViolationLoadSuccess) {
-        final List<Violation> updatedViolation =
-            (state as ViolationLoadSuccess).violations.map((violation) {
-          return violation.id == event.violation.id
-              ? event.violation
-              : violation;
-        }).toList();
-        yield currentState.copyWith(violations: updatedViolation);
-        violationRepository.editViolation(
-            token: event.token, violation: event.violation);
+        await violationRepository.editViolation(
+          token: event.token,
+          violation: event.violation,
+        );
+
+        final List<Violation> updatedViolations =
+            await violationRepository.fetchViolations(
+          token: event.token,
+          sort: 'desc id',
+          limit: currentState.violations.length,
+        );
+
+        yield currentState.copyWith(
+          violations: updatedViolations,
+          screen: '/ViolationDetailScreen',
+        );
       }
     } catch (e) {
       print(' _mapViolationUpdateToState');
@@ -97,18 +107,22 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
   Stream<ViolationState> _mapViolationDeleteToState(
       ViolationDelete event) async* {
+    final currentState = state;
     try {
-      if (state is ViolationLoadSuccess) {
-        final updatedViolations = (state as ViolationLoadSuccess)
-            .violations
-            .where((violation) => violation.id != event.id)
-            .toList();
-
-        yield (state as ViolationLoadSuccess)
-            .copyWith(violations: updatedViolations);
-        violationRepository.deleteViolation(
+      if (currentState is ViolationLoadSuccess) {
+        await violationRepository.deleteViolation(
           token: event.token,
           id: event.id,
+        );
+        final List<Violation> updatedViolations =
+            await violationRepository.fetchViolations(
+          token: event.token,
+          sort: 'desc id',
+          limit: currentState.violations.length,
+        );
+        yield (state as ViolationLoadSuccess).copyWith(
+          violations: updatedViolations,
+          screen: '/Home',
         );
       }
     } catch (e) {
