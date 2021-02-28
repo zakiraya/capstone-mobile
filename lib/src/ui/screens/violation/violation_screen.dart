@@ -142,6 +142,37 @@ class _ViolationScreenState extends State<ViolationScreen> {
   }
 }
 
+class ViolationTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // SizedBox(
+          //   height: 16,
+          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(),
+              FilterButton(
+                visible: true,
+              ),
+            ],
+          ),
+          _ViolationList(),
+        ],
+      ),
+    );
+  }
+}
+
 class _ViolationList extends StatefulWidget {
   const _ViolationList({
     Key key,
@@ -195,7 +226,10 @@ class __ViolationListState extends State<_ViolationList> {
       //   );
       // }
       if (state is ViolationFilterInProgress) {
-        return Center(child: CircularProgressIndicator());
+        return Center(
+            child: SkeletonLoading(
+          item: 4,
+        ));
       }
 
       if (state is ViolationFilterSucess) {
@@ -235,85 +269,94 @@ class __ViolationListState extends State<_ViolationList> {
               itemBuilder: (context, index) {
                 return index >= state.filteredViolations.length
                     ? BottomLoader()
-                    : Card(
-                        elevation: 4,
-                        shadowColor: Colors.purple[300],
-                        child: InkWell(
-                          splashColor: Colors.blue.withAlpha(30),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              ViolationDetailScreen.route(
-                                violation: violations[index],
-                                id: violations[index].id,
-                              ),
-                            );
-                          },
-                          child: ClipPath(
-                            clipper: ShapeBorderClipper(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  left:
-                                      BorderSide(color: Colors.green, width: 5),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            "${violations[index].branchName ?? "branch name"}"),
-                                        Text(
-                                          "${violations[index].status ?? "Status"}",
-                                          style: TextStyle(
-                                            color: Colors.green,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text("${"violation name"}"),
-                                    SizedBox(
-                                      height: 16,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("5 mistakes"),
-                                        Text(
-                                            "${violations[index].createdAt ?? "date time"}"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                    : ViolationCard(violation: violations[index]);
               }),
         ));
       }
       return Container(
         child: Center(
-          child: SkeletonLoading(),
+          child: CircularProgressIndicator(),
         ),
       );
     });
+  }
+}
+
+class ViolationCard extends StatelessWidget {
+  const ViolationCard({
+    Key key,
+    @required this.violation,
+  }) : super(key: key);
+
+  final Violation violation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shadowColor: Colors.purple[300],
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(
+            context,
+            ViolationDetailScreen.route(
+              violation: violation,
+              id: violation.id,
+            ),
+          );
+        },
+        child: ClipPath(
+          clipper: ShapeBorderClipper(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: Colors.green, width: 5),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${violation.branchName ?? "branch name"}"),
+                      Text(
+                        "${violation.status ?? "Status"}",
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text("${"violation name"}"),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("5 mistakes"),
+                      Text("${violation.createdAt ?? "date time"}"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -1,9 +1,8 @@
-import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
-import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
-import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:formz/formz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
+
+import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -72,12 +71,12 @@ class _UsernameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextField(
-          key: const Key('loginForm_usernameInput_textField'),
+          key: const Key('loginForm_emailInput_textField'),
           onChanged: (username) =>
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
-            labelText: 'username',
-            errorText: state.username.invalid ? 'invalid username' : null,
+            labelText: 'Email',
+            errorText: state.username.invalid ? 'Invalid email' : null,
           ),
         );
       },
@@ -85,7 +84,13 @@ class _UsernameInput extends StatelessWidget {
   }
 }
 
-class _PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatefulWidget {
+  @override
+  __PasswordInputState createState() => __PasswordInputState();
+}
+
+class __PasswordInputState extends State<_PasswordInput> {
+  bool isObscured = true;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -95,11 +100,16 @@ class _PasswordInput extends StatelessWidget {
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
               context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-          obscureText: true,
+          obscureText: isObscured,
           decoration: InputDecoration(
-            labelText: 'password',
-            errorText: state.password.invalid ? 'invalid password' : null,
-          ),
+              labelText: 'Password',
+              errorText: state.password.invalid ? 'Invalid Password' : null,
+              suffixIcon: IconButton(
+                icon: Icon(Icons.remove_red_eye_outlined),
+                onPressed: () {
+                  isObscured = !isObscured;
+                },
+              )),
         );
       },
     );
@@ -116,14 +126,14 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: EdgeInsets.symmetric(horizontal: 104),
                 child: ElevatedButton(
                   key: const Key('loginForm_continue_raisedButton'),
                   child: const Text(
-                    'SIGN IN',
+                    'Log in',
                     style: TextStyle(
                       color: Colors.white,
-                      letterSpacing: 1.5,
+                      // letterSpacing: 1.5,
                     ),
                   ),
                   onPressed: state.status.isValidated
@@ -135,7 +145,7 @@ class _LoginButton extends StatelessWidget {
                     onPrimary: Colors.red,
                     primary: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ),
