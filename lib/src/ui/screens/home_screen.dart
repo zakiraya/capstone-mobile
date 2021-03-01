@@ -220,6 +220,9 @@ class HomeTab extends StatelessWidget {
           ),
         ),
         LatestReportList(),
+        SizedBox(
+          height: 16,
+        ),
         GestureDetector(
           onTap: () {
             BlocProvider.of<TabBloc>(context).add(

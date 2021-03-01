@@ -93,7 +93,7 @@ class _ModalBodyState extends State<ModalBody> {
                 ),
                 // regulation dropdown
                 Container(
-                  child: Text('Violation type:',
+                  child: Text('Regulation:',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Container(
@@ -105,6 +105,9 @@ class _ModalBodyState extends State<ModalBody> {
                           )
                         : null,
                   ),
+                ),
+                SizedBox(
+                  height: 16,
                 ),
                 Container(
                   child: Text('Branch:',
@@ -120,6 +123,13 @@ class _ModalBodyState extends State<ModalBody> {
                         : null,
                   ),
                 ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  child: Text('Description:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
                 Container(
                   child: _ViolationDescriptionInput(
                     initValue: widget.isEditing == true
@@ -131,7 +141,7 @@ class _ModalBodyState extends State<ModalBody> {
                   height: 16,
                 ),
                 Container(
-                  child: Text('Regulation:',
+                  child: Text('Evidence:',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 _image == null
@@ -275,10 +285,11 @@ class _ViolationDescriptionInput extends StatelessWidget {
                           violationDescription: violationDescription),
                     ),
             decoration: InputDecoration(
+              fillColor: Colors.grey[200],
+              filled: true,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              labelText: 'Description:',
               errorText: state.violationDescription.invalid
                   ? 'invalid violation description'
                   : null,

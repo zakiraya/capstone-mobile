@@ -64,7 +64,7 @@ class _AppViewState extends State<AppView> {
     var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
       primaryColor: blue,
-      accentColor: purple,
+      // accentColor: purple,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,

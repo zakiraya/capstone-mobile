@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/src/ui/widgets/report/report_card.dart';
@@ -18,19 +19,15 @@ class LatestReportList extends StatelessWidget {
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // print('snap: ' + snapshot.data.toString());
             if (snapshot.hasData && snapshot.data.length != 0) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ReportCard(report: snapshot.data[0]),
-                    ReportCard(report: snapshot.data[1])
-                  ],
-                ),
+                child: buildReportList([
+                  ...snapshot.data,
+                ]),
               );
             }
-            return Container();
+            return ReportCard(report: Report(name: 'alo'));
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: SkeletonLoading(
@@ -42,4 +39,17 @@ class LatestReportList extends StatelessWidget {
           );
         });
   }
+}
+
+Widget buildReportList(List<Report> reports) {
+  List<ReportCard> reportCards = List<ReportCard>();
+  for (var report in reports) {
+    ReportCard card = ReportCard(
+      report: report,
+    );
+    reportCards.add(card);
+  }
+  return Column(
+    children: [...reportCards],
+  );
 }

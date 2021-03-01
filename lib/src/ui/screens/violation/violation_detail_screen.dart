@@ -110,7 +110,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
             children: [
               Container(
                 child: Text(
-                  'violation of ${violation.name}',
+                  'Violation of ${violation.name}',
                   style: TextStyle(
                     color: theme.primaryColor,
                     fontSize: theme.textTheme.headline5.fontSize,
@@ -142,70 +142,86 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text("Branch: "),
+                      child: Text("Branch: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Text(violation.branchName ?? 'empty'),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Regulation: "),
+                      child: Text("Regulation: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Text(violation.regulationName ?? 'empty'),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Created on: "),
+                      child: Text("Created on: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(violation.createdAt ?? 'empty'),
+                    Text(
+                      violation.createdAt ?? 'empty',
+                    ),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Description: "),
+                      child: Text("Description: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Container(
-                        width: double.infinity,
-                        height: size.height * 0.17,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Text(violation.description ?? 'empty')),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        // minHeight: size.height * 0.17,
+                        minWidth: double.infinity,
+                      ),
+                      child: Container(
+                          // decoration: BoxDecoration(
+                          //   border: Border.all(
+                          //     width: 1,
+                          //   ),
+                          //   borderRadius: BorderRadius.circular(2),
+                          // ),
+                          child: Text(violation.description ?? 'empty')),
+                    ),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Evidence: "),
+                      child: Text("Evidence: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     SizedBox(
                       height: 8,
                     ),
-                    Center(
-                      child: Container(
-                        height: size.height * 0.3,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                          image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: violation.imagePath == null
-                                  ? AssetImage('assets/avt.jpg')
-                                  : NetworkImage(violation?.imagePath)),
-                        ),
-                        // child: Hero(
-                        //   tag: 'dash',
-                        //   child: Image(
-                        //     image: NetworkImage(violation.imagePath),
-                        //   ),
-                        // ),
-                      ),
+                    Image(
+                      image: violation.imagePath == null
+                          ? AssetImage('assets/avt.jpg')
+                          : NetworkImage(violation?.imagePath),
                     ),
+                    // Center(
+                    //   child: Container(
+                    //     height: size.height * 0.3,
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(
+                    //         width: 1,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(2),
+                    //       image: DecorationImage(
+                    //           fit: BoxFit.contain,
+                    //           image: violation.imagePath == null
+                    //               ? AssetImage('assets/avt.jpg')
+                    //               : NetworkImage(violation?.imagePath)),
+                    //     ),
+                    //     // child: Hero(
+                    //     //   tag: 'dash',
+                    //     //   child: Image(
+                    //     //     image: NetworkImage(violation.imagePath),
+                    //     //   ),
+                    //     // ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

@@ -145,43 +145,47 @@ class _ViolationScreenState extends State<ViolationScreen> {
 class ViolationTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // SizedBox(
-          //   height: 16,
-          // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  child: Container(
-                height: 25,
-                child: TextField(
-                  // TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2.0, horizontal: 8),
-                      hintText: 'Search',
-                      suffixIcon: Icon(Icons.search)),
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: Container(
+                  height: 25,
+                  child: TextField(
+                    // TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 2.0, horizontal: 8),
+                        hintText: 'Search',
+                        suffixIcon: Icon(Icons.search)),
+                  ),
+                )),
+                FilterButton(
+                  visible: true,
                 ),
-              )),
-              FilterButton(
-                visible: true,
-              ),
-            ],
-          ),
-          _ViolationList(),
-        ],
+              ],
+            ),
+            _ViolationList(),
+          ],
+        ),
       ),
     );
   }

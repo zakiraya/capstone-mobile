@@ -22,7 +22,7 @@ class ReportCard extends StatelessWidget {
             context,
             ReportDetailScreen.route(
               report: report,
-              isEditable: report.status.toLowerCase() == 'draft' ? true : false,
+              // isEditable: report.status.toLowerCase() == 'draft' ? true : false,
             ),
           );
         },
@@ -47,16 +47,17 @@ class ReportCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                          "${'Branch: ' + report.branchName ?? "branch name"}"),
+                      Text("${'Branch: ' + "branch name"}"),
                       Text(
                         "${report.status ?? "Status"}",
                         style: TextStyle(
-                          color: report.status.toLowerCase() == 'draft'
-                              ? Colors.grey
-                              : (report.status.toLowerCase() == 'pending'
-                                  ? Colors.blue
-                                  : Colors.green),
+                          color: Colors.green,
+                          // report.status.toLowerCase() == 'draft'
+                          //     ? Colors.grey
+                          //     : (report.status.toLowerCase() == 'pending'
+                          //         ? Colors.blue
+                          //         : Colors.green
+                          //         ),
                         ),
                       ),
                     ],
@@ -64,7 +65,7 @@ class ReportCard extends StatelessWidget {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("${'Report: ' + report.name ?? "Report name"}"),
+                  Text("${'Report: ' + report?.name ?? "Report name"}"),
                   SizedBox(
                     height: 16,
                   ),
@@ -72,7 +73,7 @@ class ReportCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("5 mistakes"),
-                      Text("${report.createdAt ?? "date time"}"),
+                      Text("${report?.createdAt ?? "date time"}"),
                     ],
                   ),
                 ],
