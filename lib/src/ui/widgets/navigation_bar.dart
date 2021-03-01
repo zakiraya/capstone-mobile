@@ -1,4 +1,3 @@
-import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/violation/violation_screen.dart';
@@ -37,16 +36,11 @@ class _NavigationBarState extends State<NavigationBar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // firebaseNotification.configFirebaseMessaging();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('$title'),
-      //   centerTitle: true,
-      // ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

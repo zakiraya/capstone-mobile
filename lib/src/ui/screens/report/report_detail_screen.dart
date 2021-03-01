@@ -155,11 +155,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               : [],
         ),
         body: ReportEditForm(
-            report: report,
-            theme: theme,
-            descriptionTextFieldController: descriptionTextFieldController,
-            isEditing: isEditing,
-            size: size),
+          report: report,
+          theme: theme,
+          descriptionTextFieldController: descriptionTextFieldController,
+          isEditing: isEditing,
+          size: size,
+        ),
       ),
     );
   }

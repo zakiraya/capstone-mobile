@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,36 +32,6 @@ class _ImgPickerState extends State<ImgPicker> {
         print('No image selected.');
       }
     });
-
-    // try {
-    //   String filename = _image.path.split('/').last;
-    //   FormData formData = FormData();
-    //   formData.files.addAll([
-    //     MapEntry(
-    //       'files',
-    //       await MultipartFile.fromFile(
-    //         _image.path,
-    //         filename: filename,
-    //       ),
-    //     ),
-    //   ]);
-    //   Dio dio = Dio();
-    //   var response =
-    //       await dio.post('https://api-mavca.azurewebsites.net/v1/images/upload',
-    //           data: formData,
-    //           options: Options(headers: {
-    //             // "accept": '*/*',
-    //             "Authorization":
-    //                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiMiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjBiYWEzM2JkLWVjMGQtNGExMS1iNTBjLWE4OGEyMGYzNDRmZiIsIm5iZiI6MTYxMjYwNDU3MywiZXhwIjoxNjEyNjA0ODczLCJpYXQiOjE2MTI2MDQ1NzMsImF1ZCI6Ik1hdmNhIn0.bWlVmNtpvKZ1Twt7RTEfsT406OLflpoPCM2ogkMByOQ',
-    //             // "Content-Type": 'multipart/form-data',
-    //           }));
-    //   dio.interceptors.add(LogInterceptor(responseBody: true));
-
-    //   print('here');
-    //   print(response);
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
   void _takePhoto() async {
@@ -158,6 +127,7 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var size = MediaQuery.of(context).size;
     return Container(
       child: Center(
           child: IconButton(
@@ -167,12 +137,10 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
           getImage();
         },
       )),
-      height: 50,
-      width: 75,
+      height: size.width * 0.1,
+      width: size.width * 0.15,
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(10.0),
-              topLeft: Radius.circular(10.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           color: theme.accentColor),
     );
   }

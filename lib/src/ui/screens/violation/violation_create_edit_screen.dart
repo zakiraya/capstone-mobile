@@ -61,66 +61,80 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.delete),
-            color: Colors.red,
-            onPressed: () {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: false, // user must tap button!
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Do you want to delete this violation?'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                        onPressed: () {
-                          BlocProvider.of<ViolationBloc>(context)
-                              .add(ViolationDelete(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
-                            id: widget.violation.id,
-                          ));
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return SimpleDialog(
-                                  title: const Text('Submitting...'),
-                                  children: [
-                                    Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  ],
-                                );
-                              });
-                          // Navigator.of(context)
-                          //     .popUntil(ModalRoute.withName("/Home"));
-                        },
-                      ),
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-              // BlocProvider.of<ViolationBloc>(context).add(ViolationDelete(
-              //   token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-              //   id: widget.violation.id,
-              // ));
-              // Navigator.of(context).popUntil(ModalRoute.withName("/Home"));
-            },
-          )
+          Container(
+            width: 80,
+            child: Center(
+              child: Container(
+                width: 80,
+                height: 28,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false, // user must tap button!
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Do you want to delete this violation?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              onPressed: () {
+                                BlocProvider.of<ViolationBloc>(context)
+                                    .add(ViolationDelete(
+                                  token: BlocProvider.of<AuthenticationBloc>(
+                                          context)
+                                      .state
+                                      .token,
+                                  id: widget.violation.id,
+                                ));
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return SimpleDialog(
+                                        title: const Text('Submitting...'),
+                                        children: [
+                                          Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        ],
+                                      );
+                                    });
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
         ],
       ),
       body: BlocProvider(

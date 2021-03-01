@@ -1,9 +1,8 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
-import 'package:capstone_mobile/src/data/models/report/report_list_violation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -43,8 +42,8 @@ class ReportEditForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                  // child: Text("Created by: ${report.createdBy}"),
-                  ),
+                child: Text("Submitted by: "),
+              ),
               Container(
                 child: Text("Status: ${report.status}"),
               ),
@@ -61,18 +60,34 @@ class ReportEditForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text("Branch: "),
+                  child: Text(
+                    "Branch: ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-                Text(report.branchName),
+                Text(report.branchName ?? 'branch name'),
                 SizedBox(
                   height: 16,
                 ),
                 Container(
-                  child: Text("Created on: "),
+                  child: Text("Created on: ",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                Text(report.createdAt),
+                Text(report.createdAt ?? 'created on'),
                 SizedBox(
                   height: 16,
+                ),
+                Container(
+                  child: Text("Assignee: ",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                Text(report.createdAt ?? 'created on'),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  child: Text("Note: ",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 _ReportDescriptionInput(
                   descriptionTextFieldController:
@@ -87,14 +102,16 @@ class ReportEditForm extends StatelessWidget {
             height: 16,
           ),
           Container(
-            child: Text("Violation list: "),
+            child: Text("Violation list: ",
+                style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
             height: 16,
           ),
-          ReportListViewViolation(
-            isEditing: isEditing,
-          ),
+          buildViolationList([
+            Violation(branchName: 'fsdf'),
+            Violation(branchName: 'fsdf'),
+          ]),
           isEditing == false
               ? Container()
               : Row(
@@ -142,7 +159,6 @@ class _ReportDescriptionInput extends StatelessWidget {
           controller: descriptionTextFieldController,
           decoration: InputDecoration(
             fillColor: Colors.grey[400],
-            labelText: 'Description: ',
             hintText: report.description,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -266,7 +282,9 @@ class _SaveButton extends StatelessWidget {
 Widget buildViolationList(List<Violation> violations) {
   List<ViolationCard> violationCards = List<ViolationCard>();
   for (var vio in violations) {
-    ViolationCard card = ViolationCard();
+    ViolationCard card = ViolationCard(
+      violation: vio,
+    );
     violationCards.add(card);
   }
   return Column(

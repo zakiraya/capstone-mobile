@@ -54,37 +54,47 @@ class BranchDropdownState extends State<BranchDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      child: DropdownButton<Branch>(
-        isExpanded: true,
-        value: dropdownValue,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 1,
-          color: Colors.black38,
-        ),
-        onChanged: (newValue) {
-          setState(() {
-            print('new value: ${newValue.name}');
-            dropdownValue = newValue;
-          });
-          context.read<ViolationCreateBloc>().add(
-                ViolationBranchChanged(
-                    branch: Branch(
-                  id: newValue.id,
-                  name: newValue.name,
-                )),
+      height: 32,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.grey[200],
+        border: Border.all(),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton<Branch>(
+            isExpanded: true,
+            value: dropdownValue,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: Colors.black),
+            underline: Container(
+              height: 1,
+              color: Colors.black38,
+            ),
+            onChanged: (newValue) {
+              setState(() {
+                print('new value: ${newValue.name}');
+                dropdownValue = newValue;
+              });
+              context.read<ViolationCreateBloc>().add(
+                    ViolationBranchChanged(
+                        branch: Branch(
+                      id: newValue.id,
+                      name: newValue.name,
+                    )),
+                  );
+            },
+            items: _branches.map<DropdownMenuItem<Branch>>((branch) {
+              return DropdownMenuItem<Branch>(
+                value: branch,
+                child: Text(branch.name),
               );
-        },
-        items: _branches.map<DropdownMenuItem<Branch>>((branch) {
-          return DropdownMenuItem<Branch>(
-            value: branch,
-            child: Text(branch.name),
-          );
-        }).toList(),
+            }).toList(),
+          ),
+        ),
       ),
     );
     // });
@@ -138,38 +148,48 @@ class RegulationDropdownState extends State<RegulationDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      child: DropdownButton<Regulation>(
-        isExpanded: true,
-        value: dropdownValue,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 1,
-          color: Colors.black38,
-        ),
-        onChanged: (newValue) {
-          setState(() {
-            dropdownValue = newValue;
-          });
+      height: 32,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.grey[200],
+        border: Border.all(),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton<Regulation>(
+            isExpanded: true,
+            value: dropdownValue,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: Colors.black),
+            underline: Container(
+              height: 1,
+              color: Colors.black38,
+            ),
+            onChanged: (newValue) {
+              setState(() {
+                dropdownValue = newValue;
+              });
 
-          context.read<ViolationCreateBloc>().add(
-                ViolationRegulationChanged(
-                  regulation: Regulation(
-                    id: newValue.id,
-                    name: newValue.name,
-                  ),
-                ),
+              context.read<ViolationCreateBloc>().add(
+                    ViolationRegulationChanged(
+                      regulation: Regulation(
+                        id: newValue.id,
+                        name: newValue.name,
+                      ),
+                    ),
+                  );
+            },
+            items: _regulations.map<DropdownMenuItem<Regulation>>((regulation) {
+              return DropdownMenuItem<Regulation>(
+                value: regulation,
+                child: Text(regulation.name),
               );
-        },
-        items: _regulations.map<DropdownMenuItem<Regulation>>((regulation) {
-          return DropdownMenuItem<Regulation>(
-            value: regulation,
-            child: Text(regulation.name),
-          );
-        }).toList(),
+            }).toList(),
+          ),
+        ),
       ),
     );
     // });

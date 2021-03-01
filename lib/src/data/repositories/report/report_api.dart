@@ -13,11 +13,27 @@ class ReportApi {
 
   Future<List<Report>> getReports({
     @required String token,
-    @required String status,
+    String status,
+    String sort,
+    double page,
+    int limit,
     Map<String, String> opts,
   }) async {
-    String url =
-        reportUrl + '?Filter.IsDeleted=false' + '&Filter.Status=$status';
+    String url = reportUrl + '?Filter.IsDeleted=false';
+    if (status != null) {
+      url += '&Filter.Status=$status';
+    }
+    if (sort != null) {
+      url += '&Sort.Orders=$sort';
+    }
+    if (page != null) {
+      url += '&PageIndex=${page.ceil()}';
+    }
+
+    if (limit != null) {
+      url += '&Limit=$limit';
+    }
+
     final reportJson = await _baseApi.get(url, token, opts: opts);
     final reports = reportJson['data']['result'] as List;
     return reports.map((report) => Report.fromJson(report)).toList();

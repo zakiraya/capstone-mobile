@@ -12,15 +12,11 @@ class ReportRepository {
 
   Future<List<Report>> fetchReports({
     @required String token,
-    @required String status,
+    String status,
+    String sort,
+    double page,
+    int limit,
   }) async {
-    if (status == 'Draft') {
-      return await _reportApi.getReports(
-        token: token,
-        status: status,
-      );
-    }
-
     return await _reportApi.getReports(
       token: token,
       status: 'Done',

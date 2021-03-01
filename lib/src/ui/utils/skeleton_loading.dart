@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
 class SkeletonLoading extends StatelessWidget {
-  const SkeletonLoading({
+  SkeletonLoading({
     Key key,
+    @required this.item,
   }) : super(key: key);
 
+  final int item;
   @override
   Widget build(BuildContext context) {
     return SkeletonLoader(
@@ -38,7 +40,7 @@ class SkeletonLoading extends StatelessWidget {
           ],
         ),
       ),
-      items: 4,
+      items: item,
       period: Duration(seconds: 2),
       highlightColor: Colors.lightBlue[300],
       direction: SkeletonDirection.ltr,

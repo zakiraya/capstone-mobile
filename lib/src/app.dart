@@ -60,19 +60,17 @@ class _AppViewState extends State<AppView> {
 
   @override
   Widget build(BuildContext context) {
-    var blue = Color(0xff2329D6);
+    var blue = Color(0xff322ED9);
     var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
       primaryColor: blue,
-      accentColor: purple,
-
-      // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      //   selectedItemColor: ,
-      //   // backgroundColor: Colors.deepPurple,
-      // ),
-
+      // accentColor: purple,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        // backgroundColor: Colors.deepPurple,
+      ),
       fontFamily: 'Montserrat',
-
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 40.0,

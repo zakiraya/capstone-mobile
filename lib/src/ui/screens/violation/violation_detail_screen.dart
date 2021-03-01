@@ -60,29 +60,47 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
           ),
           actions: violation.status.toLowerCase() == 'open'
               ? [
-                  IconButton(
-                    icon: Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        ViolationCreateEditScreen.route(
-                            isEditing: true,
-                            violation: violation,
-                            onSaveCallBack: (Violation violation) {
-                              BlocProvider.of<ViolationBloc>(context).add(
-                                ViolationUpdate(
-                                  token: BlocProvider.of<AuthenticationBloc>(
-                                          context)
-                                      .state
-                                      .token,
+                  Container(
+                    width: 80,
+                    child: Center(
+                      child: Container(
+                        width: 80,
+                        height: 28,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              ViolationCreateEditScreen.route(
+                                  isEditing: true,
                                   violation: violation,
-                                ),
-                              );
-                            }),
-                      ).then((value) => {});
-                    },
-                    color: Colors.black,
-                  )
+                                  onSaveCallBack: (Violation violation) {
+                                    BlocProvider.of<ViolationBloc>(context).add(
+                                      ViolationUpdate(
+                                        token:
+                                            BlocProvider.of<AuthenticationBloc>(
+                                                    context)
+                                                .state
+                                                .token,
+                                        violation: violation,
+                                      ),
+                                    );
+                                  }),
+                            );
+                          },
+                          child: Text('Edit', style: TextStyle(fontSize: 12)),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xffFFBB33),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
                 ]
               : null,
         ),
@@ -92,7 +110,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
             children: [
               Container(
                 child: Text(
-                  'violation of ${violation.name}',
+                  'Violation of ${violation.name}',
                   style: TextStyle(
                     color: theme.primaryColor,
                     fontSize: theme.textTheme.headline5.fontSize,
@@ -100,14 +118,15 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                      // child: Text("Created by: ${violation.createdBy}"),
-                      ),
+                    child: Text("Status: "),
+                  ),
                   Container(
                     child: Text(
-                      "Status: ${violation.status}",
+                      "${violation.status}",
+                      style: TextStyle(color: Colors.green),
                     ),
                   ),
                 ],
@@ -123,70 +142,86 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text("Branch: "),
+                      child: Text("Branch: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Text(violation.branchName ?? 'empty'),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Regulation: "),
+                      child: Text("Regulation: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Text(violation.regulationName ?? 'empty'),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Created on: "),
+                      child: Text("Created on: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(violation.createdAt ?? 'empty'),
+                    Text(
+                      violation.createdAt ?? 'empty',
+                    ),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Description: "),
+                      child: Text("Description: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Container(
-                        width: double.infinity,
-                        height: size.height * 0.17,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Text(violation.description ?? 'empty')),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        // minHeight: size.height * 0.17,
+                        minWidth: double.infinity,
+                      ),
+                      child: Container(
+                          // decoration: BoxDecoration(
+                          //   border: Border.all(
+                          //     width: 1,
+                          //   ),
+                          //   borderRadius: BorderRadius.circular(2),
+                          // ),
+                          child: Text(violation.description ?? 'empty')),
+                    ),
                     SizedBox(
                       height: 16,
                     ),
                     Container(
-                      child: Text("Evidence: "),
+                      child: Text("Evidence: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     SizedBox(
                       height: 8,
                     ),
-                    Center(
-                      child: Container(
-                        height: size.height * 0.3,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                          image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: violation.imagePath == null
-                                  ? AssetImage('assets/avt.jpg')
-                                  : NetworkImage(violation?.imagePath)),
-                        ),
-                        // child: Hero(
-                        //   tag: 'dash',
-                        //   child: Image(
-                        //     image: NetworkImage(violation.imagePath),
-                        //   ),
-                        // ),
-                      ),
+                    Image(
+                      image: violation.imagePath == null
+                          ? AssetImage('assets/avt.jpg')
+                          : NetworkImage(violation?.imagePath),
                     ),
+                    // Center(
+                    //   child: Container(
+                    //     height: size.height * 0.3,
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(
+                    //         width: 1,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(2),
+                    //       image: DecorationImage(
+                    //           fit: BoxFit.contain,
+                    //           image: violation.imagePath == null
+                    //               ? AssetImage('assets/avt.jpg')
+                    //               : NetworkImage(violation?.imagePath)),
+                    //     ),
+                    //     // child: Hero(
+                    //     //   tag: 'dash',
+                    //     //   child: Image(
+                    //     //     image: NetworkImage(violation.imagePath),
+                    //     //   ),
+                    //     // ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
