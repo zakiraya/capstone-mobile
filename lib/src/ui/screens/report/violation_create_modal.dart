@@ -68,65 +68,33 @@ class _ModalBodyState extends State<ModalBody> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // action button
-                Builder(builder: (context) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(widget.isEditing
-                            ? 'Violation Edit'
-                            : 'Violation Create'),
-                      ),
-                      BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
-                        buildWhen: (previous, current) =>
-                            previous.status != current.status,
-                        builder: (context, state) {
-                          var bloc =
-                              BlocProvider.of<ViolationCreateBloc>(context);
-                          return ElevatedButton(
-                            onPressed: bloc.state.status.isValid &&
-                                    _image != null
-                                ? () async {
-                                    var state = bloc.state;
-                                    Navigator.pop<List>(
-                                      context,
-                                      [
-                                        Violation(
-                                          name: state.name,
-                                          description:
-                                              state.violationDescription.value,
-                                          regulationId: state
-                                              .violationRegulation.value.id,
-                                          regulationName: state
-                                              .violationRegulation.value.name,
-                                          imagePath: _image.path,
-                                          branchId:
-                                              state.violationBranch.value.id,
-                                          branchName:
-                                              state.violationBranch.value.name,
-                                        ),
-                                        widget.position,
-                                      ],
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                                '${widget.isEditing == true ? 'Save' : 'Add'}'),
-                            style: ElevatedButton.styleFrom(),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Text(
+                          widget.isEditing ? 'Violation Edit' : 'New violation',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 24.0,
+                          )),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
                 Divider(
-                  color: Colors.red,
+                  color: Theme.of(context).primaryColor,
                 ),
                 // regulation dropdown
                 Container(
-                  child: Text('Violation type:'),
+                  child: Text('Violation type:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   child: RegulationDropdown(
@@ -139,7 +107,8 @@ class _ModalBodyState extends State<ModalBody> {
                   ),
                 ),
                 Container(
-                  child: Text('Branch:'),
+                  child: Text('Branch:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   child: BranchDropdown(
@@ -159,34 +128,123 @@ class _ModalBodyState extends State<ModalBody> {
                   ),
                 ),
                 SizedBox(
-                  height: 8,
-                ),
-                SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: widget.size.width * 0.7,
-                      height: widget.size.height * 0.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: _image == null
-                              ? AssetImage('assets/avt.jpg')
-                              : FileImage(_image),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
-                  child: TextButton(
-                    onPressed: getImage,
-                    child: Text('Add evidence'),
-                  ),
+                  child: Text('Regulation:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                _image == null
+                    ? GestureDetector(
+                        onTap: getImage,
+                        child: Card(
+                          color: Colors.grey,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.22,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  'Add image',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                _image != null
+                    ? Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.22,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: _image == null
+                                    ? AssetImage('assets/avt.jpg')
+                                    : FileImage(_image),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _image = null;
+                                });
+                              },
+                              child: Container(
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.red),
+                                ),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: Colors.red,
+                                  size: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                Center(
+                  child: Builder(builder: (context) {
+                    return BlocBuilder<ViolationCreateBloc,
+                        ViolationCreateState>(
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status,
+                      builder: (context, state) {
+                        var bloc =
+                            BlocProvider.of<ViolationCreateBloc>(context);
+                        return ElevatedButton(
+                          onPressed: bloc.state.status.isValid && _image != null
+                              ? () async {
+                                  var state = bloc.state;
+                                  Navigator.pop<List>(
+                                    context,
+                                    [
+                                      Violation(
+                                        name: state.name,
+                                        description:
+                                            state.violationDescription.value,
+                                        regulationId:
+                                            state.violationRegulation.value.id,
+                                        regulationName: state
+                                            .violationRegulation.value.name,
+                                        imagePath: _image.path,
+                                        branchId:
+                                            state.violationBranch.value.id,
+                                        branchName:
+                                            state.violationBranch.value.name,
+                                      ),
+                                      widget.position,
+                                    ],
+                                  );
+                                }
+                              : null,
+                          child: Text(
+                              '${widget.isEditing == true ? '   Save   ' : '   Add   '}'),
+                          style: ElevatedButton.styleFrom(),
+                        );
+                      },
+                    );
+                  }),
                 ),
               ],
             ),

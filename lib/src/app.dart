@@ -1,6 +1,5 @@
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/ui/widgets/mavca_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';

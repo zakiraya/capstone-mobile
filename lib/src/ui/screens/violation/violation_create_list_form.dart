@@ -54,29 +54,27 @@ class ViolationListForm extends StatelessWidget {
               ),
             ),
             ViolationList(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: Colors.blue[900],
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      showModalOne(
-                        context,
-                        isEditing: false,
-                      );
-                    },
+            GestureDetector(
+              onTap: () {
+                showModalOne(
+                  context,
+                  isEditing: false,
+                );
+              },
+              child: Card(
+                elevation: 5,
+                color: Color(0xffF2F2F2),
+                child: Container(
+                  height: size.height * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add),
+                      Text('New violation'),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
             _SubmitButton(size: size),
           ],
@@ -101,45 +99,47 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return Container(
-          width: size.width * 0.4,
-          child: ElevatedButton(
-            key: const Key('createForm_submit_raisedButton'),
-            child: const Text(
-              'Submit',
-              style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 1.5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 104),
+            child: ElevatedButton(
+              key: const Key('createForm_submit_raisedButton'),
+              child: const Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
               ),
-            ),
-            onPressed: state.status.isValidated
-                ? () {
-                    context.read<ViolationListBloc>().add(
-                          ViolationListSubmitted(
-                              token: context
-                                  .read<AuthenticationBloc>()
-                                  .state
-                                  .token),
-                        );
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return SimpleDialog(
-                            title: const Text('Submitting...'),
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            ],
+              onPressed: state.status.isValidated
+                  ? () {
+                      context.read<ViolationListBloc>().add(
+                            ViolationListSubmitted(
+                                token: context
+                                    .read<AuthenticationBloc>()
+                                    .state
+                                    .token),
                           );
-                        });
-                  }
-                : null,
-            style: ElevatedButton.styleFrom(
-              onPrimary: Colors.red,
-              primary: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return SimpleDialog(
+                              title: const Text('Submitting...'),
+                              children: [
+                                Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              ],
+                            );
+                          });
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.red,
+                primary: Theme.of(context).primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
           ),

@@ -2,13 +2,15 @@ import 'package:capstone_mobile/src/blocs/tab/tab_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
 import 'package:capstone_mobile/src/data/models/tab.dart';
+import 'package:capstone_mobile/src/ui/screens/notification/notification_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/report/reports_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/settings_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
-import 'package:capstone_mobile/src/ui/widgets/navigation_bar.dart';
+import 'package:capstone_mobile/src/ui/widgets/report/report_list.dart';
 import 'package:capstone_mobile/src/ui/widgets/tab_selector.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,7 +42,7 @@ class HomeView extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  List<Widget> _tabs = <Widget>[
+  final List<Widget> _tabs = <Widget>[
     HomeTab(),
     ReportsTab(),
     ViolationTab(),
@@ -55,16 +57,18 @@ class HomeView extends StatelessWidget {
       builder: (context, activeTab) {
         return Scaffold(
           appBar: AppBar(
+            elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            automaticallyImplyLeading: false,
+            // automaticallyImplyLeading: false,
+
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(
-                  width: size.width * 0.15,
-                  image: AssetImage('assets/logo.png'),
-                ),
+                // Image(
+                //   width: size.width * 0.15,
+                //   image: AssetImage('assets/logo.png'),
+                // ),
                 Image(
                   width: size.width * 0.3,
                   image: AssetImage('assets/brand_name.png'),
@@ -73,11 +77,25 @@ class HomeView extends StatelessWidget {
             ),
             actions: [
               Container(
-                child: IconButton(
-                  icon: Icon(Icons.camera_alt_outlined),
-                  color: theme.primaryColor,
-                  onPressed: () {},
+                width: 64,
+                child: Center(
+                  child: Container(
+                    width: 80,
+                    height: 28,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Utils.getImage();
+                      },
+                      child: Icon(Icons.camera_alt_outlined),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff916BFF),
+                      ),
+                    ),
+                  ),
                 ),
+              ),
+              SizedBox(
+                width: 16,
               ),
             ],
           ),
@@ -145,6 +163,29 @@ class HomeTab extends StatelessWidget {
           width: size.width * 0.2,
           height: size.height * 0.2,
           color: Colors.grey[200],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('New notifications '),
+                    GestureDetector(
+                      child: Text('see all '),
+                      onTap: () {
+                        Navigator.push(context, NotificationScreen.route());
+                      },
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 15,
+                  thickness: 2,
+                ),
+              ],
+            ),
+          ),
         ),
         GestureDetector(
           onTap: () {
@@ -178,6 +219,7 @@ class HomeTab extends StatelessWidget {
             ),
           ),
         ),
+        LatestReportList(),
         GestureDetector(
           onTap: () {
             BlocProvider.of<TabBloc>(context).add(

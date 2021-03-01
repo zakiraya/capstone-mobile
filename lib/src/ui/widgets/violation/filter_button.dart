@@ -71,7 +71,7 @@ class _Button extends StatelessWidget {
           child: Text(branch),
         );
       }).toList(),
-      icon: Icon(Icons.filter_list),
+      icon: Icon(Icons.filter_alt_outlined),
     );
   }
 }

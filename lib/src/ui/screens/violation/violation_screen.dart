@@ -160,7 +160,21 @@ class ViolationTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Expanded(
+                  child: Container(
+                height: 25,
+                child: TextField(
+                  // TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 8),
+                      hintText: 'Search',
+                      suffixIcon: Icon(Icons.search)),
+                ),
+              )),
               FilterButton(
                 visible: true,
               ),

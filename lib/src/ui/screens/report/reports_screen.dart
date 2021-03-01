@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/ui/widgets/report/report_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -172,92 +173,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       child: ListView.builder(
                         itemCount: reports.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 4,
-                            shadowColor: Colors.purple[300],
-                            child: InkWell(
-                              splashColor: Colors.blue.withAlpha(30),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  ReportDetailScreen.route(
-                                    report: reports[index],
-                                    isEditable:
-                                        reports[index].status.toLowerCase() ==
-                                                'draft'
-                                            ? true
-                                            : false,
-                                  ),
-                                );
-                              },
-                              child: ClipPath(
-                                clipper: ShapeBorderClipper(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
-                                ),
-                                child: Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      left: BorderSide(
-                                          color: Colors.green, width: 5),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                                "${'Branch: ' + reports[index].branchName ?? "branch name"}"),
-                                            Text(
-                                              "${reports[index].status ?? "Status"}",
-                                              style: TextStyle(
-                                                color: reports[index]
-                                                            .status
-                                                            .toLowerCase() ==
-                                                        'draft'
-                                                    ? Colors.grey
-                                                    : (reports[index]
-                                                                .status
-                                                                .toLowerCase() ==
-                                                            'pending'
-                                                        ? Colors.blue
-                                                        : Colors.green),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text(
-                                            "${'Report: ' + reports[index].name ?? "Report name"}"),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("5 mistakes"),
-                                            Text(
-                                                "${reports[index].createdAt ?? "date time"}"),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
+                          return ReportCard(report: reports[index]);
                         },
                       ),
                     );
@@ -316,91 +232,8 @@ class ReportsTab extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: reports.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 4,
-                          shadowColor: Colors.purple[300],
-                          child: InkWell(
-                            splashColor: Colors.blue.withAlpha(30),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                ReportDetailScreen.route(
-                                  report: reports[index],
-                                  isEditable:
-                                      reports[index].status.toLowerCase() ==
-                                              'draft'
-                                          ? true
-                                          : false,
-                                ),
-                              );
-                            },
-                            child: ClipPath(
-                              clipper: ShapeBorderClipper(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    left: BorderSide(
-                                        color: Colors.green, width: 5),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                              "${'Branch: ' + reports[index].branchName ?? "branch name"}"),
-                                          Text(
-                                            "${reports[index].status ?? "Status"}",
-                                            style: TextStyle(
-                                              color: reports[index]
-                                                          .status
-                                                          .toLowerCase() ==
-                                                      'draft'
-                                                  ? Colors.grey
-                                                  : (reports[index]
-                                                              .status
-                                                              .toLowerCase() ==
-                                                          'pending'
-                                                      ? Colors.blue
-                                                      : Colors.green),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                          "${'Report: ' + reports[index].name ?? "Report name"}"),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("5 mistakes"),
-                                          Text(
-                                              "${reports[index].createdAt ?? "date time"}"),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                        return ReportCard(
+                          report: reports[index],
                         );
                       },
                     ),

@@ -17,22 +17,30 @@ class LatesViolationList extends StatelessWidget {
           limit: 2,
         ),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  ViolationCard(violation: snapshot.data[0]),
-                  ViolationCard(violation: snapshot.data[1]),
-                ],
-              ),
-            );
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            print('snap: ' + snapshot.data.toString());
+            if (snapshot.data.length != 0) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    ViolationCard(violation: snapshot.data[0]),
+                    ViolationCard(violation: snapshot.data[1]),
+                  ],
+                ),
+              );
+            }
+            return Container();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: SkeletonLoading(
               item: 2,
             ));
           }
+          return Center(
+            child: Text(snapshot.connectionState.toString()),
+          );
         });
   }
 }

@@ -61,7 +61,7 @@ class BranchDropdownState extends State<BranchDropdown> {
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
+        style: TextStyle(color: Colors.black),
         underline: Container(
           height: 1,
           color: Colors.black38,
@@ -145,7 +145,7 @@ class RegulationDropdownState extends State<RegulationDropdown> {
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.deepPurple),
+        style: TextStyle(color: Colors.black),
         underline: Container(
           height: 1,
           color: Colors.black38,

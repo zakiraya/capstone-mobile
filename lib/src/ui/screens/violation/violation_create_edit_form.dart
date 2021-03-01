@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +65,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
         if (state is ViolationLoadSuccess) {
           Navigator.of(context)
               .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
-          print('aloo');
         }
       },
       child: Padding(
@@ -79,16 +77,120 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
               children: [
                 Container(
                   child: Text(
-                      widget.isEditing ? 'Violation Edit' : 'Violation Create'),
+                    'Violation of ${widget.violation.name}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-                BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
-                  buildWhen: (previous, current) =>
-                      previous.status != current.status,
-                  builder: (context, state) {
-                    var bloc = BlocProvider.of<ViolationCreateBloc>(context);
+              ],
+            ),
+            Divider(
+              color: Theme.of(context).primaryColor,
+            ),
+            // regulation dropdown
+            Container(
+              child: Text(
+                'Regulation:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              child: RegulationDropdown(
+                initValue: widget.isEditing == true
+                    ? Regulation(
+                        id: widget.violation.regulationId,
+                        name: widget.violation.regulationName,
+                      )
+                    : null,
+              ),
+            ),
+            Container(
+              child: Text('Branch:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            Container(
+              child: BranchDropdown(
+                initValue: widget.isEditing == true
+                    ? Branch(
+                        id: widget.violation.branchId,
+                        name: widget.violation.branchName,
+                      )
+                    : null,
+              ),
+            ),
+            Container(
+              child: _ViolationDescriptionInput(
+                initValue: widget.isEditing == true
+                    ? widget.violation.description
+                    : null,
+              ),
+            ),
 
-                    return ElevatedButton(
-                      onPressed: state.status.isValid
+            SizedBox(
+              height: 16,
+            ),
+            Container(
+              child: Text('Evidence:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Stack(children: [
+              Image(
+                image: _image == null
+                    ? AssetImage('assets/avt.jpg')
+                    : isNetworkImage == true
+                        ? NetworkImage(_image.path)
+                        : FileImage(_image),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _image = null;
+                    });
+                  },
+                  child: Container(
+                    height: 24,
+                    width: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.red),
+                    ),
+                    child: Icon(
+                      Icons.clear,
+                      color: Colors.red,
+                      size: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            Container(
+              child: TextButton(
+                onPressed: getImage,
+                child: Text('Add evidence'),
+              ),
+            ),
+            Container(
+              child: BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status,
+                builder: (context, state) {
+                  var bloc = BlocProvider.of<ViolationCreateBloc>(context);
+
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.3),
+                    child: ElevatedButton(
+                      onPressed: state.status.isValid && _image != null
                           ? () {
                               widget.onSaveCallBack(
                                 widget.violation.copyWith(
@@ -123,79 +225,9 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                       child:
                           Text('${widget.isEditing == true ? 'Save' : 'Add'}'),
                       style: ElevatedButton.styleFrom(),
-                    );
-                  },
-                ),
-              ],
-            ),
-            Divider(
-              color: Colors.red,
-            ),
-            // regulation dropdown
-            Container(
-              child: Text('Violation type:'),
-            ),
-            Container(
-              child: RegulationDropdown(
-                initValue: widget.isEditing == true
-                    ? Regulation(
-                        id: widget.violation.regulationId,
-                        name: widget.violation.regulationName,
-                      )
-                    : null,
-              ),
-            ),
-            Container(
-              child: Text('Branch:'),
-            ),
-            Container(
-              child: BranchDropdown(
-                initValue: widget.isEditing == true
-                    ? Branch(
-                        id: widget.violation.branchId,
-                        name: widget.violation.branchName,
-                      )
-                    : null,
-              ),
-            ),
-            Container(
-              child: _ViolationDescriptionInput(
-                initValue: widget.isEditing == true
-                    ? widget.violation.description
-                    : null,
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: Container(
-                // width: size.width * 0.7,
-                height: widget.size.height * 0.3,
-
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(2),
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: _image == null
-                        ? AssetImage('assets/avt.jpg')
-                        : isNetworkImage == true
-                            ? NetworkImage(_image.path)
-                            : FileImage(_image),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              child: TextButton(
-                onPressed: getImage,
-                child: Text('Add evidence'),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -251,6 +283,7 @@ class __ViolationDescriptionInputState
                 borderRadius: BorderRadius.circular(8),
               ),
               labelText: 'Description:',
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
               errorText: state.violationDescription.invalid
                   ? 'invalid violation description'
                   : null,

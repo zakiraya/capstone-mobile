@@ -60,29 +60,47 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
           ),
           actions: violation.status.toLowerCase() == 'open'
               ? [
-                  IconButton(
-                    icon: Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        ViolationCreateEditScreen.route(
-                            isEditing: true,
-                            violation: violation,
-                            onSaveCallBack: (Violation violation) {
-                              BlocProvider.of<ViolationBloc>(context).add(
-                                ViolationUpdate(
-                                  token: BlocProvider.of<AuthenticationBloc>(
-                                          context)
-                                      .state
-                                      .token,
+                  Container(
+                    width: 80,
+                    child: Center(
+                      child: Container(
+                        width: 80,
+                        height: 28,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              ViolationCreateEditScreen.route(
+                                  isEditing: true,
                                   violation: violation,
-                                ),
-                              );
-                            }),
-                      ).then((value) => {});
-                    },
-                    color: Colors.black,
-                  )
+                                  onSaveCallBack: (Violation violation) {
+                                    BlocProvider.of<ViolationBloc>(context).add(
+                                      ViolationUpdate(
+                                        token:
+                                            BlocProvider.of<AuthenticationBloc>(
+                                                    context)
+                                                .state
+                                                .token,
+                                        violation: violation,
+                                      ),
+                                    );
+                                  }),
+                            );
+                          },
+                          child: Text('Edit', style: TextStyle(fontSize: 12)),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xffFFBB33),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
                 ]
               : null,
         ),
@@ -100,14 +118,15 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                      // child: Text("Created by: ${violation.createdBy}"),
-                      ),
+                    child: Text("Status: "),
+                  ),
                   Container(
                     child: Text(
-                      "Status: ${violation.status}",
+                      "${violation.status}",
+                      style: TextStyle(color: Colors.green),
                     ),
                   ),
                 ],
