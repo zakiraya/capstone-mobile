@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -45,24 +46,32 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             sort: 'desc id',
             page: 0,
           );
+
           yield ViolationLoadSuccess(
               violations: violations, hasReachedMax: false);
           return;
         }
 
-        if (currentState is ViolationLoadSuccess &&
-            !_hasReachedMax(currentState)) {
+        if (currentState is ViolationLoadSuccess
+            // &&
+            //     !_hasReachedMax(currentState)
+            ) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
             token: event.token,
             sort: 'desc id',
-            page: currentState.violations.length / 20,
+            // page: currentState.violations.length / 20,
+            limit: 40,
+            branchId: event.filter.branch.id,
+            name: event.filter.name,
+            status: event.filter.status,
           );
 
           yield violations.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : ViolationLoadSuccess(
-                  violations: currentState.violations + violations,
+                  // violations: currentState.violations + violations,
+                  violations: violations,
                   hasReachedMax: false,
                 );
         }

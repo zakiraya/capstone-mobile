@@ -9,9 +9,23 @@ abstract class ViolationFilterState extends Equatable {
 
 class ViolationFilterInProgress extends ViolationFilterState {}
 
+// class ViolationFilterSucess extends ViolationFilterState {
+//   final List<Violation> filteredViolations;
+//   final  activeFilter;
+
+//   ViolationFilterSucess(this.filteredViolations, this.activeFilter);
+
+//   @override
+//   List<Object> get props => [filteredViolations, activeFilter];
+
+//   @override
+//   String toString() {
+//     return 'FilteredTodosLoadSuccess { filteredTodos: $filteredViolations, activeFilter: $activeFilter }';
+//   }
+// }
 class ViolationFilterSucess extends ViolationFilterState {
   final List<Violation> filteredViolations;
-  final String activeFilter;
+  final ViolationFilter activeFilter;
 
   ViolationFilterSucess(this.filteredViolations, this.activeFilter);
 
@@ -20,6 +34,6 @@ class ViolationFilterSucess extends ViolationFilterState {
 
   @override
   String toString() {
-    return 'FilteredTodosLoadSuccess { filteredTodos: $filteredViolations, activeFilter: $activeFilter }';
+    return 'FilteredTodosLoadSuccess { filteredTodos: ${filteredViolations.map((e) => e.branchId)}, activeFilter: $activeFilter }';
   }
 }

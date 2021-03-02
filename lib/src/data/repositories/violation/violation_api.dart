@@ -30,6 +30,9 @@ class ViolationApi {
     String sort,
     double page,
     int limit,
+    String status,
+    int branchId,
+    String name,
   }) async {
     String url = violationUrl + '?Filter.IsDeleted=false';
     if (sort != null) {
@@ -38,11 +41,19 @@ class ViolationApi {
     if (page != null) {
       url += '&PageIndex=${page.ceil()}';
     }
-
     if (limit != null) {
       url += '&Limit=$limit';
     }
-
+    if (status != null) {
+      url += '&Filter.Status=$status';
+    }
+    if (name != null) {
+      url += '&Filter.Name=$name';
+    }
+    if (branchId != null) {
+      url += '&Filter.BranchIds=$branchId';
+    }
+    print(url);
     final violationJson = await _baseApi.get(url, token);
     final violations = violationJson['data']['result'] as List;
     return violations

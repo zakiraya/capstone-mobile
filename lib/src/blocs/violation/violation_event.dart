@@ -8,13 +8,18 @@ abstract class ViolationEvent extends Equatable {
 }
 
 class ViolationRequested extends ViolationEvent {
-  const ViolationRequested({@required this.token, this.isRefresh = false});
+  const ViolationRequested({
+    @required this.token,
+    this.filter,
+    this.isRefresh = false,
+  });
 
   final String token;
   final bool isRefresh;
+  final ViolationFilter filter;
 
   @override
-  List<Object> get props => [token, isRefresh];
+  List<Object> get props => [token, filter, isRefresh];
 }
 
 class ViolationUpdate extends ViolationEvent {

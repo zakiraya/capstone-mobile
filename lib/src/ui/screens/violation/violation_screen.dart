@@ -265,24 +265,25 @@ class __ViolationListState extends State<_ViolationList> {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
-                _violationBloc.add(ViolationRequested(
-                  token:
-                      BlocProvider.of<AuthenticationBloc>(context).state.token,
-                  isRefresh: true,
-                ));
+                print('at top');
+                // _violationBloc.add(ViolationRequested(
+                //   token:
+                //       BlocProvider.of<AuthenticationBloc>(context).state.token,
+                //   isRefresh: true,
+                // ));
               } else {
-                _violationBloc.add(
-                  ViolationRequested(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token),
-                );
+                // _violationBloc.add(
+                //   ViolationRequested(
+                //       token: BlocProvider.of<AuthenticationBloc>(context)
+                //           .state
+                //           .token),
+                // );
               }
             }
             return true;
           },
           child: ListView.builder(
-              itemCount: state.filteredViolations.length + 1,
+              itemCount: state.filteredViolations.length,
               controller: _scrollController,
               itemBuilder: (context, index) {
                 return index >= state.filteredViolations.length

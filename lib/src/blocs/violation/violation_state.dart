@@ -36,6 +36,10 @@ class ViolationLoadSuccess extends ViolationState {
 
   @override
   List<Object> get props => [violations, hasReachedMax];
+
+  @override
+  String toString() =>
+      'ViolationLoadSuccess { violation total: ${violations.length} }';
 }
 
 class ViolationLoadFailure extends ViolationState {}

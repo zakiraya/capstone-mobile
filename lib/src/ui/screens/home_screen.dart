@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/tab/tab_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatelessWidget {
       BlocProvider(
         create: (context) => ViolationFilterBloc(
           violationBloc: BlocProvider.of<ViolationBloc>(context),
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
         ),
       ),
       BlocProvider(
