@@ -10,8 +10,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 
-part 'violation_event.dart';
-part 'violation_state.dart';
+part 'violation_list_event.dart';
+part 'violation_list_state.dart';
 
 class ViolationCreateBloc
     extends Bloc<ViolationCreateEvent, ViolationCreateState> {

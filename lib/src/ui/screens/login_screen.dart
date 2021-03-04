@@ -14,10 +14,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: const Text('Login'),
-      // ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: ConstrainedBox(
@@ -30,19 +26,6 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Container(
-                //   width: size.width * 0.3,
-                //   height: size.width * 0.2,
-                //   decoration: BoxDecoration(
-                //     border: Border.all(
-                //       width: 1,
-                //     ),
-                //     borderRadius: BorderRadius.circular(2),
-                //     image: DecorationImage(
-                //       image: AssetImage('assets/logo.png'),
-                //     ),
-                //   ),
-                // ),
                 Container(
                   width: size.width * 0.5,
                   height: size.width * 0.3,
@@ -50,22 +33,6 @@ class LoginScreen extends StatelessWidget {
                     image: AssetImage('assets/Group1108.png'),
                   ),
                 ),
-                // Container(
-                //   width: size.width * 0.4,
-                //   height: size.width * 0.2,
-                //   decoration: BoxDecoration(
-                //     image: DecorationImage(
-                //       fit: BoxFit.fitWidth,
-                //       image: AssetImage('assets/brand_name.png'),
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   child: Text(
-                //     'Manage via camera',
-                //     style: TextStyle(fontSize: 16),
-                //   ),
-                // ),
                 BlocProvider(
                   create: (context) {
                     return LoginBloc(

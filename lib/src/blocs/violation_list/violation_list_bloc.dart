@@ -48,7 +48,7 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
       yield _mapViolationListChangeToState(event, state);
     } else if (event is ViolationListRemove) {
       yield _mapViolationListRemoveToState(event, state);
-    } else if (event is ViolationUpdate) {
+    } else if (event is ViolationItemUpdate) {
       yield _mapViolationUpdateToState(event, state);
     } else if (event is ViolationListSubmitted) {
       yield* _mapViolationListSubmittedToState(event, state);
@@ -76,7 +76,7 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   }
 
   ViolationListState _mapViolationUpdateToState(
-    ViolationUpdate event,
+    ViolationItemUpdate event,
     ViolationListState state,
   ) {
     List<Violation> violations =
