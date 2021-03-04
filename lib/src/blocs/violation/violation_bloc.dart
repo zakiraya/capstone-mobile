@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -38,15 +39,52 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
         )) {
       try {
-        if (currentState is ViolationInitial || event.isRefresh == true) {
+        if (currentState is ViolationInitial) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
             token: event.token,
             sort: 'desc id',
             page: 0,
           );
+
           yield ViolationLoadSuccess(
-              violations: violations, hasReachedMax: false);
+            violations: violations,
+            hasReachedMax: false,
+            activeFilter: ViolationFilter(),
+          );
+          return;
+        }
+
+        if (currentState is ViolationLoadFailure) {
+          final List<Violation> violations =
+              await violationRepository.fetchViolations(
+            token: event.token,
+            sort: 'desc id',
+            page: 0,
+          );
+
+          yield ViolationLoadSuccess(
+            violations: violations,
+            hasReachedMax: false,
+            activeFilter: ViolationFilter(),
+          );
+          return;
+        }
+
+        if (currentState is ViolationLoadSuccess && event.isRefresh == true) {
+          final List<Violation> violations =
+              await violationRepository.fetchViolations(
+            token: event.token,
+            sort: 'desc id',
+            page: 0,
+            branchId: currentState.activeFilter.branchId,
+            name: currentState.activeFilter.name,
+            status: currentState.activeFilter.status,
+          );
+
+          yield currentState.copyWith(
+            violations: violations,
+          );
           return;
         }
 
@@ -57,12 +95,16 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             token: event.token,
             sort: 'desc id',
             page: currentState.violations.length / 20,
+            branchId: event.filter.branchId,
+            name: event.filter.name,
+            status: event.filter.status,
           );
 
           yield violations.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
-              : ViolationLoadSuccess(
+              : currentState.copyWith(
                   violations: currentState.violations + violations,
+                  // violations: violations,
                   hasReachedMax: false,
                 );
         }
@@ -70,10 +112,39 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         print(e);
         yield ViolationLoadFailure();
       }
+    } else if (event is ViolationFilterChanged) {
+      yield* _mapViolationFilterChangeToState(event);
     } else if (event is ViolationUpdate) {
       yield* _mapViolationUpdateToState(event);
     } else if (event is ViolationDelete) {
       yield* _mapViolationDeleteToState(event);
+    }
+  }
+
+  Stream<ViolationState> _mapViolationFilterChangeToState(
+      ViolationFilterChanged event) async* {
+    final currentState = state;
+    try {
+      if (currentState is ViolationLoadSuccess) {
+        final List<Violation> violations =
+            await violationRepository.fetchViolations(
+          token: event.token,
+          sort: 'desc id',
+          page: 0,
+          branchId: event.filter.branchId,
+          name: event.filter.name,
+          status: event.filter.status,
+        );
+
+        yield currentState.copyWith(
+          hasReachedMax: violations.length < 20 ? true : false,
+          violations: violations,
+          activeFilter: event.filter,
+        );
+      }
+    } catch (e) {
+      print(' _mapViolationFilterChangeToState: ');
+      print(e);
     }
   }
 

@@ -1,5 +1,5 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation_create/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';

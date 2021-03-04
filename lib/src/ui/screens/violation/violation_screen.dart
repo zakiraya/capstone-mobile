@@ -1,4 +1,4 @@
-import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -169,13 +169,28 @@ class ViolationTab extends StatelessWidget {
                   child: TextField(
                     // TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 8),
+                      hintText: 'Search',
+                      suffixIcon: Icon(Icons.search),
+                    ),
+                    onSubmitted: (text) {
+                      print(text);
+                      BlocProvider.of<ViolationBloc>(context).add(
+                        ViolationFilterChanged(
+                          token: BlocProvider.of<AuthenticationBloc>(context)
+                              .state
+                              .token,
+                          filter: (BlocProvider.of<ViolationBloc>(context).state
+                                  as ViolationLoadSuccess)
+                              .activeFilter
+                              .copyWith(name: text),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 2.0, horizontal: 8),
-                        hintText: 'Search',
-                        suffixIcon: Icon(Icons.search)),
+                      );
+                    },
                   ),
                 )),
                 FilterButton(
@@ -231,33 +246,45 @@ class __ViolationListState extends State<_ViolationList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+    return BlocBuilder<ViolationBloc, ViolationState>(
         builder: (context, state) {
-      // if (state is ViolationLoadInProgress) {
-      //   return const Center(
-      //     child: CircularProgressIndicator(),
-      //   );
-      // }
-      // if (state is ViolationLoadFailure) {
-      //   return Center(
-      //     child: Text('Fail to fetch violations'),
-      //   );
-      // }
-      if (state is ViolationFilterInProgress) {
+      if (state is ViolationLoadInProgress) {
         return Center(
-            child: SkeletonLoading(
-          item: 4,
-        ));
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is ViolationLoadFailure) {
+        return Center(
+          child: Column(
+            children: [
+              Text('Fail to fetch violations'),
+              ElevatedButton(
+                onPressed: () {
+                  _violationBloc.add(ViolationRequested(
+                    token: BlocProvider.of<AuthenticationBloc>(context)
+                        .state
+                        .token,
+                  ));
+                },
+                child: Text('Reload'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey[200],
+                  onPrimary: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        );
       }
 
-      if (state is ViolationFilterSucess) {
-        if (state.filteredViolations.isEmpty) {
-          Center(
+      if (state is ViolationLoadSuccess) {
+        if (state.violations.isEmpty) {
+          return Center(
             child: Text('There is no violations'),
           );
         }
 
-        List<Violation> violations = state.filteredViolations;
+        List<Violation> violations = state.violations;
 
         return Expanded(
             child: NotificationListener<ScrollEndNotification>(
@@ -265,27 +292,35 @@ class __ViolationListState extends State<_ViolationList> {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
+                print('at top');
                 _violationBloc.add(ViolationRequested(
                   token:
                       BlocProvider.of<AuthenticationBloc>(context).state.token,
                   isRefresh: true,
+                  filter: state.activeFilter,
                 ));
               } else {
+                print('at bottom');
                 _violationBloc.add(
                   ViolationRequested(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token),
+                    token: BlocProvider.of<AuthenticationBloc>(context)
+                        .state
+                        .token,
+                    filter: state.activeFilter,
+                  ),
                 );
               }
             }
             return true;
           },
           child: ListView.builder(
-              itemCount: state.filteredViolations.length + 1,
+              itemCount:
+                  (_violationBloc.state as ViolationLoadSuccess).hasReachedMax
+                      ? state.violations.length
+                      : state.violations.length + 1,
               controller: _scrollController,
               itemBuilder: (context, index) {
-                return index >= state.filteredViolations.length
+                return index >= state.violations.length
                     ? BottomLoader()
                     : ViolationCard(violation: violations[index]);
               }),
@@ -293,7 +328,9 @@ class __ViolationListState extends State<_ViolationList> {
       }
       return Container(
         child: Center(
-          child: CircularProgressIndicator(),
+          child: SkeletonLoading(
+            item: 4,
+          ),
         ),
       );
     });

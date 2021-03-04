@@ -21,3 +21,7 @@ doc/api/
 *.js.map
 
 .vscode/launch.json
+
+.flutter-plugins-dependencies
+
+.flutter-plugins
