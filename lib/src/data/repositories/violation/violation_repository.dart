@@ -16,12 +16,18 @@ class ViolationRepository {
     String sort,
     double page,
     int limit,
+    String status,
+    int branchId,
+    String name,
   }) async {
     return await _violationApi.getViolations(
       token: token,
       sort: sort,
       page: page,
       limit: limit,
+      branchId: branchId,
+      name: name,
+      status: status,
     );
   }
 

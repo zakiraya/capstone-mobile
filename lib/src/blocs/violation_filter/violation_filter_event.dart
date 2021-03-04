@@ -7,8 +7,19 @@ abstract class ViolationFilterEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// class FilterUpdated extends ViolationFilterEvent {
+//   final String filter;
+
+//   FilterUpdated(this.filter);
+
+//   @override
+//   List<Object> get props => [filter];
+
+//   @override
+//   String toString() => 'FilterUpdated { filter: $filter }';
+// }
 class FilterUpdated extends ViolationFilterEvent {
-  final String filter;
+  final ViolationFilter filter;
 
   FilterUpdated(this.filter);
 

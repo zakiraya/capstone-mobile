@@ -1,10 +1,10 @@
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_form.dart';
-import 'package:capstone_mobile/src/blocs/violation_create/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 
 class ViolationCreateEditScreen extends StatefulWidget {

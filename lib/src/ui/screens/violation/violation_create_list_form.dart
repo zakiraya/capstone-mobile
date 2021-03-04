@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -29,7 +30,16 @@ class ViolationListForm extends StatelessWidget {
             context: context,
             type: CoolAlertType.success,
             text: "Transaction completed successfully!",
-          );
+          ).then((value) => {
+                BlocProvider.of<ViolationBloc>(context).add(
+                  ViolationRequested(
+                    token: BlocProvider.of<AuthenticationBloc>(context)
+                        .state
+                        .token,
+                    isRefresh: true,
+                  ),
+                )
+              });
         }
         if (state.status.isSubmissionFailure) {
           Navigator.pop(context);
@@ -114,10 +124,11 @@ class _SubmitButton extends StatelessWidget {
                   ? () {
                       context.read<ViolationListBloc>().add(
                             ViolationListSubmitted(
-                                token: context
-                                    .read<AuthenticationBloc>()
-                                    .state
-                                    .token),
+                              token: context
+                                  .read<AuthenticationBloc>()
+                                  .state
+                                  .token,
+                            ),
                           );
                       showDialog(
                           barrierDismissible: false,
@@ -128,7 +139,7 @@ class _SubmitButton extends StatelessWidget {
                               children: [
                                 Center(
                                   child: CircularProgressIndicator(),
-                                )
+                                ),
                               ],
                             );
                           });
@@ -217,7 +228,7 @@ void showModalOne(
               ),
             )
           : bloc.add(
-              ViolationUpdate(
+              ViolationItemUpdate(
                 position: value[1],
                 violation: value[0],
               ),

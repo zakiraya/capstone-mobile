@@ -1,4 +1,8 @@
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,10 +22,18 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<ViolationFilterBloc>(context)
-              .add(FilterUpdated(filter));
+          // BlocProvider.of<ViolationFilterBloc>(context)
+          //     .add(FilterUpdated(ViolationFilter(branch: filter)));
+          BlocProvider.of<ViolationBloc>(context).add(
+            ViolationFilterChanged(
+              token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+              filter: ViolationFilter(branchId: filter),
+            ),
+          );
         },
-        activeFilter: state is ViolationFilterSucess ? state.activeFilter : '',
+        // activeFilter: state is ViolationFilterSucess
+        //     ? state.activeFilter.branch.name
+        //     : '',
         activeStyle: activeStyle,
         defaultStyle: defaultStyle,
       );
@@ -38,13 +50,13 @@ class _Button extends StatelessWidget {
   _Button({
     Key key,
     @required this.onSelected,
-    @required this.activeFilter,
+    // @required this.activeFilter,
     @required this.activeStyle,
     @required this.defaultStyle,
   }) : super(key: key);
 
-  final PopupMenuItemSelected<String> onSelected;
-  final String activeFilter;
+  final PopupMenuItemSelected<int> onSelected;
+  // final String activeFilter;
   final TextStyle activeStyle;
   final TextStyle defaultStyle;
 
@@ -53,21 +65,27 @@ class _Button extends StatelessWidget {
     'Quan 9',
     'Quan 666',
     'Farrell Shoal',
+    'string',
     'Q5',
     'Quan 66',
+    'Hoeger Branch',
     'Corporations',
     'Quigley Meadow',
+    'Chi Nhanh 1',
   ];
+
+  final ids = [0, 1, 2, 3, 4, 6, 10, 13, 18, 27, 28];
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<String>(
+    return PopupMenuButton<int>(
       tooltip: 'Filter',
       onSelected: onSelected,
       itemBuilder: (BuildContext context) =>
-          branches.map<PopupMenuItem<String>>((branch) {
-        return PopupMenuItem<String>(
-          value: branch == 'All branches' ? '' : branch,
+          branches.map<PopupMenuItem<int>>((branch) {
+        return PopupMenuItem<int>(
+          value:
+              branch == 'All branches' ? null : ids[branches.indexOf(branch)],
           child: Text(branch),
         );
       }).toList(),

@@ -1,4 +1,4 @@
-part of 'violation_bloc.dart';
+part of 'violation_list_bloc.dart';
 
 abstract class ViolationCreateEvent extends Equatable {
   const ViolationCreateEvent();
