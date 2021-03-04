@@ -53,6 +53,7 @@ class ViolationApi {
     if (branchId != null) {
       url += '&Filter.BranchIds=$branchId';
     }
+
     print(url);
     final violationJson = await _baseApi.get(url, token);
     final violations = violationJson['data']['result'] as List;

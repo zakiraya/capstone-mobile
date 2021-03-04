@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
@@ -20,8 +22,14 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<ViolationFilterBloc>(context)
-              .add(FilterUpdated(ViolationFilter(branch: filter)));
+          // BlocProvider.of<ViolationFilterBloc>(context)
+          //     .add(FilterUpdated(ViolationFilter(branch: filter)));
+          BlocProvider.of<ViolationBloc>(context).add(
+            ViolationFilterChanged(
+              token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+              filter: ViolationFilter(branchId: filter),
+            ),
+          );
         },
         // activeFilter: state is ViolationFilterSucess
         //     ? state.activeFilter.branch.name
@@ -47,7 +55,7 @@ class _Button extends StatelessWidget {
     @required this.defaultStyle,
   }) : super(key: key);
 
-  final PopupMenuItemSelected<Branch> onSelected;
+  final PopupMenuItemSelected<int> onSelected;
   // final String activeFilter;
   final TextStyle activeStyle;
   final TextStyle defaultStyle;
@@ -70,18 +78,14 @@ class _Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<Branch>(
+    return PopupMenuButton<int>(
       tooltip: 'Filter',
       onSelected: onSelected,
       itemBuilder: (BuildContext context) =>
-          branches.map<PopupMenuItem<Branch>>((branch) {
-        return PopupMenuItem<Branch>(
-          value: branch == 'All branches'
-              ? null
-              : Branch(
-                  id: ids[branches.indexOf(branch)],
-                  name: branch,
-                ),
+          branches.map<PopupMenuItem<int>>((branch) {
+        return PopupMenuItem<int>(
+          value:
+              branch == 'All branches' ? null : ids[branches.indexOf(branch)],
           child: Text(branch),
         );
       }).toList(),

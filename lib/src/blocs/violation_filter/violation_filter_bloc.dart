@@ -27,12 +27,12 @@ class ViolationFilterBloc
                 )
               : ViolationFilterInProgress(),
         ) {
-    violationSubscription = violationBloc.listen((state) {
-      if (state is ViolationLoadSuccess) {
-        add(ViolationsUpdated(
-            (violationBloc.state as ViolationLoadSuccess).violations));
-      }
-    });
+    // violationSubscription = violationBloc.listen((state) {
+    //   if (state is ViolationLoadSuccess) {
+    //     add(ViolationsUpdated(
+    //         (violationBloc.state as ViolationLoadSuccess).violations));
+    //   }
+    // });
   }
 
   @override
@@ -49,9 +49,7 @@ class ViolationFilterBloc
   Stream<ViolationFilterState> _mapUpdateFilterToState(
     FilterUpdated event,
   ) async* {
-    print('alo');
     if (violationBloc.state is ViolationLoadSuccess) {
-      print('1alo');
       yield ViolationFilterSucess(
         _mapViolationsToFilteredViolation(
           (violationBloc.state as ViolationLoadSuccess).violations,
