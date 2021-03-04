@@ -63,11 +63,6 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
     List<Violation> violations =
         state.violations.map((violation) => violation).toList();
 
-    print('violation_list_change: ');
-    print(violation.branchName);
-    print(violation.regulationName);
-    print(violation.description);
-
     violations.add(violation);
     return state.copyWith(
       violations: violations,
@@ -84,10 +79,6 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
 
     violations[event.position] = event.violation;
 
-    print('violation_update_to_state: ');
-    print(violations[event.position].branchName);
-    print(violations[event.position].regulationName);
-    print(violations[event.position].description);
     return state.copyWith(
       violations: violations,
       status: FormzStatus.valid,

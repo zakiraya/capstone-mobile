@@ -23,6 +23,7 @@ class _ViolationCreateScreenState extends State<ViolationCreateScreen> {
         backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
+          iconSize: 16.0,
           icon: Icon(
             Icons.arrow_back_ios,
             color: theme.primaryColor,

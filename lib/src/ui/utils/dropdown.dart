@@ -76,7 +76,6 @@ class BranchDropdownState extends State<BranchDropdown> {
             ),
             onChanged: (newValue) {
               setState(() {
-                print('new value: ${newValue.name}');
                 dropdownValue = newValue;
               });
               context.read<ViolationCreateBloc>().add(

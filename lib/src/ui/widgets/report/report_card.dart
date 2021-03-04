@@ -13,8 +13,7 @@ class ReportCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shadowColor: Colors.purple[300],
+      elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {

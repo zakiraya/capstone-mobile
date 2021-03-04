@@ -76,7 +76,7 @@ class _ModalBodyState extends State<ModalBody> {
                   children: [
                     Container(
                       child: Text(
-                          widget.isEditing ? 'Violation Edit' : 'New violation',
+                          widget.isEditing ? 'Edit violation' : 'New violation',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 24.0,
@@ -84,7 +84,9 @@ class _ModalBodyState extends State<ModalBody> {
                     ),
                     IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     )
                   ],
                 ),
@@ -250,7 +252,13 @@ class _ModalBodyState extends State<ModalBody> {
                               : null,
                           child: Text(
                               '${widget.isEditing == true ? '   Save   ' : '   Add   '}'),
-                          style: ElevatedButton.styleFrom(),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 5.0,
+                            primary: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                         );
                       },
                     );

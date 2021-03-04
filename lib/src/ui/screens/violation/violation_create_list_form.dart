@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -55,13 +56,9 @@ class ViolationListForm extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
-            Container(
-              child: Text(
-                'New Violations',
-                style: TextStyle(
-                    color: theme.primaryColor,
-                    fontSize: theme.textTheme.headline4.fontSize),
-              ),
+            DropdownFieldBranch(),
+            SizedBox(
+              height: 16,
             ),
             ViolationList(),
             GestureDetector(
@@ -85,6 +82,9 @@ class ViolationListForm extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: 24,
             ),
             _SubmitButton(size: size),
           ],
@@ -110,7 +110,8 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return Container(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 104),
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.27),
             child: ElevatedButton(
               key: const Key('createForm_submit_raisedButton'),
               child: const Text(
@@ -146,10 +147,11 @@ class _SubmitButton extends StatelessWidget {
                     }
                   : null,
               style: ElevatedButton.styleFrom(
+                elevation: 5,
                 onPrimary: Colors.red,
                 primary: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
