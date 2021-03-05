@@ -61,19 +61,27 @@ class HomeView extends StatelessWidget {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            // automaticallyImplyLeading: false,
-
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Image(
-                //   width: size.width * 0.15,
-                //   image: AssetImage('assets/logo.png'),
-                // ),
                 Image(
-                  width: size.width * 0.3,
-                  image: AssetImage('assets/brand_name.png'),
+                  width: size.width * 0.07,
+                  image: AssetImage('assets/logo.png'),
+                ),
+                SizedBox(
+                  width: 8.0,
+                ),
+                Column(
+                  children: [
+                    Image(
+                      width: size.width * 0.2,
+                      image: AssetImage('assets/brand_name.png'),
+                    ),
+                    SizedBox(
+                      height: 6.0,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -83,7 +91,7 @@ class HomeView extends StatelessWidget {
                 child: Center(
                   child: Container(
                     width: 80,
-                    height: 28,
+                    height: 32,
                     child: ElevatedButton(
                       onPressed: () {
                         Utils.getImage();
@@ -91,6 +99,9 @@ class HomeView extends StatelessWidget {
                       child: Icon(Icons.camera_alt_outlined),
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xff916BFF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
                       ),
                     ),
                   ),
@@ -131,9 +142,6 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
                   ],
                 )
               : null,
@@ -161,6 +169,9 @@ class HomeTab extends StatelessWidget {
           height: size.height * 0.2,
           color: Color(0xffE9EFFF),
         ),
+        SizedBox(
+          height: 16,
+        ),
         Container(
           width: size.width * 0.2,
           height: size.height * 0.2,
@@ -172,9 +183,21 @@ class HomeTab extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('New notifications '),
+                    Text(
+                      'Latest notifications ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
                     GestureDetector(
-                      child: Text('see all '),
+                      child: Text(
+                        'see all ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.0,
+                        ),
+                      ),
                       onTap: () {
                         Navigator.push(context, NotificationScreen.route());
                       },
@@ -189,6 +212,9 @@ class HomeTab extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(
+          height: 16,
+        ),
         GestureDetector(
           onTap: () {
             BlocProvider.of<TabBloc>(context).add(
@@ -196,24 +222,24 @@ class HomeTab extends StatelessWidget {
             );
           },
           child: Container(
-            color: Color(0xffFFBB33),
-            height: size.height * 0.05,
+            color: Colors.orange[400],
+            height: 32,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Report list',
+                    'REPORT LIST',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    size: 20,
+                    size: 12,
                     color: Colors.white,
                   )
                 ],
@@ -232,24 +258,24 @@ class HomeTab extends StatelessWidget {
             );
           },
           child: Container(
-            color: Color(0xffFFBB33),
-            height: size.height * 0.05,
+            color: Colors.orange[400],
+            height: 32,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Violation list',
+                    'VIOLATION LIST',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    size: 20,
+                    size: 12,
                     color: Colors.white,
                   )
                 ],

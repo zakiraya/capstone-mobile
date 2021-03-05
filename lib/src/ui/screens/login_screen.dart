@@ -14,37 +14,36 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: size.width,
-            minHeight: size.height,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: size.width * 0.5,
-                  height: size.width * 0.3,
-                  child: Image(
-                    image: AssetImage('assets/Group1108.png'),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (OverscrollIndicatorNotification overscroll) {
+            overscroll.disallowGlow();
+          },
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: size.height * 0.2,
+              ),
+              Container(
+                width: size.width * 0.6,
+                height: size.width * 0.3,
+                child: Image(
+                  image: AssetImage('assets/Group1108.png'),
                 ),
-                BlocProvider(
-                  create: (context) {
-                    return LoginBloc(
-                      authenticationRepository:
-                          RepositoryProvider.of<AuthenticationRepository>(
-                              context),
-                    );
-                  },
-                  child: LoginForm(),
-                ),
-              ],
-            ),
+              ),
+              BlocProvider(
+                create: (context) {
+                  return LoginBloc(
+                    authenticationRepository:
+                        RepositoryProvider.of<AuthenticationRepository>(
+                            context),
+                  );
+                },
+                child: LoginForm(),
+              ),
+            ],
           ),
         ),
       ),

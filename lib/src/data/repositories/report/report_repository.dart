@@ -42,7 +42,7 @@ class ReportRepository {
       violation.branchId = report.branchId;
     });
 
-    var violation = await violationRepository.createViolation(
+    var violation = await violationRepository.createViolations(
       token: token,
       violations: report.violations,
     );

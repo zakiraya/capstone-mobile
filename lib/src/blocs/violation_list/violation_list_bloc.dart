@@ -22,7 +22,7 @@ class ViolationListCubit extends Cubit<ViolationListState> {
         status: FormzStatus.submissionInProgress,
       ));
       final result =
-          violationRepository.createViolation(token: token, violations: list);
+          violationRepository.createViolations(token: token, violations: list);
       emit(ViolationListState(
         status: FormzStatus.submissionSuccess,
         violations: list,
@@ -63,11 +63,6 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
     List<Violation> violations =
         state.violations.map((violation) => violation).toList();
 
-    print('violation_list_change: ');
-    print(violation.branchName);
-    print(violation.regulationName);
-    print(violation.description);
-
     violations.add(violation);
     return state.copyWith(
       violations: violations,
@@ -84,10 +79,6 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
 
     violations[event.position] = event.violation;
 
-    print('violation_update_to_state: ');
-    print(violations[event.position].branchName);
-    print(violations[event.position].regulationName);
-    print(violations[event.position].description);
     return state.copyWith(
       violations: violations,
       status: FormzStatus.valid,
@@ -121,12 +112,11 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      var result = await violationRepository.createViolation(
+      var result = await violationRepository.createViolations(
         token: event.token,
         violations: state.violations,
       );
       yield state.copyWith(
-        // violations: List<Violation>(),
         status: FormzStatus.submissionSuccess,
       );
       yield state.copyWith(

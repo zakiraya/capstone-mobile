@@ -52,6 +52,7 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
         elevation: 0.0,
         backgroundColor: theme.scaffoldBackgroundColor,
         leading: IconButton(
+          iconSize: 16,
           icon: Icon(
             Icons.arrow_back_ios,
             color: theme.primaryColor,

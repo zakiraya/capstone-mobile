@@ -7,12 +7,24 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
+            width: size.width * 0.6,
+            height: size.width * 0.3,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/logo.png'),
+              ),
+            ),
+          ),
+          Container(
+            width: size.width * 0.6,
+            height: size.width * 0.3,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/brand_name.png'),

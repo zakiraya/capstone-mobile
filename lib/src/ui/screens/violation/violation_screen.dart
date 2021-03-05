@@ -1,4 +1,4 @@
-import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,8 +82,9 @@ class _ViolationScreenState extends State<ViolationScreen> {
                       child: Text(
                         'Violation',
                         style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: theme.textTheme.headline1.fontSize),
+                          color: theme.primaryColor,
+                          fontSize: theme.textTheme.headline1.fontSize,
+                        ),
                       ),
                     ),
                     Row(
@@ -93,8 +94,9 @@ class _ViolationScreenState extends State<ViolationScreen> {
                           child: Text(
                             'List',
                             style: TextStyle(
-                                color: theme.primaryColor,
-                                fontSize: theme.textTheme.headline1.fontSize),
+                              color: theme.primaryColor,
+                              fontSize: theme.textTheme.headline1.fontSize,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -165,20 +167,19 @@ class ViolationTab extends StatelessWidget {
               children: [
                 Expanded(
                     child: Container(
-                  height: 25,
+                  height: 24,
                   child: TextField(
-                    // TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 2.0, horizontal: 8),
-                      hintText: 'Search',
+                      hintText: 'Search by regulation',
+                      hintStyle: TextStyle(fontSize: 12),
                       suffixIcon: Icon(Icons.search),
                     ),
                     onSubmitted: (text) {
-                      print(text);
                       BlocProvider.of<ViolationBloc>(context).add(
                         ViolationFilterChanged(
                           token: BlocProvider.of<AuthenticationBloc>(context)
@@ -292,7 +293,6 @@ class __ViolationListState extends State<_ViolationList> {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
-                print('at top');
                 _violationBloc.add(ViolationRequested(
                   token:
                       BlocProvider.of<AuthenticationBloc>(context).state.token,
@@ -300,7 +300,6 @@ class __ViolationListState extends State<_ViolationList> {
                   filter: state.activeFilter,
                 ));
               } else {
-                print('at bottom');
                 _violationBloc.add(
                   ViolationRequested(
                     token: BlocProvider.of<AuthenticationBloc>(context)
@@ -338,7 +337,7 @@ class __ViolationListState extends State<_ViolationList> {
 }
 
 class ViolationCard extends StatelessWidget {
-  const ViolationCard({
+  ViolationCard({
     Key key,
     @required this.violation,
   }) : super(key: key);
@@ -348,8 +347,7 @@ class ViolationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shadowColor: Colors.purple[300],
+      elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
@@ -364,14 +362,15 @@ class ViolationCard extends StatelessWidget {
         child: ClipPath(
           clipper: ShapeBorderClipper(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
           child: Container(
             height: 100,
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: Colors.green, width: 5),
+                left: BorderSide(
+                    color: Constant.statusColors[violation.status], width: 5),
               ),
             ),
             child: Padding(
@@ -382,11 +381,17 @@ class ViolationCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${violation.branchName ?? "branch name"}"),
+                      Text(
+                        "${violation.branchName ?? "branch name"}",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Text(
                         "${violation.status ?? "Status"}",
                         style: TextStyle(
-                          color: Colors.green,
+                          color: Constant.statusColors[violation.status],
                         ),
                       ),
                     ],
@@ -394,15 +399,28 @@ class ViolationCard extends StatelessWidget {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("${"violation name"}"),
+                  Text(
+                    "${violation.regulationName ?? 'Regulation name'}",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   SizedBox(
                     height: 16,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("5 mistakes"),
-                      Text("${violation.createdAt ?? "date time"}"),
+                      Text(""),
+                      Text(
+                        "submitted: " + "${violation.createdAt ?? "date time"}",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ],
                   ),
                 ],

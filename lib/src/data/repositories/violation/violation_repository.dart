@@ -31,7 +31,7 @@ class ViolationRepository {
     );
   }
 
-  Future<String> createViolation({
+  Future<String> createViolations({
     @required String token,
     @required List<Violation> violations,
   }) async {

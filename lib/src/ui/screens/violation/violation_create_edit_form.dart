@@ -288,7 +288,6 @@ class __ViolationDescriptionInputState
     extends State<_ViolationDescriptionInput> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.initValue != null || widget.initValue != '') {
       context.read<ViolationCreateBloc>().add(

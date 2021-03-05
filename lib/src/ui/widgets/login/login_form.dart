@@ -25,10 +25,9 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _UsernameInput(),
-              const Padding(padding: EdgeInsets.all(12)),
               _PasswordInput(),
               // _ErrorText(),
-              const Padding(padding: EdgeInsets.all(12)),
+              SizedBox(height: 40),
               _LoginButton(),
             ],
           ),
@@ -70,13 +69,16 @@ class _UsernameInput extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_emailInput_textField'),
-          onChanged: (username) =>
-              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-          decoration: InputDecoration(
-            labelText: 'Email',
-            errorText: state.username.invalid ? 'Invalid email' : null,
+        return Container(
+          child: TextField(
+            key: const Key('loginForm_emailInput_textField'),
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (username) =>
+                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+            decoration: InputDecoration(
+              hintText: 'example@com.vn',
+              errorText: state.username.invalid ? 'Invalid email' : null,
+            ),
           ),
         );
       },
@@ -96,20 +98,25 @@ class __PasswordInputState extends State<_PasswordInput> {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-          obscureText: isObscured,
-          decoration: InputDecoration(
-              labelText: 'Password',
-              errorText: state.password.invalid ? 'Invalid Password' : null,
-              suffixIcon: IconButton(
-                icon: Icon(Icons.remove_red_eye_outlined),
-                onPressed: () {
-                  isObscured = !isObscured;
-                },
-              )),
+        return Container(
+          child: TextField(
+            key: const Key('loginForm_passwordInput_textField'),
+            onChanged: (password) =>
+                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            obscureText: isObscured,
+            decoration: InputDecoration(
+                hintText: 'password',
+                errorText: state.password.invalid ? 'Invalid Password' : null,
+                suffixIcon: IconButton(
+                  iconSize: 16,
+                  icon: Icon(Icons.remove_red_eye_sharp),
+                  onPressed: () {
+                    setState(() {
+                      isObscured = !isObscured;
+                    });
+                  },
+                )),
+          ),
         );
       },
     );
@@ -142,10 +149,11 @@ class _LoginButton extends StatelessWidget {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
+                    elevation: 10.0,
                     onPrimary: Colors.red,
                     primary: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                 ),

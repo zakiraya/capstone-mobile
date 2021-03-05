@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +38,6 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
-    // var violation = widget.violation;
 
     return BlocBuilder<ViolationBloc, ViolationState>(
         builder: (context, state) {
@@ -50,6 +50,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
             elevation: 0,
             backgroundColor: theme.scaffoldBackgroundColor,
             leading: IconButton(
+              iconSize: 16,
               icon: Icon(
                 Icons.arrow_back_ios,
                 color: theme.primaryColor,
@@ -110,7 +111,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
               children: [
                 Container(
                   child: Text(
-                    'Violation of ${violation.name}',
+                    'Violation of ${violation.regulationName}',
                     style: TextStyle(
                       color: theme.primaryColor,
                       fontSize: theme.textTheme.headline5.fontSize,
@@ -126,7 +127,8 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                     Container(
                       child: Text(
                         "${violation.status}",
-                        style: TextStyle(color: Colors.green),
+                        style: TextStyle(
+                            color: Constant.statusColors[violation.status]),
                       ),
                     ),
                   ],
@@ -146,14 +148,14 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       Text(violation.branchName ?? 'empty'),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Container(
-                        child: Text("Regulation: ",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Text(violation.regulationName ?? 'empty'),
+                      // SizedBox(
+                      //   height: 16,
+                      // ),
+                      // Container(
+                      //   child: Text("Regulation: ",
+                      //       style: TextStyle(fontWeight: FontWeight.bold)),
+                      // ),
+                      // Text(violation.regulationName ?? 'empty'),
                       SizedBox(
                         height: 16,
                       ),

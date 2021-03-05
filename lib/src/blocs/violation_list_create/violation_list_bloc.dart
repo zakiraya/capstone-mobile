@@ -81,11 +81,6 @@ Stream<ViolationCreateState> _mapViolationCreateAddedToState(
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
       DateTime date = DateTime.now();
-      print('violation create: ');
-      print(state.violationDescription.value);
-      print(state.violationRegulation.value);
-      print(state.name);
-      print(state.createdDate);
       yield state.copyWith(
         status: FormzStatus.submissionSuccess,
         createdDate: formatDate(date),

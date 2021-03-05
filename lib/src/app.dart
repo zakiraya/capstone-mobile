@@ -53,7 +53,6 @@ class _AppViewState extends State<AppView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     firebaseNotification.configFirebaseMessaging(_navigator);
   }
@@ -78,8 +77,12 @@ class _AppViewState extends State<AppView> {
         ),
         headline6: TextStyle(fontSize: 20.0),
         bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        button:
-            TextStyle(fontSize: 16, letterSpacing: 1.5, color: Colors.white),
+        button: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+      buttonTheme: ButtonThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
 
