@@ -1,4 +1,7 @@
 import 'package:capstone_mobile/src/blocs/blocs.dart';
+import 'package:capstone_mobile/src/ui/screens/change_password_screen.dart';
+import 'package:circular_check_box/circular_check_box.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +15,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  var checkbox = true;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -69,17 +73,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             height: 24,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, ChangePasswordScreen.route());
+            },
             child: Container(
-              color: Colors.grey[200],
-              height: size.height * 0.05,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.grey[200],
+              ),
+              height: 48,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Report list',
+                      'Change password',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -88,12 +97,124 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
-                      size: 16,
+                      size: 12,
                       color: Colors.black,
                     )
                   ],
                 ),
               ),
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.grey[200],
+              ),
+              height: 48,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Languages',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down_outlined,
+                      size: 20,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.grey[200],
+            ),
+            height: 48,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    children: [
+                      CircularCheckBox(
+                          activeColor: Colors.green,
+                          // checkColor: Colors.green,
+                          value: checkbox,
+                          onChanged: (value) {
+                            setState(() {
+                              checkbox = value;
+                            });
+                          }),
+                      Text('Vietnam')
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Flag(
+                    'VN',
+                    height: 24,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.grey[200],
+            ),
+            height: 48,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    children: [
+                      CircularCheckBox(
+                          activeColor: Colors.green,
+                          value: checkbox,
+                          onChanged: (value) {
+                            setState(() {
+                              checkbox = value;
+                            });
+                          }),
+                      Text('English')
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Flag(
+                    'US',
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(
@@ -106,8 +227,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   .add(AuthenticationLogoutRequested());
             },
             child: Container(
-              color: Colors.grey[200],
-              height: size.height * 0.05,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.grey[200],
+              ),
+              height: 48,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -131,72 +255,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-
-          // Row(
-          //   children: [
-          //     Icon(
-          //       Icons.person,
-          //       color: Theme.of(context).primaryColor,
-          //     ),
-          //     SizedBox(
-          //       width: 15,
-          //     ),
-          //     Text(
-          //       'Notifications',
-          //       style: TextStyle(
-          //         fontSize: 18,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     )
-          //   ],
-          // ),
-          // Divider(
-          //   height: 15,
-          //   thickness: 2,
-          // ),
-          // SizedBox(
-          //   height: 15,
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(
-          //       'New for you',
-          //       style: TextStyle(
-          //         fontSize: 18,
-          //         fontWeight: FontWeight.w500,
-          //         color: Colors.grey,
-          //       ),
-          //     ),
-          //     Switch(
-          //       activeColor: Theme.of(context).primaryColor,
-          //       value: true,
-          //       onChanged: (bool val) {},
-          //     ),
-          //   ],
-          // ),
-          // Container(
-          //   padding: EdgeInsets.symmetric(horizontal: 40),
-          //   child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         onPrimary: Colors.red,
-          //         primary: Theme.of(context).primaryColor,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(20),
-          //         ),
-          //       ),
-          //       child: Text(
-          //         'SIGN OUT',
-          //         style: TextStyle(
-          //           color: Colors.white,
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         context
-          //             .read<AuthenticationBloc>()
-          //             .add(AuthenticationLogoutRequested());
-          //       }),
-          // ),
         ],
       ),
     );

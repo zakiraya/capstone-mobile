@@ -48,7 +48,8 @@ dependencies:
   firebase_core: "^0.5.0+1"
   firebase_messaging: "^7.0.3"
   dropdownfield: 0.0.2
-  dropdown_search: ^0.4.9
+  circular_check_box: ^1.0.4
+  flag: ^3.2.2
 
 
 dev_dependencies:
