@@ -50,6 +50,19 @@ class SettingsScreen extends StatelessWidget {
                       image: AssetImage('assets/avt.jpg'),
                     )),
               ),
+              Column(
+                children: [
+                  Container(
+                    child: Text('${user.email ?? 'mail'}'),
+                  ),
+                  Container(
+                    child: Text('${user.roleName ?? 'role name'}'),
+                  ),
+                  Container(
+                    child: Text('${user.branchName ?? 'branch name'}'),
+                  ),
+                ],
+              )
             ]),
             SizedBox(
               width: 16.0,
@@ -109,36 +122,35 @@ class SettingsScreen extends StatelessWidget {
               height: 8,
             ),
             GestureDetector(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.grey[200],
-                ),
-                height: 48,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Languages',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        size: 20,
-                        color: Colors.black,
-                      )
-                    ],
+                onTap: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey[200],
                   ),
-                ),
-              ),
-            ),
+                  height: 48,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Languages',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down_outlined,
+                          size: 20,
+                          color: Colors.black,
+                        )
+                      ],
+                    ),
+                  ),
+                )),
             SizedBox(
               height: 8,
             ),

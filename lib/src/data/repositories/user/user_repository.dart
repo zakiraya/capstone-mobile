@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:uuid/uuid.dart';
 
 import 'package:capstone_mobile/src/data/repositories/user/user_api.dart';
 import '../../models/models.dart';
@@ -10,11 +9,10 @@ class UserRepository {
 
   UserRepository({this.userApi});
 
-  Future<User> getUser(String username, String token) async {
+  Future<User> getUser(String token) async {
     return _user = _user != null
         ? _user
         : await userApi.getProfile(
-            username,
             token,
           );
   }
