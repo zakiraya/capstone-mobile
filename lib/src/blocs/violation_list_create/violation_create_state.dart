@@ -1,10 +1,10 @@
-part of 'violation_list_bloc.dart';
+part of 'violation_create_bloc.dart';
 
 class ViolationCreateState extends Equatable {
   const ViolationCreateState({
     this.violationDescription = const ViolationDescription.pure(),
     this.violationRegulation = const ViolationRegulation.pure(),
-    this.violationBranch = const ViolationBranch.pure(),
+    // this.violationBranch = const ViolationBranch.pure(),
     this.status = FormzStatus.pure,
     this.createdDate = '01-01-2000',
     this.name = 'create violation',
@@ -13,7 +13,7 @@ class ViolationCreateState extends Equatable {
   final FormzStatus status;
   final ViolationDescription violationDescription;
   final ViolationRegulation violationRegulation;
-  final ViolationBranch violationBranch;
+  // final ViolationBranch violationBranch;
   final String createdDate;
   final String name;
 
@@ -23,7 +23,7 @@ class ViolationCreateState extends Equatable {
     String createdDate,
     String name,
     ViolationRegulation violationRegulation,
-    ViolationBranch violationBranch,
+    // ViolationBranch violationBranch,
   }) {
     return ViolationCreateState(
       status: status ?? this.status,
@@ -31,7 +31,7 @@ class ViolationCreateState extends Equatable {
       createdDate: createdDate ?? this.createdDate,
       name: name ?? this.name,
       violationRegulation: violationRegulation ?? this.violationRegulation,
-      violationBranch: violationBranch ?? this.violationBranch,
+      // violationBranch: violationBranch ?? this.violationBranch,
     );
   }
 
@@ -42,6 +42,6 @@ class ViolationCreateState extends Equatable {
         violationRegulation,
         name,
         createdDate,
-        violationBranch
+        // violationBranch
       ];
 }

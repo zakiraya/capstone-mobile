@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation_list_create/violation_list_bloc.dart';
-import 'package:capstone_mobile/src/data/models/branch/branch.dart';
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
@@ -98,33 +98,17 @@ class _ModalBodyState extends State<ModalBody> {
                   child: Text('Regulation:',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                Container(
-                  child: RegulationDropdown(
-                    initValue: widget.isEditing == true
-                        ? Regulation(
-                            id: widget.violation.regulationId,
-                            name: widget.violation.regulationName,
-                          )
-                        : null,
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text('Branch:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  child: BranchDropdown(
-                    initValue: widget.isEditing == true
-                        ? Branch(
-                            id: widget.violation.branchId,
-                            name: widget.violation.branchName,
-                          )
-                        : null,
-                  ),
-                ),
+                DropdownFieldRegulation(),
+                // Container(
+                //   child: RegulationDropdown(
+                //     initValue: widget.isEditing == true
+                //         ? Regulation(
+                //             id: widget.violation.regulationId,
+                //             name: widget.violation.regulationName,
+                //           )
+                //         : null,
+                //   ),
+                // ),
                 SizedBox(
                   height: 16,
                 ),
@@ -240,10 +224,10 @@ class _ModalBodyState extends State<ModalBody> {
                                         regulationName: state
                                             .violationRegulation.value.name,
                                         imagePath: _image.path,
-                                        branchId:
-                                            state.violationBranch.value.id,
-                                        branchName:
-                                            state.violationBranch.value.name,
+                                        // branchId:
+                                        //     state.violationBranch.value.id,
+                                        // branchName:
+                                        //     state.violationBranch.value.name,
                                       ),
                                       widget.position,
                                     ],

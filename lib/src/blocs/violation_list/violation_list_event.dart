@@ -7,6 +7,15 @@ abstract class ViolationListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ViolationBranchChanged extends ViolationListEvent {
+  const ViolationBranchChanged({@required this.branch});
+
+  final Branch branch;
+
+  @override
+  List<Object> get props => [branch];
+}
+
 class ViolationListChanged extends ViolationListEvent {
   const ViolationListChanged({@required this.violation});
 

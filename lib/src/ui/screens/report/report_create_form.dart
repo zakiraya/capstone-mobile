@@ -60,7 +60,6 @@ class _ReportFormState extends State<ReportForm> {
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    BranchDropdown(),
                     SizedBox(
                       height: 15,
                     ),

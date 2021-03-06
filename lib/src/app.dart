@@ -63,11 +63,9 @@ class _AppViewState extends State<AppView> {
     var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
       primaryColor: blue,
-      // accentColor: purple,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        // backgroundColor: Colors.deepPurple,
       ),
       fontFamily: 'Montserrat',
       textTheme: TextTheme(
@@ -75,8 +73,6 @@ class _AppViewState extends State<AppView> {
           fontSize: 40.0,
           fontWeight: FontWeight.bold,
         ),
-        headline6: TextStyle(fontSize: 20.0),
-        bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         button: TextStyle(fontSize: 16, color: Colors.white),
       ),
       buttonTheme: ButtonThemeData(

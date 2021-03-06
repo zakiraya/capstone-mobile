@@ -61,27 +61,48 @@ class ViolationListForm extends StatelessWidget {
               height: 16,
             ),
             ViolationList(),
-            GestureDetector(
-              onTap: () {
-                showModalOne(
-                  context,
-                  isEditing: false,
+            BlocBuilder<ViolationListBloc, ViolationListState>(
+              builder: (context, state) {
+                return GestureDetector(
+                  onTap: state.violationBranch.pure ||
+                          state.violationBranch.invalid
+                      ? null
+                      : () {
+                          showModalOne(
+                            context,
+                            isEditing: false,
+                          );
+                        },
+                  child: Card(
+                    elevation: 5,
+                    color: Color(0xffF2F2F2),
+                    child: Container(
+                      height: size.height * 0.1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: state.violationBranch.pure ||
+                                    state.violationBranch.invalid
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          Text(
+                            'New violation',
+                            style: TextStyle(
+                              color: state.violationBranch.pure ||
+                                      state.violationBranch.invalid
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
-              child: Card(
-                elevation: 5,
-                color: Color(0xffF2F2F2),
-                child: Container(
-                  height: size.height * 0.1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add),
-                      Text('New violation'),
-                    ],
-                  ),
-                ),
-              ),
             ),
             SizedBox(
               height: 24,
