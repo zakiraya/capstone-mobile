@@ -70,7 +70,6 @@ class AuthenticationBloc
   Future<User> _tryGetUser() async {
     try {
       final user = await _userRepository.getUser(
-        _authenticationRepository.username,
         _authenticationRepository.token,
       );
       return user;
@@ -78,14 +77,4 @@ class AuthenticationBloc
       return null;
     }
   }
-
-  // Future<User> _tryGetUser(String token) async {
-  //   try {
-  //     final user = await _userRepository.getUser("9", token);
-  //     return user;
-  //   } catch (e) {
-  //     print(e);
-  //     return null;
-  //   }
-  // }
 }
