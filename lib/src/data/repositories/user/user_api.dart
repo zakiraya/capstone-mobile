@@ -1,7 +1,12 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/models.dart';
+import '../../../../Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
+
+class AuthenticationException extends AppException {
+  AuthenticationException([message]) : super(message, "Authentication error: ");
+}
 
 class UserApi {
   final http.Client httpClient;
@@ -26,14 +31,18 @@ class UserApi {
   }
 
   Future<User> getProfile(
-    String username,
     String token, {
     Map<String, String> opts,
   }) async {
-    final url = 'accounts?Filter.Username=$username&IncludeProperties=Employee';
+    final url = 'employees/profile';
 
     final userJson =
         await baseApi.get(url, token, opts: opts) as Map<String, dynamic>;
+
+    if (userJson['code'] != 200) {
+      throw AuthenticationException('Error');
+    }
+
     return User.fromJson(userJson);
   }
 }

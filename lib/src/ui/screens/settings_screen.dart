@@ -65,6 +65,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     child: Text('${user.email ?? 'mail'}'),
                   ),
+                  Container(
+                    child: Text('${user.roleName ?? 'role name'}'),
+                  ),
+                  Container(
+                    child: Text('${user.branchName ?? 'branch name'}'),
+                  ),
                 ],
               ),
             ],
