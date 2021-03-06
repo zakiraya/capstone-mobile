@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/tab/tab_bloc.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
 import 'package:capstone_mobile/src/data/models/tab.dart';
@@ -14,6 +15,7 @@ import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -25,17 +27,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider(
-        create: (context) => ViolationFilterBloc(
-          violationBloc: BlocProvider.of<ViolationBloc>(context),
-          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-        ),
-      ),
-      BlocProvider(
-        create: (context) => TabBloc(),
-      ),
-    ], child: HomeView());
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ViolationFilterBloc(
+              violationBloc: BlocProvider.of<ViolationBloc>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => TabBloc(),
+          ),
+        ],
+        child: BlocBuilder<LocalizationBloc, String>(
+          builder: (context, state) {
+            return HomeView();
+          },
+        ));
   }
 }
 
@@ -184,7 +192,7 @@ class HomeTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Latest notifications ',
+                      S.of(context).title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
