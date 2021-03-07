@@ -5,12 +5,7 @@ import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// class SettingsScreen extends StatefulWidget {
-
-//   @override
-//   _SettingsScreenState createState() => _SettingsScreenState();
-// }
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class SettingsScreen extends StatelessWidget {
   static Route route() {
@@ -50,37 +45,41 @@ class SettingsScreen extends StatelessWidget {
                       image: AssetImage('assets/avt.jpg'),
                     )),
               ),
+              SizedBox(
+                width: 24,
+              ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    child: Text(
+                      '${user.fullName ?? 'full name'}',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                   Container(
                     child: Text('${user.email ?? 'mail'}'),
                   ),
                   Container(
-                    child: Text('${user.roleName ?? 'role name'}'),
+                    child: Text(
+                      '${user.branchName ?? 'branch name'}',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                   Container(
-                    child: Text('${user.branchName ?? 'branch name'}'),
+                    child: Text(
+                      '${user.roleName ?? 'role name'}',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ],
               )
             ]),
             SizedBox(
               width: 16.0,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(
-                    '${user.fullName ?? 'name'}',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                  ),
-                ),
-                Container(
-                  child: Text('${user.email ?? 'mail'}'),
-                ),
-              ],
             ),
             SizedBox(
               height: 24,
@@ -101,7 +100,7 @@ class SettingsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Change password',
+                        S.of(context).CHANGE_PASSWORD,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -135,7 +134,7 @@ class SettingsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Languages',
+                          S.of(context).LANGUAGE,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -175,7 +174,7 @@ class SettingsScreen extends StatelessWidget {
                                   .read<LocalizationBloc>()
                                   .add(LocalizationUpdated('vi'));
                             }),
-                        Text('Vietnam')
+                        Text(S.of(context).LANGUAGE_VN)
                       ],
                     ),
                   ),
@@ -213,7 +212,7 @@ class SettingsScreen extends StatelessWidget {
                                   .read<LocalizationBloc>()
                                   .add(LocalizationUpdated('en'));
                             }),
-                        Text('English')
+                        Text(S.of(context).LANGUAGE_EN),
                       ],
                     ),
                   ),
@@ -249,7 +248,7 @@ class SettingsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Log out',
+                        S.of(context).LOGOUT,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

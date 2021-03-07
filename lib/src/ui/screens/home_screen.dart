@@ -54,8 +54,16 @@ class HomeView extends StatelessWidget {
 
   final List<Widget> _tabs = <Widget>[
     HomeTab(),
-    ReportsTab(),
-    ViolationTab(),
+    BlocBuilder<LocalizationBloc, String>(
+      builder: (context, state) {
+        return ReportsTab();
+      },
+    ),
+    BlocBuilder<LocalizationBloc, String>(
+      builder: (context, state) {
+        return ViolationTab();
+      },
+    ),
     SettingsScreen(),
   ];
 
@@ -142,7 +150,11 @@ class HomeView extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "CREATE NEW +",
+                            S
+                                    .of(context)
+                                    .VIOLATION_SCREEN_CREATE_NEW_BUTTON
+                                    .toUpperCase() +
+                                " +",
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -192,7 +204,7 @@ class HomeTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      S.of(context).title,
+                      S.of(context).HOME_LATEST_NOTIFICATION,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
@@ -200,7 +212,7 @@ class HomeTab extends StatelessWidget {
                     ),
                     GestureDetector(
                       child: Text(
-                        'see all ',
+                        S.of(context).HOME_SEE_ALL,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 16.0,
@@ -231,14 +243,14 @@ class HomeTab extends StatelessWidget {
           },
           child: Container(
             color: Colors.orange[400],
-            height: 32,
+            height: 36,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'REPORT LIST',
+                    S.of(context).HOME_REPORT_LIST,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -255,7 +267,7 @@ class HomeTab extends StatelessWidget {
             ),
           ),
         ),
-        LatestReportList(),
+        // LatestReportList(),
         SizedBox(
           height: 16,
         ),
@@ -267,14 +279,14 @@ class HomeTab extends StatelessWidget {
           },
           child: Container(
             color: Colors.orange[400],
-            height: 32,
+            height: 36,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'VIOLATION LIST',
+                    S.of(context).HOME_VIOLATION_LIST,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

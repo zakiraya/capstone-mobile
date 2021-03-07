@@ -78,7 +78,7 @@ class _AppViewState extends State<AppView> {
         unselectedItemColor: Colors.grey,
         // backgroundColor: Colors.deepPurple,
       ),
-      fontFamily: 'Montserrat',
+      // fontFamily: 'Montserrat',
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 40.0,
@@ -129,6 +129,10 @@ class _AppViewState extends State<AppView> {
                   debugShowCheckedModeBanner: false,
                   navigatorKey: _navigatorKey,
                   builder: (context, child) {
+                    BlocProvider.of<LocalizationBloc>(context).add(
+                        LocalizationUpdated(
+                            Localizations.localeOf(context).toString()));
+
                     return BlocListener<AuthenticationBloc,
                         AuthenticationState>(
                       listener: (context, state) {

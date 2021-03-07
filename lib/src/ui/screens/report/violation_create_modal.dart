@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:formz/formz.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class ModalBody extends StatefulWidget {
   const ModalBody({
@@ -76,7 +77,9 @@ class _ModalBodyState extends State<ModalBody> {
                   children: [
                     Container(
                       child: Text(
-                          widget.isEditing ? 'Edit violation' : 'New violation',
+                          widget.isEditing
+                              ? S.of(context).EDIT_VIOLATION
+                              : S.of(context).NEW_VIOLATION,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 24.0,
@@ -95,8 +98,12 @@ class _ModalBodyState extends State<ModalBody> {
                 ),
                 // regulation dropdown
                 Container(
-                  child: Text('Regulation:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(
+                    S.of(context).REGULATION,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Container(
                   child: RegulationDropdown(
@@ -112,8 +119,12 @@ class _ModalBodyState extends State<ModalBody> {
                   height: 16,
                 ),
                 Container(
-                  child: Text('Branch:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(
+                    S.of(context).BRANCH,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Container(
                   child: BranchDropdown(
@@ -129,8 +140,12 @@ class _ModalBodyState extends State<ModalBody> {
                   height: 16,
                 ),
                 Container(
-                  child: Text('Description:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(
+                    S.of(context).DESCRIPTION,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Container(
                   child: _ViolationDescriptionInput(
@@ -143,7 +158,7 @@ class _ModalBodyState extends State<ModalBody> {
                   height: 16,
                 ),
                 Container(
-                  child: Text('Evidence:',
+                  child: Text(S.of(context).EVIDENCE,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 _image == null
@@ -162,7 +177,7 @@ class _ModalBodyState extends State<ModalBody> {
                                   color: Colors.white,
                                 ),
                                 Text(
-                                  'Add image',
+                                  S.of(context).ADD_IMAGE,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -251,10 +266,11 @@ class _ModalBodyState extends State<ModalBody> {
                                 }
                               : null,
                           child: Text(
-                              '${widget.isEditing == true ? '   Save   ' : '   Add   '}'),
+                              '${widget.isEditing == true ? S.of(context).VIOLATION_CREATE_MODAL_ADD : S.of(context).VIOLATION_CREATE_MODAL_ADD}'),
                           style: ElevatedButton.styleFrom(
                             elevation: 5.0,
                             primary: Theme.of(context).primaryColor,
+                            padding: EdgeInsets.symmetric(horizontal: 24),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
