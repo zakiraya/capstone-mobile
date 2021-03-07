@@ -40,7 +40,6 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
 
   _printLatestValue() {
     if (myController.text.isEmpty) {
-      print('empty');
       context.read<ViolationListBloc>().add(ViolationBranchChanged(
             branch: null,
           ));
