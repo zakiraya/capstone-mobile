@@ -10,6 +10,7 @@ import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dar
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class ViolationListForm extends StatelessWidget {
   const ViolationListForm({
@@ -30,7 +31,7 @@ class ViolationListForm extends StatelessWidget {
           CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            text: "Transaction completed successfully!",
+            text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
           ).then((value) => {
                 BlocProvider.of<ViolationBloc>(context).add(
                   ViolationRequested(
@@ -48,7 +49,7 @@ class ViolationListForm extends StatelessWidget {
             context: context,
             type: CoolAlertType.error,
             title: "Oops...",
-            text: "Sorry, something went wrong",
+            text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
           );
         }
       },
@@ -77,7 +78,7 @@ class ViolationListForm extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.add),
-                      Text('New violation'),
+                      Text(S.of(context).NEW_VIOLATION),
                     ],
                   ),
                 ),
@@ -114,8 +115,8 @@ class _SubmitButton extends StatelessWidget {
                 horizontal: MediaQuery.of(context).size.width * 0.27),
             child: ElevatedButton(
               key: const Key('createForm_submit_raisedButton'),
-              child: const Text(
-                'Submit',
+              child: Text(
+                S.of(context).SUBMIT_BUTTON,
                 style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 1.5,

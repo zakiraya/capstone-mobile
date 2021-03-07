@@ -10,6 +10,7 @@ import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -258,7 +259,7 @@ class __ViolationListState extends State<_ViolationList> {
         return Center(
           child: Column(
             children: [
-              Text('Fail to fetch violations'),
+              Text(S.of(context).VIOLATION_SCREEN_FETCH_FAIL),
               ElevatedButton(
                 onPressed: () {
                   _violationBloc.add(ViolationRequested(
@@ -267,7 +268,7 @@ class __ViolationListState extends State<_ViolationList> {
                         .token,
                   ));
                 },
-                child: Text('Reload'),
+                child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.grey[200],
                   onPrimary: Colors.black,
@@ -281,7 +282,7 @@ class __ViolationListState extends State<_ViolationList> {
       if (state is ViolationLoadSuccess) {
         if (state.violations.isEmpty) {
           return Center(
-            child: Text('There is no violations'),
+            child: Text(S.of(context).VIOLATION_SCREEN_NO_VIOLATIONS),
           );
         }
 
@@ -355,7 +356,7 @@ class ViolationCard extends StatelessWidget {
             context,
             ViolationDetailScreen.route(
               violation: violation,
-              id: violation.id,
+              id: violation?.id,
             ),
           );
         },
@@ -370,7 +371,9 @@ class ViolationCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                    color: Constant.statusColors[violation.status], width: 5),
+                    color:
+                        Constant.statusColors[violation.status] ?? Colors.green,
+                    width: 5),
               ),
             ),
             child: Padding(
@@ -382,14 +385,14 @@ class ViolationCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${violation.branchName ?? "branch name"}",
+                        "${violation?.branchName ?? "branch name"}",
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        "${violation.status ?? "Status"}",
+                        "${violation?.status ?? "Status"}",
                         style: TextStyle(
                           color: Constant.statusColors[violation.status],
                         ),
@@ -414,7 +417,8 @@ class ViolationCard extends StatelessWidget {
                     children: [
                       Text(""),
                       Text(
-                        "submitted: " + "${violation.createdAt ?? "date time"}",
+                        S.of(context).CREATED_ON +
+                            ": ${violation.createdAt ?? "date time"}",
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[400],
