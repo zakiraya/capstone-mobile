@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -105,7 +107,7 @@ class __PasswordInputState extends State<_PasswordInput> {
                 context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             obscureText: isObscured,
             decoration: InputDecoration(
-                hintText: 'password',
+                hintText: S.of(context).PASSWORD,
                 errorText: state.password.invalid ? 'Invalid Password' : null,
                 suffixIcon: IconButton(
                   iconSize: 16,
@@ -133,11 +135,11 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 104),
+                padding: EdgeInsets.symmetric(horizontal: 80),
                 child: ElevatedButton(
                   key: const Key('loginForm_continue_raisedButton'),
-                  child: const Text(
-                    'Log in',
+                  child: Text(
+                    S.of(context).LOGIN,
                     style: TextStyle(
                       color: Colors.white,
                       // letterSpacing: 1.5,

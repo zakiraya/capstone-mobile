@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   const User({
-    this.roleId,
+    this.roleName,
     this.branchId,
     this.branchManagerId,
     this.firstName,
@@ -27,7 +27,7 @@ class User extends Equatable {
   final String imagePath;
   final int positionId;
   final String branchName;
-  final int roleId;
+  final String roleName;
   final int branchId;
   final int branchManagerId;
 
@@ -39,9 +39,7 @@ class User extends Equatable {
   static const empty = User(firstName: "empty");
 
   static User fromJson(dynamic json) {
-    final data = json['data'];
-    final userInfo = data['result'][0]['employee'];
-    // final token = json['token'];
+    final userInfo = json['data'];
     return User(
       email: userInfo['email'],
       code: userInfo['code'],
@@ -49,6 +47,8 @@ class User extends Equatable {
       lastName: userInfo['lastName'],
       address: userInfo['address'],
       imagePath: userInfo['imagePath'],
+      roleName: userInfo['account']['role']['name'],
+      branchName: userInfo['branch']['name'],
     );
   }
 }

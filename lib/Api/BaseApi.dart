@@ -33,7 +33,7 @@ class BaseApi {
       responseJson = _returnResponse(response);
     } catch (e) {
       print(e);
-      // throw FetchDataException('No Internet connection');
+      throw Exception(e.toString());
     }
 
     return responseJson;

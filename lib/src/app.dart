@@ -1,10 +1,13 @@
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:capstone_mobile/src/services/firebase/notification.dart';
@@ -27,15 +30,21 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
-        child: AppView(),
-      ),
-    );
+        value: authenticationRepository,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => AuthenticationBloc(
+                authenticationRepository: authenticationRepository,
+                userRepository: userRepository,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => LocalizationBloc(),
+            )
+          ],
+          child: AppView(),
+        ));
   }
 }
 
@@ -67,7 +76,7 @@ class _AppViewState extends State<AppView> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
       ),
-      fontFamily: 'Montserrat',
+      // fontFamily: 'Montserrat',
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 40.0,
@@ -105,10 +114,21 @@ class _AppViewState extends State<AppView> {
                             .token,
                       )),
                 child: MaterialApp(
+                  localizationsDelegates: [
+                    S.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: S.delegate.supportedLocales,
                   theme: themeData,
                   debugShowCheckedModeBanner: false,
                   navigatorKey: _navigatorKey,
                   builder: (context, child) {
+                    BlocProvider.of<LocalizationBloc>(context).add(
+                        LocalizationUpdated(
+                            Localizations.localeOf(context).toString()));
+
                     return BlocListener<AuthenticationBloc,
                         AuthenticationState>(
                       listener: (context, state) {
