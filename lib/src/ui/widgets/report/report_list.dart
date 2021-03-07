@@ -27,7 +27,7 @@ class LatestReportList extends StatelessWidget {
                 ]),
               );
             }
-            return ReportCard(report: Report(name: 'alo'));
+            return Container();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: SkeletonLoading(

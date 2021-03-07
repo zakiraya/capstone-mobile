@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class ReportCard extends StatelessWidget {
   const ReportCard({
@@ -35,7 +38,10 @@ class ReportCard extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: Colors.green, width: 5),
+                left: BorderSide(
+                  color: Constant.statusColors[report.status] ?? Colors.black,
+                  width: 5,
+                ),
               ),
             ),
             child: Padding(
@@ -46,17 +52,18 @@ class ReportCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${'Branch: ' + "branch name"}"),
+                      Text(
+                        // "${report.branchName ?? "branch name"}",
+                        '',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Text(
                         "${report.status ?? "Status"}",
                         style: TextStyle(
-                          color: Colors.green,
-                          // report.status.toLowerCase() == 'draft'
-                          //     ? Colors.grey
-                          //     : (report.status.toLowerCase() == 'pending'
-                          //         ? Colors.blue
-                          //         : Colors.green
-                          //         ),
+                          color: Constant.statusColors[report.status],
                         ),
                       ),
                     ],
@@ -64,15 +71,30 @@ class ReportCard extends StatelessWidget {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("${'Report: ' + report?.name ?? "Report name"}"),
+                  Text(
+                    "${report?.name ?? "Report name"}",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   SizedBox(
                     height: 16,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("5 mistakes"),
-                      Text("${report?.createdAt ?? "date time"}"),
+                      Text(""),
+                      Text(
+                        S.of(context).CREATED_ON +
+                            ': '
+                                "${report?.createdAt ?? "date time"}",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ],
                   ),
                 ],

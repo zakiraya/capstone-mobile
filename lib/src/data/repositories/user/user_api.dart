@@ -4,10 +4,6 @@ import '../../../../Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
-class AuthenticationException extends AppException {
-  AuthenticationException([message]) : super(message, "Authentication error: ");
-}
-
 class UserApi {
   final http.Client httpClient;
   BaseApi baseApi = BaseApi();

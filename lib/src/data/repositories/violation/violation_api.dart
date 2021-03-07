@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:meta/meta.dart';
+import '../../../../Api/Exceptions.dart';
 import 'package:http/http.dart' as http;
 
 class ViolationApi {
@@ -54,8 +55,12 @@ class ViolationApi {
       url += '&Filter.BranchIds=$branchId';
     }
 
-    print(url);
     final violationJson = await _baseApi.get(url, token);
+
+    if (violationJson['code'] != 200) {
+      throw FetchDataException(violationJson['message']);
+    }
+
     final violations = violationJson['data']['result'] as List;
     return violations
         .map(

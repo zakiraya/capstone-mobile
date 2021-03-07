@@ -25,7 +25,7 @@ class ViolationFilterInProgress extends ViolationFilterState {}
 // }
 class ViolationFilterSucess extends ViolationFilterState {
   final List<Violation> filteredViolations;
-  final ViolationFilter activeFilter;
+  final Filter activeFilter;
 
   ViolationFilterSucess(this.filteredViolations, this.activeFilter);
 

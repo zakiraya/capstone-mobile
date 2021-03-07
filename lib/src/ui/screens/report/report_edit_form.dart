@@ -1,11 +1,13 @@
-import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
-import 'package:capstone_mobile/src/data/models/report/report.dart';
-import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/report/report_violation_list.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+
+import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 class ReportEditForm extends StatelessWidget {
   const ReportEditForm({
@@ -31,7 +33,7 @@ class ReportEditForm extends StatelessWidget {
         children: [
           Container(
             child: Text(
-              'Report of ${report.name}',
+              '${report.name}',
               style: TextStyle(
                 color: theme.primaryColor,
                 fontSize: theme.textTheme.headline5.fontSize,
@@ -42,11 +44,26 @@ class ReportEditForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: Text("Submitted by: "),
+                child: Text(S.of(context).SUBMITTED_BY + ": "),
               ),
               Container(
-                child: Text("Status: ${report.status}"),
-              ),
+                  child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: S.of(context).VIOLATION_STATUS + ': ',
+                        style: TextStyle(
+                          color: Colors.black,
+                        )),
+                    TextSpan(
+                      text: report.status,
+                      style: TextStyle(
+                        color: Constant.statusColors[report.status],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
             ],
           ),
           Divider(
@@ -61,7 +78,7 @@ class ReportEditForm extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    "Branch: ",
+                    S.of(context).BRANCH + ':',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -70,7 +87,7 @@ class ReportEditForm extends StatelessWidget {
                   height: 16,
                 ),
                 Container(
-                  child: Text("Created on: ",
+                  child: Text(S.of(context).CREATED_ON + ": ",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Text(report.createdAt ?? 'created on'),
@@ -78,22 +95,22 @@ class ReportEditForm extends StatelessWidget {
                   height: 16,
                 ),
                 Container(
-                  child: Text("Assignee: ",
+                  child: Text(S.of(context).UPDATED_ON + ": ",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                Text(report.createdAt ?? 'created on'),
+                Text(report.updatedAt ?? 'created on'),
                 SizedBox(
                   height: 16,
                 ),
                 Container(
-                  child: Text("Note: ",
+                  child: Text(S.of(context).COMMENTS + ": ",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 _ReportDescriptionInput(
                   descriptionTextFieldController:
                       descriptionTextFieldController,
                   report: report,
-                  editable: isEditing,
+                  isEditing: isEditing,
                 ),
               ],
             ),
@@ -102,7 +119,7 @@ class ReportEditForm extends StatelessWidget {
             height: 16,
           ),
           Container(
-            child: Text("Violation list: ",
+            child: Text(S.of(context).HOME_VIOLATION_LIST + ": ",
                 style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
@@ -141,12 +158,12 @@ class _ReportDescriptionInput extends StatelessWidget {
     Key key,
     @required this.descriptionTextFieldController,
     @required this.report,
-    @required this.editable,
+    @required this.isEditing,
   }) : super(key: key);
 
   final TextEditingController descriptionTextFieldController;
   final Report report;
-  final bool editable;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +175,14 @@ class _ReportDescriptionInput extends StatelessWidget {
           key: const Key('editForm_reportDescription_textField'),
           controller: descriptionTextFieldController,
           decoration: InputDecoration(
-            fillColor: Colors.grey[400],
+            filled: isEditing,
+            fillColor: isEditing ? Colors.grey[400] : null,
             hintText: report.description,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            border: isEditing
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  )
+                : InputBorder.none,
           ),
           onChanged: (description) {
             context.read<ReportCreateBloc>().add(
@@ -172,8 +192,8 @@ class _ReportDescriptionInput extends StatelessWidget {
                   ),
                 );
           },
-          enabled: editable,
-          maxLines: 5,
+          enabled: isEditing,
+          maxLines: isEditing ? 5 : null,
         );
       },
     );

@@ -15,7 +15,7 @@ class ViolationLoadSuccess extends ViolationState {
   final List<Violation> violations;
   final bool hasReachedMax;
   final String screen;
-  final ViolationFilter activeFilter;
+  final Filter activeFilter;
 
   const ViolationLoadSuccess({
     @required this.violations,
@@ -28,7 +28,7 @@ class ViolationLoadSuccess extends ViolationState {
     List<Violation> violations,
     bool hasReachedMax,
     String screen,
-    ViolationFilter activeFilter,
+    Filter activeFilter,
   }) {
     return ViolationLoadSuccess(
       violations: violations ?? this.violations,

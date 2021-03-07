@@ -182,7 +182,7 @@ class ViolationTab extends StatelessWidget {
                     ),
                     onSubmitted: (text) {
                       BlocProvider.of<ViolationBloc>(context).add(
-                        ViolationFilterChanged(
+                        FilterChanged(
                           token: BlocProvider.of<AuthenticationBloc>(context)
                               .state
                               .token,

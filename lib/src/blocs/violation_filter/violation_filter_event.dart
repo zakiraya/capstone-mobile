@@ -19,7 +19,7 @@ abstract class ViolationFilterEvent extends Equatable {
 //   String toString() => 'FilterUpdated { filter: $filter }';
 // }
 class FilterUpdated extends ViolationFilterEvent {
-  final ViolationFilter filter;
+  final Filter filter;
 
   FilterUpdated(this.filter);
 
