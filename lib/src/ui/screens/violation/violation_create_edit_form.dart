@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation_list_create/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,20 +124,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                       : null,
                 ),
               ),
-              Container(
-                child: Text('Branch:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Container(
-                child: BranchDropdown(
-                  initValue: widget.isEditing == true
-                      ? Branch(
-                          id: widget.violation.branchId,
-                          name: widget.violation.branchName,
-                        )
-                      : null,
-                ),
-              ),
               SizedBox(
                 height: 16,
               ),
@@ -237,10 +223,10 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                                     regulationName: bloc
                                         .state.violationRegulation.value.name,
                                     imagePath: _image.path,
-                                    branchId:
-                                        bloc.state.violationBranch.value.id,
-                                    branchName:
-                                        bloc.state.violationBranch.value.name,
+                                    // branchId:
+                                    //     bloc.state.violationBranch.value.id,
+                                    // branchName:
+                                    //     bloc.state.violationBranch.value.name,
                                   ),
                                 );
                                 showDialog(

@@ -1,17 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
-import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_description.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_regulation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 
-part 'violation_list_event.dart';
-part 'violation_list_state.dart';
+part 'violation_create_event.dart';
+part 'violation_create_state.dart';
 
 class ViolationCreateBloc
     extends Bloc<ViolationCreateEvent, ViolationCreateState> {
@@ -25,9 +23,11 @@ class ViolationCreateBloc
       yield _mapViolationDescriptionToState(event, state);
     } else if (event is ViolationRegulationChanged) {
       yield _mapViolationRegulationChangetoState(event, state);
-    } else if (event is ViolationBranchChanged) {
-      yield _mapViolationBranchChangetoState(event, state);
-    } else if (event is ViolationAdded) {
+    }
+    //  else if (event is ViolationBranchChanged) {
+    //   yield _mapViolationBranchChangetoState(event, state);
+    // }
+    else if (event is ViolationAdded) {
       yield* _mapViolationCreateAddedToState(event, state);
     }
   }
@@ -41,23 +41,23 @@ ViolationCreateState _mapViolationRegulationChangetoState(
     status: Formz.validate([
       state.violationDescription,
       regulation,
-      state.violationBranch,
+      // state.violationBranch,
     ]),
   );
 }
 
-ViolationCreateState _mapViolationBranchChangetoState(
-    ViolationBranchChanged event, ViolationCreateState state) {
-  final branch = ViolationBranch.dirty(event.branch);
-  return state.copyWith(
-    violationBranch: branch,
-    status: Formz.validate([
-      state.violationDescription,
-      state.violationRegulation,
-      branch,
-    ]),
-  );
-}
+// ViolationCreateState _mapViolationBranchChangetoState(
+//     ViolationBranchChanged event, ViolationCreateState state) {
+//   final branch = ViolationBranch.dirty(event.branch);
+//   return state.copyWith(
+//     violationBranch: branch,
+//     status: Formz.validate([
+//       state.violationDescription,
+//       state.violationRegulation,
+//       branch,
+//     ]),
+//   );
+// }
 
 ViolationCreateState _mapViolationDescriptionToState(
     ViolationDescriptionChanged event, ViolationCreateState state) {
@@ -69,7 +69,7 @@ ViolationCreateState _mapViolationDescriptionToState(
       [
         violationDescription,
         state.violationRegulation,
-        state.violationBranch,
+        // state.violationBranch,
       ],
     ),
   );

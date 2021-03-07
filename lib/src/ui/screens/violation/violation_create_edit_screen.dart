@@ -1,4 +1,4 @@
-import 'package:capstone_mobile/src/blocs/violation_list_create/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

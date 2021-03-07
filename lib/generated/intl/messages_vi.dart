@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Thêm hình"),
+    "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("Thuộc"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Chi nhánh"),
     "CHANGE_PASSWORD" : MessageLookupByLibrary.simpleMessage("Thay đổi mật khẩu"),
     "CREATED_ON" : MessageLookupByLibrary.simpleMessage("Ngày tạo"),

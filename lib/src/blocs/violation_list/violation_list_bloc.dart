@@ -1,38 +1,15 @@
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';
 
 part 'violation_list_state.dart';
 part 'violation_list_event.dart';
-
-class ViolationListCubit extends Cubit<ViolationListState> {
-  ViolationListCubit({@required this.violationRepository})
-      : super(ViolationListState(violations: List<Violation>()));
-
-  final ViolationRepository violationRepository;
-
-  Future<void> submitViolationList(List<Violation> list, String token) async {
-    try {
-      emit(ViolationListState(
-        violations: list,
-        status: FormzStatus.submissionInProgress,
-      ));
-      final result =
-          violationRepository.createViolations(token: token, violations: list);
-      emit(ViolationListState(
-        status: FormzStatus.submissionSuccess,
-        violations: list,
-      ));
-    } catch (e) {
-      print(e);
-      emit(ViolationListState(status: FormzStatus.submissionFailure));
-    }
-  }
-}
 
 class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   final ViolationRepository violationRepository;
@@ -46,6 +23,8 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   ) async* {
     if (event is ViolationListChanged) {
       yield _mapViolationListChangeToState(event, state);
+    } else if (event is ViolationBranchChanged) {
+      yield _mapViolationBranchChangetoState(event, state);
     } else if (event is ViolationListRemove) {
       yield _mapViolationListRemoveToState(event, state);
     } else if (event is ViolationItemUpdate) {
@@ -53,6 +32,16 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
     } else if (event is ViolationListSubmitted) {
       yield* _mapViolationListSubmittedToState(event, state);
     }
+  }
+
+  ViolationListState _mapViolationBranchChangetoState(
+    ViolationBranchChanged event,
+    ViolationListState state,
+  ) {
+    final branch = ViolationBranch.dirty(event.branch);
+    return state.copyWith(
+      violationBranch: branch,
+    );
   }
 
   ViolationListState _mapViolationListChangeToState(
@@ -112,6 +101,10 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
+      state.violations.forEach((violation) {
+        violation.branchId = state.violationBranch.value.id;
+      });
+
       var result = await violationRepository.createViolations(
         token: event.token,
         violations: state.violations,

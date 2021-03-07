@@ -1,4 +1,4 @@
-part of 'violation_list_bloc.dart';
+part of 'violation_create_bloc.dart';
 
 abstract class ViolationCreateEvent extends Equatable {
   const ViolationCreateEvent();
@@ -25,14 +25,14 @@ class ViolationRegulationChanged extends ViolationCreateEvent {
   List<Object> get props => [regulation];
 }
 
-class ViolationBranchChanged extends ViolationCreateEvent {
-  const ViolationBranchChanged({@required this.branch});
+// class ViolationBranchChanged extends ViolationCreateEvent {
+//   const ViolationBranchChanged({@required this.branch});
 
-  final Branch branch;
+//   final Branch branch;
 
-  @override
-  List<Object> get props => [branch];
-}
+//   @override
+//   List<Object> get props => [branch];
+// }
 
 class ViolationAdded extends ViolationCreateEvent {
   const ViolationAdded();
