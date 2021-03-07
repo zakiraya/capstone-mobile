@@ -3,42 +3,6 @@ library dropdownfield;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-///DropDownField has customized autocomplete text field functionality
-///
-///Parameters
-///
-///value - dynamic - Optional value to be set into the Dropdown field by default when this field renders
-///
-///icon - Widget - Optional icon to be shown to the left of the Dropdown field
-///
-///hintText - String - Optional Hint text to be shown
-///
-///hintStyle - TextStyle - Optional styling for Hint text. Default is normal, gray colored font of size 18.0
-///
-///labelText - String - Optional Label text to be shown
-///
-///labelStyle - TextStyle - Optional styling for Label text. Default is normal, gray colored font of size 18.0
-///
-///required - bool - True will validate that this field has a non-null/non-empty value. Default is false
-///
-///enabled - bool - False will disable the field. You can unset this to use the Dropdown field as a read only form field. Default is true
-///
-///items - List<dynamic> - List of items to be shown as suggestions in the Dropdown. Typically a list of String values.
-///You can supply a static list of values or pass in a dynamic list using a FutureBuilder
-///
-///textStyle - TextStyle - Optional styling for text shown in the Dropdown. Default is bold, black colored font of size 14.0
-///
-///inputFormatters - List<TextInputFormatter> - Optional list of TextInputFormatter to format the text field
-///
-///setter - FormFieldSetter<dynamic> - Optional implementation of your setter method. Will be called internally by Form.save() method
-///
-///onValueChanged - ValueChanged<dynamic> - Optional implementation of code that needs to be executed when the value in the Dropdown
-///field is changed
-///
-///strict - bool - True will validate if the value in this dropdown is amongst those suggestions listed.
-///False will let user type in new values as well. Default is true
-///
-///itemsVisibleInDropdown - int - Number of suggestions to be shown by default in the Dropdown after which the list scrolls. Defaults to 3
 class DropDownField extends FormField<String> {
   final dynamic value;
   final Widget icon;
@@ -56,10 +20,6 @@ class DropDownField extends FormField<String> {
   final bool strict;
   final int itemsVisibleInDropdown;
 
-  /// Controls the text being edited.
-  ///
-  /// If null, this widget will create its own [TextEditingController] and
-  /// initialize its [TextEditingController.text] with [initialValue].
   final TextEditingController controller;
 
   DropDownField(
@@ -124,11 +84,11 @@ class DropDownField extends FormField<String> {
                             errorText: field.errorText,
                             contentPadding:
                                 const EdgeInsets.only(top: 14, left: 8),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
+                            // border: OutlineInputBorder(
+                            //   borderSide: const BorderSide(
+                            //       color: Colors.white, width: 2.0),
+                            //   borderRadius: BorderRadius.circular(5.0),
+                            // ),
                           ),
                           style: textStyle,
                           textAlign: TextAlign.start,
@@ -185,6 +145,7 @@ class DropDownField extends FormField<String> {
                                   .toList()
                               : List(),
                         ),
+                        color: Colors.grey[200],
                       ),
               ],
             );
@@ -293,13 +254,6 @@ class DropDownFieldState extends FormFieldState<String> {
   }
 
   void _handleControllerChanged() {
-    // Suppress changes that originated from within this class.
-    //
-    // In the case where a controller has been passed in to this widget, we
-    // register this change listener. In these cases, we'll also receive change
-    // notifications for changes originating from within this class -- for
-    // example, the reset() method. In such cases, the FormField value will
-    // already have been set.
     if (_effectiveController.text != value)
       didChange(_effectiveController.text);
 

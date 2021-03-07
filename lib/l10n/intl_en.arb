@@ -4,6 +4,7 @@
     "REPORT": "Report",
     "BRANCH": "Branch",
     "VIOLATION": "Violation",
+    "BELONGS_TO": "belongs to",
     "CREATED_ON": "Created on",
     "REGULATION": "Regulation",
     "DESCRIPTION": "Description",

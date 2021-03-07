@@ -40,11 +40,11 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
 
   _printLatestValue() {
     if (myController.text.isEmpty) {
+      print('empty');
       context.read<ViolationListBloc>().add(ViolationBranchChanged(
             branch: null,
           ));
     }
-    print("Second text field: ${myController.text}");
   }
 
   @override
@@ -67,8 +67,6 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
         controller: myController,
         onValueChanged: (value) {
           id = value;
-          print('changed');
-          print(_branches.firstWhere((element) => element.name == value).id);
           context.read<ViolationListBloc>().add(ViolationBranchChanged(
                 branch: Branch(
                   id: _branches
@@ -149,8 +147,6 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
         controller: myController,
         onValueChanged: (value) {
           id = value;
-          print('changed');
-          print(_regulations.firstWhere((element) => element.name == value).id);
           context.read<ViolationCreateBloc>().add(
                 ViolationRegulationChanged(
                   regulation: Regulation(

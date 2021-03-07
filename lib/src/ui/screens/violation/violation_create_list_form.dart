@@ -32,16 +32,15 @@ class ViolationListForm extends StatelessWidget {
             context: context,
             type: CoolAlertType.success,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
-          ).then((value) => {
-                BlocProvider.of<ViolationBloc>(context).add(
-                  ViolationRequested(
-                    token: BlocProvider.of<AuthenticationBloc>(context)
-                        .state
-                        .token,
-                    isRefresh: true,
-                  ),
-                )
-              });
+          ).then((value) {
+            BlocProvider.of<ViolationBloc>(context).add(
+              ViolationRequested(
+                token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+                isRefresh: true,
+              ),
+            );
+            Navigator.pop(context);
+          });
         }
         if (state.status.isSubmissionFailure) {
           Navigator.pop(context);
@@ -53,77 +52,86 @@ class ViolationListForm extends StatelessWidget {
           );
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            DropdownFieldBranch(),
-            SizedBox(
-              height: 16,
-            ),
-            ViolationList(),
-            BlocBuilder<ViolationListBloc, ViolationListState>(
-              builder: (context, state) {
-                return GestureDetector(
-                  onTap: state.violationBranch.pure ||
-                          state.violationBranch.invalid
-                      ? null
-                      : () {
-                          showModalOne(
-                            context,
-                            isEditing: false,
-                          );
-                        },
-                  child: Card(
-                    elevation: 5,
-                    color: Color(0xffF2F2F2),
-                    child: Container(
-                      height: size.height * 0.1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: state.violationBranch.pure ||
-                                    state.violationBranch.invalid
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          Text(
-                            S.of(context).NEW_VIOLATION,
-                            style: TextStyle(
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ListView(
+            children: [
+              DropdownFieldBranch(),
+              SizedBox(
+                height: 16,
+              ),
+              ViolationList(),
+              BlocBuilder<ViolationListBloc, ViolationListState>(
+                builder: (context, state) {
+                  return GestureDetector(
+                    onTap: state.violationBranch.pure ||
+                            state.violationBranch.invalid
+                        ? null
+                        : () {
+                            showModalOne(
+                              context,
+                              isEditing: false,
+                            );
+                          },
+                    child: Card(
+                      elevation: 5,
+                      color: Color(0xffF2F2F2),
+                      child: Container(
+                        height: size.height * 0.1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add,
                               color: state.violationBranch.pure ||
                                       state.violationBranch.invalid
                                   ? Colors.white
                                   : Colors.black,
                             ),
-                          ),
-                        ],
+                            Text(
+                              S.of(context).NEW_VIOLATION,
+                              style: TextStyle(
+                                color: state.violationBranch.pure ||
+                                        state.violationBranch.invalid
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-              // child: Card(
-              //   elevation: 5,
-              //   color: Color(0xffF2F2F2),
-              //   child: Container(
-              //     height: size.height * 0.1,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         Icon(Icons.add),
-              //         Text(S.of(context).NEW_VIOLATION),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            _SubmitButton(size: size),
-          ],
+                  );
+                },
+                // child: Card(
+                //   elevation: 5,
+                //   color: Color(0xffF2F2F2),
+                //   child: Container(
+                //     height: size.height * 0.1,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Icon(Icons.add),
+                //         Text(S.of(context).NEW_VIOLATION),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              _SubmitButton(size: size),
+            ],
+          ),
         ),
       ),
       // }
@@ -142,7 +150,9 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ViolationListBloc, ViolationListState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.violationBranch != current.violationBranch,
       builder: (context, state) {
         return Container(
           child: Padding(
@@ -157,7 +167,7 @@ class _SubmitButton extends StatelessWidget {
                   letterSpacing: 1.5,
                 ),
               ),
-              onPressed: state.status.isValidated
+              onPressed: state.status.isValidated && state.violationBranch.valid
                   ? () {
                       context.read<ViolationListBloc>().add(
                             ViolationListSubmitted(

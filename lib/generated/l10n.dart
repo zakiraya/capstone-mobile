@@ -85,6 +85,16 @@ class S {
     );
   }
 
+  /// `belongs to`
+  String get BELONGS_TO {
+    return Intl.message(
+      'belongs to',
+      name: 'BELONGS_TO',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Created on`
   String get CREATED_ON {
     return Intl.message(

@@ -7,6 +7,7 @@ import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_f
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:capstone_mobile/generated/l10n.dart';
 
 enum ExtraAction { remove, edit }
 
@@ -50,24 +51,31 @@ class ViolationCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Branch: ${violation.branchName ?? ""}",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("${violation.name ?? "Violation name"}"),
+                      // Text(
+                      //   "Branch: ${violation.branchName ?? ""}",
+                      //   style: TextStyle(fontSize: 12),
+                      // ),
+                      // SizedBox(
+                      //   height: 8,
+                      // ),
                       SizedBox(
                         height: 16,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Regulation: ${violation.regulationName ?? ""}",
-                              style: TextStyle(fontSize: 10)),
-                        ],
+                      Text(S.of(context).VIOLATION +
+                          ' ' +
+                          S.of(context).BELONGS_TO +
+                          ' ' +
+                          "${violation.regulationName ?? "Violation name"}"),
+                      SizedBox(
+                        height: 16,
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text("Regulation: ${violation.regulationName ?? ""}",
+                      //         style: TextStyle(fontSize: 10)),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
