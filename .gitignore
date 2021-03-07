@@ -25,3 +25,9 @@ doc/api/
 .flutter-plugins-dependencies
 
 .flutter-plugins
+
+lib/generated/intl/messages_en.dart
+
+lib/generated/intl/messages_vi.dart
+
+lib/generated/l10n.dart

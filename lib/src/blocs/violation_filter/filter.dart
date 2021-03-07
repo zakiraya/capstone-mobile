@@ -14,6 +14,9 @@ class ViolationFilter extends Equatable {
         name,
       ];
 
+  @override
+  String toString() => '{ branchId: $branchId, status: $status, name: $name }';
+
   ViolationFilter copyWith({
     int branchId,
     String status,

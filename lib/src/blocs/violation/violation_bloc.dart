@@ -77,9 +77,9 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             token: event.token,
             sort: 'desc id',
             page: 0,
-            branchId: currentState.activeFilter.branchId,
-            name: currentState.activeFilter.name,
-            status: currentState.activeFilter.status,
+            branchId: currentState.activeFilter?.branchId,
+            name: currentState.activeFilter?.name,
+            status: currentState.activeFilter?.status,
           );
 
           yield currentState.copyWith(
@@ -95,9 +95,9 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             token: event.token,
             sort: 'desc id',
             page: currentState.violations.length / 20,
-            branchId: event.filter.branchId,
-            name: event.filter.name,
-            status: event.filter.status,
+            branchId: event.filter?.branchId,
+            name: event.filter?.name,
+            status: event.filter?.status,
           );
 
           yield violations.isEmpty
@@ -131,9 +131,9 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
           token: event.token,
           sort: 'desc id',
           page: 0,
-          branchId: event.filter.branchId,
-          name: event.filter.name,
-          status: event.filter.status,
+          branchId: event.filter?.branchId,
+          name: event.filter?.name,
+          status: event.filter?.status,
         );
 
         yield currentState.copyWith(
