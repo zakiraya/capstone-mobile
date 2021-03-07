@@ -16,7 +16,7 @@ class ViolationRequested extends ViolationEvent {
 
   final String token;
   final bool isRefresh;
-  final ViolationFilter filter;
+  final Filter filter;
 
   @override
   List<Object> get props => [token, filter, isRefresh];
@@ -26,21 +26,20 @@ class ViolationRequested extends ViolationEvent {
       ' ViolationRequested: { ${filter.toString()}, $isRefresh }';
 }
 
-class ViolationFilterChanged extends ViolationEvent {
-  const ViolationFilterChanged({
+class FilterChanged extends ViolationEvent {
+  const FilterChanged({
     @required this.token,
     this.filter,
   });
 
   final String token;
-  final ViolationFilter filter;
+  final Filter filter;
 
   @override
   List<Object> get props => [token, filter];
 
   @override
-  String toString() =>
-      ' ViolationFilterChanged: { branch ${filter.branchId}, name ${filter.name}, status ${filter.status} } ';
+  String toString() => ' FilterChanged: { ${filter.toString()} } ';
 }
 
 class ViolationUpdate extends ViolationEvent {

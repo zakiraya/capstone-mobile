@@ -25,9 +25,9 @@ class FilterButton extends StatelessWidget {
           // BlocProvider.of<ViolationFilterBloc>(context)
           //     .add(FilterUpdated(ViolationFilter(branch: filter)));
           BlocProvider.of<ViolationBloc>(context).add(
-            ViolationFilterChanged(
+            FilterChanged(
               token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-              filter: ViolationFilter(branchId: filter),
+              filter: Filter(branchId: filter),
             ),
           );
         },

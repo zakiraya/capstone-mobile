@@ -5,6 +5,8 @@ class Constant {
     'Opening': Colors.blue,
     'Confirmed': Colors.green,
     'Excused': Colors.orange[300],
-    'Rejected': Colors.orange[900]
+    'Rejected': Colors.orange[900],
+    'Pending': Colors.orange,
+    'Submitted': Colors.grey,
   };
 }

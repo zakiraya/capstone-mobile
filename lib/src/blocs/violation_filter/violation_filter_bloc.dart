@@ -23,7 +23,7 @@ class ViolationFilterBloc
           violationBloc.state is ViolationLoadSuccess
               ? ViolationFilterSucess(
                   (violationBloc.state as ViolationLoadSuccess).violations,
-                  ViolationFilter(),
+                  Filter(),
                 )
               : ViolationFilterInProgress(),
         ) {
@@ -65,7 +65,7 @@ class ViolationFilterBloc
   ) async* {
     final visibilityFilter = state is ViolationFilterSucess
         ? (state as ViolationFilterSucess).activeFilter
-        : ViolationFilter();
+        : Filter();
     yield ViolationFilterSucess(
       (violationBloc.state as ViolationLoadSuccess).violations,
       visibilityFilter,
@@ -84,7 +84,7 @@ class ViolationFilterBloc
   // }
 
   List<Violation> _mapViolationsToFilteredViolation(
-      List<Violation> violations, ViolationFilter filter) {
+      List<Violation> violations, Filter filter) {
     print('_mapViolationsToFilteredViolation');
     violationBloc.add(ViolationRequested(
       token: authenticationBloc.state.token,

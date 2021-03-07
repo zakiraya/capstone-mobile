@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
+import '../../../../Api/Exceptions.dart';
 
 class ReportApi {
   final http.Client httpClient;
@@ -17,6 +18,7 @@ class ReportApi {
     String sort,
     double page,
     int limit,
+    int branchId,
     Map<String, String> opts,
   }) async {
     String url = reportUrl + '?Filter.IsDeleted=false';
@@ -26,6 +28,7 @@ class ReportApi {
     if (sort != null) {
       url += '&Sort.Orders=$sort';
     }
+
     if (page != null) {
       url += '&PageIndex=${page.ceil()}';
     }
@@ -34,7 +37,16 @@ class ReportApi {
       url += '&Limit=$limit';
     }
 
+    if (branchId != null) {
+      url += '&Filter.BranchIds=$branchId';
+    }
+
     final reportJson = await _baseApi.get(url, token, opts: opts);
+
+    if (reportJson['code'] != 200) {
+      throw FetchDataException(reportJson['message']);
+    }
+
     final reports = reportJson['data']['result'] as List;
     return reports.map((report) => Report.fromJson(report)).toList();
   }

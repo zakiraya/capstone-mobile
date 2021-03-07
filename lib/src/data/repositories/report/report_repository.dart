@@ -16,10 +16,14 @@ class ReportRepository {
     String sort,
     double page,
     int limit,
+    int branchId,
   }) async {
     return await _reportApi.getReports(
       token: token,
-      status: 'Done',
+      status: status,
+      page: page,
+      limit: limit,
+      branchId: branchId,
     );
   }
 

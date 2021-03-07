@@ -8,11 +8,36 @@ abstract class ReportEvent extends Equatable {
 }
 
 class ReportRequested extends ReportEvent {
-  const ReportRequested({@required this.token, this.status});
+  const ReportRequested({
+    @required this.token,
+    this.filter,
+    this.isRefresh,
+  });
 
   final String token;
-  final String status;
+  final Filter filter;
+  final bool isRefresh;
 
   @override
-  List<Object> get props => [token, status];
+  List<Object> get props => [token, filter];
+
+  @override
+  String toString() =>
+      ' FilterChanged: { Filter: ${filter.toString()}, Refresh: $isRefresh }';
+}
+
+class FilterChanged extends ReportEvent {
+  const FilterChanged({
+    @required this.token,
+    this.filter,
+  });
+
+  final String token;
+  final Filter filter;
+
+  @override
+  List<Object> get props => [token, filter];
+
+  @override
+  String toString() => ' FilterChanged: { ${filter.toString()} } ';
 }

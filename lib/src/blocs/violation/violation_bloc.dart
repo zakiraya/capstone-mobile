@@ -49,8 +49,8 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
           yield ViolationLoadSuccess(
             violations: violations,
-            hasReachedMax: false,
-            activeFilter: ViolationFilter(),
+            hasReachedMax: violations.length < 20 ? true : false,
+            activeFilter: Filter(),
           );
           return;
         }
@@ -65,8 +65,8 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
           yield ViolationLoadSuccess(
             violations: violations,
-            hasReachedMax: false,
-            activeFilter: ViolationFilter(),
+            hasReachedMax: violations.length < 20 ? true : false,
+            activeFilter: Filter(),
           );
           return;
         }
@@ -107,13 +107,14 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
                   // violations: violations,
                   hasReachedMax: false,
                 );
+          return;
         }
       } catch (e) {
         print(e);
         yield ViolationLoadFailure();
       }
-    } else if (event is ViolationFilterChanged) {
-      yield* _mapViolationFilterChangeToState(event);
+    } else if (event is FilterChanged) {
+      yield* _mapFilterChangeToState(event);
     } else if (event is ViolationUpdate) {
       yield* _mapViolationUpdateToState(event);
     } else if (event is ViolationDelete) {
@@ -121,8 +122,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     }
   }
 
-  Stream<ViolationState> _mapViolationFilterChangeToState(
-      ViolationFilterChanged event) async* {
+  Stream<ViolationState> _mapFilterChangeToState(FilterChanged event) async* {
     final currentState = state;
     try {
       if (currentState is ViolationLoadSuccess) {
@@ -143,7 +143,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         );
       }
     } catch (e) {
-      print(' _mapViolationFilterChangeToState: ');
+      print(' _mapFilterChangeToState: ');
       print(e);
     }
   }

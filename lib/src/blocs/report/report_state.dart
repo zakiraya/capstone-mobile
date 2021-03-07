@@ -13,12 +13,42 @@ class ReportLoadInProgress extends ReportState {}
 
 class ReportLoadSuccess extends ReportState {
   final List<Report> reports;
+  final bool hasReachedMax;
+  final String screen;
+  final Filter activeFilter;
 
-  const ReportLoadSuccess({@required this.reports});
+  const ReportLoadSuccess({
+    @required this.reports,
+    this.hasReachedMax,
+    this.screen,
+    this.activeFilter,
+  });
 
-  ReportLoadSuccess copyWith({List<Report> reports}) {
-    return ReportLoadSuccess(reports: reports ?? this.reports);
+  ReportLoadSuccess copyWith({
+    List<Report> reports,
+    bool hasReachedMax,
+    String screen,
+    Filter activeFilter,
+  }) {
+    return ReportLoadSuccess(
+      reports: reports ?? this.reports,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      screen: screen,
+      activeFilter: activeFilter ?? this.activeFilter,
+    );
   }
+
+  @override
+  List<Object> get props => [
+        reports,
+        hasReachedMax,
+        screen,
+        activeFilter,
+      ];
+
+  @override
+  String toString() =>
+      'ViolationLoadSuccess { violation total: ${reports.length}, Has reach max $hasReachedMax }, activeFilter { branchId ${activeFilter.branchId} }';
 }
 
 class ReportLoadFailure extends ReportState {}

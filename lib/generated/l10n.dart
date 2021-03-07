@@ -105,6 +105,26 @@ class S {
     );
   }
 
+  /// `Submitted by`
+  String get SUBMITTED_BY {
+    return Intl.message(
+      'Submitted by',
+      name: 'SUBMITTED_BY',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updated on`
+  String get UPDATED_ON {
+    return Intl.message(
+      'Updated on',
+      name: 'UPDATED_ON',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Regulation`
   String get REGULATION {
     return Intl.message(
@@ -120,6 +140,16 @@ class S {
     return Intl.message(
       'Description',
       name: 'DESCRIPTION',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comments`
+  String get COMMENTS {
+    return Intl.message(
+      'Comments',
+      name: 'COMMENTS',
       desc: '',
       args: [],
     );
@@ -340,6 +370,16 @@ class S {
     return Intl.message(
       'Rejected',
       name: 'VIOLATION_STATUS_REJECTED',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no reports`
+  String get REPORT_SCREEN_NO_REPORTS {
+    return Intl.message(
+      'There are no reports',
+      name: 'REPORT_SCREEN_NO_REPORTS',
       desc: '',
       args: [],
     );
