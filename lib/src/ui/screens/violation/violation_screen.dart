@@ -225,7 +225,7 @@ class __ViolationListState extends State<_ViolationList> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    // _scrollController.addListener(_onScroll);
     _violationBloc = BlocProvider.of<ViolationBloc>(context);
   }
 

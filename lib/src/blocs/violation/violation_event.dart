@@ -22,7 +22,8 @@ class ViolationRequested extends ViolationEvent {
   List<Object> get props => [token, filter, isRefresh];
 
   @override
-  String toString() => ' ViolationRequested: $filter, $isRefresh ';
+  String toString() =>
+      ' ViolationRequested: { ${filter.toString()}, $isRefresh }';
 }
 
 class ViolationFilterChanged extends ViolationEvent {
