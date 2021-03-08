@@ -1,16 +1,27 @@
 import 'package:capstone_mobile/src/data/models/tab.dart';
-import 'package:capstone_mobile/src/ui/utils/icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
   final Function(AppTab) onTabSelected;
-  final List<Icon> _icons = [
-    Icon(MyIcons.home_alt),
-    Icon(MyIcons.group_1109),
-    Icon(MyIcons.group_1111),
-    Icon(MyIcons.setting),
+  final List<Image> _icons = [
+    Image.asset(
+      "assets/home.png",
+      height: 28,
+    ),
+    Image.asset(
+      "assets/report.png",
+      height: 28,
+    ),
+    Image.asset(
+      "assets/violations.png",
+      height: 28,
+    ),
+    Image.asset(
+      "assets/Setting.png",
+      height: 28,
+    ),
   ];
   final List<String> _labels = [
     'Home',
@@ -28,6 +39,8 @@ class TabSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      // showSelectedLabels: false,
+      type: BottomNavigationBarType.fixed,
       currentIndex: AppTab.values.indexOf(activeTab),
       onTap: (index) => onTabSelected(AppTab.values[index]),
       items: AppTab.values.map((tab) {

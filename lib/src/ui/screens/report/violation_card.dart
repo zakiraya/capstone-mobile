@@ -33,7 +33,7 @@ class ViolationCard extends StatelessWidget {
             expand: false,
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context) => ModalFit(
+            builder: (context) => ViolationModalFit(
               violation: violation,
             ),
           );

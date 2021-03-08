@@ -17,6 +17,7 @@ import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:capstone_mobile/src/ui/widgets/report/report_list.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/ui/utils/icons.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -185,6 +186,7 @@ class HomeTab extends StatelessWidget {
         SizedBox(
           height: 16,
         ),
+        Icon(MyIcons.group_1109),
         Container(
           width: size.width * 0.2,
           height: size.height * 0.2,
