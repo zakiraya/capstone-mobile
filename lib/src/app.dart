@@ -1,6 +1,9 @@
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/notification/notification_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
+import 'package:capstone_mobile/src/blocs/notification/notification_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:capstone_mobile/src/services/firebase/notification.dart';
@@ -105,14 +109,37 @@ class _AppViewState extends State<AppView> {
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return BlocProvider(
-                create: (context) => ViolationBloc(
-                      violationRepository: ViolationRepository(),
-                    )..add(ViolationRequested(
+            return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => ViolationBloc(
+                            violationRepository: ViolationRepository(),
+                          )..add(ViolationRequested(
+                              token:
+                                  BlocProvider.of<AuthenticationBloc>(context)
+                                      .state
+                                      .token,
+                            ))),
+                  BlocProvider(
+                      create: (context) =>
+                          ReportBloc(reportRepository: ReportRepository())
+                            ..add(ReportRequested(
+                              token:
+                                  BlocProvider.of<AuthenticationBloc>(context)
+                                      .state
+                                      .token,
+                            ))),
+                  BlocProvider(
+                    create: (context) => NotificationBloc(
+                        notificationRepository: NotificationRepository())
+                      ..add(NotificationRequested(
                         token: BlocProvider.of<AuthenticationBloc>(context)
                             .state
                             .token,
                       )),
+                    child: Container(),
+                  )
+                ],
                 child: MaterialApp(
                   localizationsDelegates: [
                     S.delegate,

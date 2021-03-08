@@ -196,110 +196,103 @@ class ReportsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return BlocProvider(
-      create: (context) => ReportBloc(reportRepository: ReportRepository())
-        ..add(ReportRequested(
-            token: BlocProvider.of<AuthenticationBloc>(context).state.token)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            BlocBuilder<ReportBloc, ReportState>(
-              builder: (context, state) {
-                if (state is ReportLoadInProgress) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is ReportLoadFailure) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        Text(S.of(context).VIOLATION_SCREEN_FETCH_FAIL),
-                        ElevatedButton(
-                          onPressed: () {
-                            BlocProvider.of<ReportBloc>(context)
-                                .add(ReportRequested(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
-                            ));
-                          },
-                          child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey[200],
-                            onPrimary: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (state is ReportLoadSuccess) {
-                  if (state.reports.isEmpty) {
-                    return Center(
-                      child: Text(S.of(context).REPORT_SCREEN_NO_REPORTS),
-                    );
-                  }
-                  List<Report> reports = state.reports;
-
-                  return Expanded(
-                    child: NotificationListener<ScrollEndNotification>(
-                      onNotification: (scrollEnd) {
-                        var metrics = scrollEnd.metrics;
-                        if (metrics.atEdge) {
-                          if (metrics.pixels == 0) {
-                            BlocProvider.of<ReportBloc>(context)
-                                .add(ReportRequested(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
-                              isRefresh: true,
-                              filter: state.activeFilter,
-                            ));
-                          } else {
-                            BlocProvider.of<ReportBloc>(context)
-                                .add(ReportRequested(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
-                              filter: state.activeFilter,
-                            ));
-                          }
-                        }
-                        return true;
-                      },
-                      child: ListView.builder(
-                        itemCount: (BlocProvider.of<ReportBloc>(context).state
-                                    as ReportLoadSuccess)
-                                .hasReachedMax
-                            ? state.reports.length
-                            : state.reports.length + 1,
-                        itemBuilder: (context, index) {
-                          return index >= state.reports.length
-                              ? BottomLoader()
-                              : ReportCard(
-                                  report: reports[index],
-                                );
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 16,
+          ),
+          BlocBuilder<ReportBloc, ReportState>(
+            builder: (context, state) {
+              if (state is ReportLoadInProgress) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is ReportLoadFailure) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Text(S.of(context).VIOLATION_SCREEN_FETCH_FAIL),
+                      ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<ReportBloc>(context)
+                              .add(ReportRequested(
+                            token: BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .token,
+                          ));
                         },
+                        child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey[200],
+                          onPrimary: Colors.black,
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                );
+              } else if (state is ReportLoadSuccess) {
+                if (state.reports.isEmpty) {
+                  return Center(
+                    child: Text(S.of(context).REPORT_SCREEN_NO_REPORTS),
                   );
                 }
-                return Container();
-              },
-            ),
-          ],
-        ),
+                List<Report> reports = state.reports;
+
+                return Expanded(
+                  child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (scrollEnd) {
+                      var metrics = scrollEnd.metrics;
+                      if (metrics.atEdge) {
+                        if (metrics.pixels == 0) {
+                          BlocProvider.of<ReportBloc>(context)
+                              .add(ReportRequested(
+                            token: BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .token,
+                            isRefresh: true,
+                            filter: state.activeFilter,
+                          ));
+                        } else {
+                          BlocProvider.of<ReportBloc>(context)
+                              .add(ReportRequested(
+                            token: BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .token,
+                            filter: state.activeFilter,
+                          ));
+                        }
+                      }
+                      return true;
+                    },
+                    child: ListView.builder(
+                      itemCount: (BlocProvider.of<ReportBloc>(context).state
+                                  as ReportLoadSuccess)
+                              .hasReachedMax
+                          ? state.reports.length
+                          : state.reports.length + 1,
+                      itemBuilder: (context, index) {
+                        return index >= state.reports.length
+                            ? BottomLoader()
+                            : ReportCard(
+                                report: reports[index],
+                              );
+                      },
+                    ),
+                  ),
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
-      // )
-    );
+    )
+        // )
+        ;
   }
 }

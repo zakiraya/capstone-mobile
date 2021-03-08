@@ -23,7 +23,7 @@ class ReportRequested extends ReportEvent {
 
   @override
   String toString() =>
-      ' FilterChanged: { Filter: ${filter.toString()}, Refresh: $isRefresh }';
+      ' ReportRequested: { Filter: ${filter.toString()}, Refresh: $isRefresh }';
 }
 
 class FilterChanged extends ReportEvent {
