@@ -11,6 +11,8 @@ import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -132,9 +134,18 @@ class _ViolationScreenState extends State<ViolationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(),
-                FilterButton(
-                  visible: true,
-                ),
+                // FilterButton(
+                //   visible: true,
+                // ),
+                IconButton(
+                  icon: Icon(Icons.filter_alt_rounded),
+                  onPressed: () => showMaterialModalBottomSheet(
+                    expand: false,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => ModalFit(),
+                  ),
+                )
               ],
             ),
             _ViolationList(),
@@ -219,13 +230,11 @@ class _ViolationList extends StatefulWidget {
 
 class __ViolationListState extends State<_ViolationList> {
   final _scrollController = ScrollController();
-  final _scrollThreshold = 200.0;
   ViolationBloc _violationBloc;
 
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(_onScroll);
     _violationBloc = BlocProvider.of<ViolationBloc>(context);
   }
 
@@ -233,17 +242,6 @@ class __ViolationListState extends State<_ViolationList> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-      _violationBloc.add(
-        ViolationRequested(
-            token: BlocProvider.of<AuthenticationBloc>(context).state.token),
-      );
-    }
   }
 
   @override
