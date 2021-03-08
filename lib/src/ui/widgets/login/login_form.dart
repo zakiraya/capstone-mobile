@@ -28,7 +28,6 @@ class LoginForm extends StatelessWidget {
             children: [
               _UsernameInput(),
               _PasswordInput(),
-              // _ErrorText(),
               SizedBox(height: 40),
               _LoginButton(),
             ],

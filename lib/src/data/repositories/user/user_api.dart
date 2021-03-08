@@ -1,6 +1,5 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/models.dart';
-import 'package:capstone_mobile/src/data/models/change_password/change_password.dart';
 import '../../../../Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;

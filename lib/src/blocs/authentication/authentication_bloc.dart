@@ -56,8 +56,6 @@ class AuthenticationBloc
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        print('user');
-        print(user.toString());
         return user != null
             ? AuthenticationState.authenticated(
                 user: user,

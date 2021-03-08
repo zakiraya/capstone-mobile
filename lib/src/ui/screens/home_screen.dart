@@ -55,16 +55,8 @@ class HomeView extends StatelessWidget {
 
   final List<Widget> _tabs = <Widget>[
     HomeTab(),
-    BlocBuilder<LocalizationBloc, String>(
-      builder: (context, state) {
-        return ReportsTab();
-      },
-    ),
-    BlocBuilder<LocalizationBloc, String>(
-      builder: (context, state) {
-        return ViolationTab();
-      },
-    ),
+    ReportsTab(),
+    ViolationTab(),
     SettingsScreen(),
   ];
 
