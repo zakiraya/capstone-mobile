@@ -33,8 +33,6 @@ class AuthenticationRepository {
 
     try {
       this.token = await userApi.signIn(username, password);
-      // final token = 'authen_repo';
-      print('token: ' + token);
       token != ''
           ? _controller.add(AuthenticationStatus.authenticated)
           : _controller.add(AuthenticationStatus.unauthenticated);

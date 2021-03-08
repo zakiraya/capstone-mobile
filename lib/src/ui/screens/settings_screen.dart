@@ -53,7 +53,9 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   Container(
                     child: Text(
-                      '${user.fullName ?? 'full name'}',
+                      '${user.lastName ?? 'full name'}' +
+                          ' ' +
+                          '${user.firstName ?? 'first name'}',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
