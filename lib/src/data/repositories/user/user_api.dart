@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/models.dart';
+import 'package:capstone_mobile/src/data/models/change_password/change_password.dart';
 import '../../../../Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -40,5 +41,29 @@ class UserApi {
     }
 
     return User.fromJson(userJson);
+  }
+
+  Future<String> changePassword({
+    @required String token,
+    @required String username,
+    @required String oldPassword,
+    @required String newPassword,
+    Map<String, String> opts,
+  }) async {
+    final url = 'auth/password';
+
+    final body = <String, dynamic>{
+      "username": username,
+      "password": oldPassword,
+      "newPassword": newPassword,
+    };
+
+    final responseJson = await baseApi.put(url, body, token);
+
+    if (responseJson['code'] != 200) {
+      throw FetchDataException(responseJson['message']);
+    }
+
+    return responseJson['message'];
   }
 }

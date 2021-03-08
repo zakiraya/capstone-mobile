@@ -24,4 +24,18 @@ class UserRepository {
   //     () => _user = User(id: Uuid().v4()),
   //   );
   // }
+
+  Future<String> changePassword(
+    String token,
+    String username,
+    String oldPassword,
+    String newPassword,
+  ) async {
+    return await userApi.changePassword(
+      token: token,
+      username: username,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    );
+  }
 }

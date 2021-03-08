@@ -6,11 +6,15 @@ class CustomTextField extends StatefulWidget {
     @required this.label,
     this.placeholder,
     @required this.isHidden,
+    this.errorText,
+    this.onChange,
   }) : super(key: key);
 
   final String label;
   final String placeholder;
   final bool isHidden;
+  final String errorText;
+  final Function onChange;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -23,7 +27,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextField(
       obscureText: widget.isHidden ? showPassword : false,
+      onChanged: (value) {
+        widget.onChange(value);
+      },
       decoration: InputDecoration(
+        errorText: widget.errorText,
         suffixIcon: widget.isHidden
             ? IconButton(
                 icon: Icon(Icons.remove_red_eye),
