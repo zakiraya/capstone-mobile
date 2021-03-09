@@ -1,7 +1,11 @@
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
+import 'package:capstone_mobile/src/blocs/regulation/regulation_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/notification/notification_repository.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +141,24 @@ class _AppViewState extends State<AppView> {
                             .state
                             .token,
                       )),
-                    child: Container(),
+                  ),
+                  BlocProvider(
+                    create: (context) =>
+                        BranchBloc(branchRepository: BranchRepository())
+                          ..add(BranchRequested(
+                            token: BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .token,
+                          )),
+                  ),
+                  BlocProvider(
+                    create: (context) => RegulationBloc(
+                        regulationRepository: RegulationRepository())
+                      ..add(RegulationRequested(
+                        token: BlocProvider.of<AuthenticationBloc>(context)
+                            .state
+                            .token,
+                      )),
                   )
                 ],
                 child: MaterialApp(

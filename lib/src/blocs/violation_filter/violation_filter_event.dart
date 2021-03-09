@@ -30,13 +30,28 @@ class FilterUpdated extends ViolationFilterEvent {
   String toString() => 'FilterUpdated { filter: $filter }';
 }
 
-class ViolationsUpdated extends ViolationFilterEvent {
-  final List<Violation> violations;
+class ViolationFilterBranchIdUpdated extends ViolationFilterEvent {
+  final int branchId;
 
-  ViolationsUpdated(this.violations);
+  ViolationFilterBranchIdUpdated({this.branchId});
   @override
-  List<Object> get props => [violations];
+  String toString() =>
+      'ViolationFilterBranchIdUpdated { BranchId: $branchId  }';
+}
 
+class ViolationFilterRegulationUpdated extends ViolationFilterEvent {
+  final int regulationId;
+
+  ViolationFilterRegulationUpdated({this.regulationId});
   @override
-  String toString() => 'TodosUpdated { todos: $violations }';
+  String toString() =>
+      'ViolationFilterRegulationUpdated { RegulationId: $regulationId  }';
+}
+
+class ViolationFilterStatusUpdated extends ViolationFilterEvent {
+  final String status;
+
+  ViolationFilterStatusUpdated({this.status});
+  @override
+  String toString() => 'ViolationFilterStatusUpdated { Status: $status  }';
 }

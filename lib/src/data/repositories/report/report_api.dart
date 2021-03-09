@@ -41,6 +41,8 @@ class ReportApi {
       url += '&Filter.BranchIds=$branchId';
     }
 
+    print(token);
+
     final reportJson = await _baseApi.get(url, token, opts: opts);
 
     if (reportJson['code'] != 200) {

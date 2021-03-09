@@ -5,14 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
+import 'package:capstone_mobile/src/blocs/regulation/regulation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
+import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
+import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -137,15 +143,6 @@ class _ViolationScreenState extends State<ViolationScreen> {
                 // FilterButton(
                 //   visible: true,
                 // ),
-                IconButton(
-                  icon: Icon(Icons.filter_alt_rounded),
-                  onPressed: () => showMaterialModalBottomSheet(
-                    expand: false,
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => ModalFit(),
-                  ),
-                )
               ],
             ),
             _ViolationList(),
@@ -177,46 +174,205 @@ class ViolationTab extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                    child: Container(
-                  height: 24,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2.0, horizontal: 8),
-                      hintText: 'Search by regulation',
-                      hintStyle: TextStyle(fontSize: 12),
-                      suffixIcon: Icon(Icons.search),
-                    ),
-                    onSubmitted: (text) {
-                      BlocProvider.of<ViolationBloc>(context).add(
-                        FilterChanged(
-                          token: BlocProvider.of<AuthenticationBloc>(context)
-                              .state
-                              .token,
-                          filter: (BlocProvider.of<ViolationBloc>(context).state
-                                  as ViolationLoadSuccess)
-                              .activeFilter
-                              .copyWith(name: text),
-                        ),
-                      );
-                    },
-                  ),
-                )),
-                FilterButton(
-                  visible: true,
-                ),
+                // Expanded(
+                //     child: Container(
+                //   height: 24,
+                //   child: TextField(
+                //     decoration: InputDecoration(
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(24),
+                //       ),
+                //       contentPadding: const EdgeInsets.symmetric(
+                //           vertical: 2.0, horizontal: 8),
+                //       hintText: 'Search by regulation',
+                //       hintStyle: TextStyle(fontSize: 12),
+                //       suffixIcon: Icon(Icons.search),
+                //     ),
+                //     onSubmitted: (text) {
+                //       BlocProvider.of<ViolationBloc>(context).add(
+                //         FilterChanged(
+                //           token: BlocProvider.of<AuthenticationBloc>(context)
+                //               .state
+                //               .token,
+                //           filter: (BlocProvider.of<ViolationBloc>(context).state
+                //                   as ViolationLoadSuccess)
+                //               .activeFilter
+                //               .copyWith(regulationId: 1),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // )),
+                // FilterButton(
+                //   visible: true,
+                // ),
               ],
             ),
+            ViolationListFilter(),
             _ViolationList(),
           ],
         ),
       ),
     );
   }
+}
+
+class ViolationListFilter extends StatelessWidget {
+  const ViolationListFilter({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          children: [
+            Text('Branch: '),
+            BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+                builder: (context, state) {
+              return GestureDetector(
+                onTap: () => showMaterialModalBottomSheet(
+                  expand: false,
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => ModalFit(
+                      title: 'Branches',
+                      list: (BlocProvider.of<BranchBloc>(context).state
+                              as BranchLoadSuccess)
+                          .branches),
+                ).then((value) {
+                  BlocProvider.of<ViolationBloc>(context).add(
+                    FilterChanged(
+                      token: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .token,
+                      filter: Filter(branchId: value),
+                    ),
+                  );
+                  BlocProvider.of<ViolationFilterBloc>(context)
+                      .add(ViolationFilterBranchIdUpdated(
+                    branchId: value,
+                  ));
+                }),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.grey[200],
+                    border: Border.all(),
+                  ),
+                  // color: Colors.grey[200],
+                  height: 32,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(children: [
+                      Text(
+                          findBranchName(state.filter.branchId, context) ?? ''),
+                      Icon(Icons.arrow_drop_down),
+                    ]),
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        // Row(
+        //   children: [
+        //     Text('Regulation: '),
+        //     BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+        //         builder: (context, state) {
+        //       return GestureDetector(
+        //         onTap: () => showMaterialModalBottomSheet(
+        //           expand: false,
+        //           context: context,
+        //           backgroundColor: Colors.transparent,
+        //           builder: (context) => ModalFit(
+        //               title: 'Regulations',
+        //               list: (BlocProvider.of<RegulationBloc>(context).state
+        //                       as RegulationLoadSuccess)
+        //                   .regulations),
+        //         ).then((value) {
+        //           BlocProvider.of<ViolationBloc>(context).add(
+        //             FilterChanged(
+        //               token: BlocProvider.of<AuthenticationBloc>(context)
+        //                   .state
+        //                   .token,
+        //               filter: Filter(regulationId: value),
+        //             ),
+        //           );
+        //           BlocProvider.of<ViolationFilterBloc>(context)
+        //               .add(ViolationFilterRegulationUpdated(
+        //             regulationId: value,
+        //           ));
+        //         }),
+        //         child: Container(
+        //           color: Colors.grey[200],
+        //           height: 32,
+        //           child: Row(children: [
+        //             Text(findRegulationName(
+        //                     state.filter.regulationId, context) ??
+        //                 ''),
+        //             Icon(Icons.arrow_drop_down),
+        //           ]),
+        //         ),
+        //       );
+        //     }),
+        //   ],
+        // ),
+        Row(
+          children: [
+            Text('Status: '),
+            StatusDropdown(
+                onChanged: (value) {
+                  BlocProvider.of<ViolationBloc>(context).add(
+                    FilterChanged(
+                      token: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .token,
+                      filter: Filter(status: value),
+                    ),
+                  );
+                  BlocProvider.of<ViolationFilterBloc>(context)
+                      .add(ViolationFilterStatusUpdated(
+                    status: value,
+                  ));
+                },
+                list: ['Opening', 'Rejected', 'Confirmed', 'Excused']),
+          ],
+        ),
+      ]),
+    );
+  }
+}
+
+String findBranchName(int id, BuildContext context) {
+  var branchState = BlocProvider.of<BranchBloc>(context).state;
+  if (branchState is BranchLoadSuccess) {
+    return branchState.branches
+        .firstWhere(
+          (branch) => branch.id == id,
+          orElse: () => null,
+        )
+        ?.name;
+  }
+  return null;
+}
+
+String findRegulationName(int id, BuildContext context) {
+  var regulationState = BlocProvider.of<RegulationBloc>(context).state;
+  if (regulationState is RegulationLoadSuccess) {
+    return regulationState.regulations
+        .firstWhere(
+          (regulation) => regulation.id == id,
+          orElse: () => null,
+        )
+        ?.name;
+  }
+  return null;
 }
 
 class _ViolationList extends StatefulWidget {
@@ -428,24 +584,6 @@ class ViolationCard extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
           ),
         ),
       ),

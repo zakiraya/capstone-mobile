@@ -78,7 +78,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             sort: 'desc id',
             page: 0,
             branchId: currentState.activeFilter?.branchId,
-            name: currentState.activeFilter?.name,
+            regulationId: currentState.activeFilter?.regulationId,
             status: currentState.activeFilter?.status,
           );
 
@@ -95,9 +95,11 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             token: event.token,
             sort: 'desc id',
             page: currentState.violations.length / 20,
-            branchId: event.filter?.branchId,
-            name: event.filter?.name,
-            status: event.filter?.status,
+            branchId:
+                event.filter?.branchId ?? currentState.activeFilter.branchId,
+            regulationId: event.filter?.regulationId ??
+                currentState.activeFilter.regulationId,
+            status: event.filter?.status ?? currentState.activeFilter.status,
           );
 
           yield violations.isEmpty
@@ -124,22 +126,33 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
   Stream<ViolationState> _mapFilterChangeToState(FilterChanged event) async* {
     final currentState = state;
+
     try {
       if (currentState is ViolationLoadSuccess) {
+        print(currentState.activeFilter.branchId);
+        print(event.filter?.branchId);
         final List<Violation> violations =
             await violationRepository.fetchViolations(
           token: event.token,
           sort: 'desc id',
           page: 0,
-          branchId: event.filter?.branchId,
-          name: event.filter?.name,
-          status: event.filter?.status,
+          branchId:
+              event.filter?.branchId ?? currentState.activeFilter.branchId,
+          regulationId: event.filter?.regulationId ??
+              currentState.activeFilter.regulationId,
+          status: event.filter?.status ?? currentState.activeFilter.status,
         );
 
         yield currentState.copyWith(
           hasReachedMax: violations.length < 20 ? true : false,
           violations: violations,
-          activeFilter: event.filter,
+          activeFilter: currentState.activeFilter.copyWith(
+            branchId:
+                event.filter?.branchId ?? currentState.activeFilter.branchId,
+            regulationId: event.filter?.regulationId ??
+                currentState.activeFilter.regulationId,
+            status: event.filter?.status ?? currentState.activeFilter.status,
+          ),
         );
       }
     } catch (e) {

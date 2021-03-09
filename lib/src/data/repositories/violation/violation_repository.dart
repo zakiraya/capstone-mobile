@@ -18,7 +18,7 @@ class ViolationRepository {
     int limit,
     String status,
     int branchId,
-    String name,
+    int regulationId,
   }) async {
     return await _violationApi.getViolations(
       token: token,
@@ -26,7 +26,7 @@ class ViolationRepository {
       page: page,
       limit: limit,
       branchId: branchId,
-      name: name,
+      regulationId: regulationId,
       status: status,
     );
   }

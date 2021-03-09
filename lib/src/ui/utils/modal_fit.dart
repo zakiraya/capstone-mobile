@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 
 class ViolationModalFit extends StatelessWidget {
   const ViolationModalFit({Key key, @required this.violation})
@@ -114,42 +115,51 @@ class ViolationModalFit extends StatelessWidget {
 }
 
 class ModalFit extends StatelessWidget {
-  const ModalFit({Key key}) : super(key: key);
+  const ModalFit({Key key, this.list, this.title}) : super(key: key);
+
+  final list;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
+    print(list.length);
+    var size = MediaQuery.of(context).size;
     return Material(
         child: SafeArea(
       top: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            title: Text('Edit'),
-            leading: Icon(Icons.edit),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          ListTile(
-            title: Text('Copy'),
-            leading: Icon(Icons.content_copy),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          ListTile(
-            title: Text('Cut'),
-            leading: Icon(Icons.content_cut),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          ListTile(
-            title: Text('Move'),
-            leading: Icon(Icons.folder_open),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          ListTile(
-            title: Text('Delete'),
-            leading: Icon(Icons.delete),
-            onTap: () => Navigator.of(context).pop(),
-          )
-        ],
+      child: Container(
+        height: size.height * 0.5,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: 16,
+            ),
+            Center(
+              child: Text(title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            Expanded(
+              child: ListView(
+                children: ListTile.divideTiles(
+                  context: context,
+                  tiles: List<Widget>.generate(
+                    list.length,
+                    (index) => ListTile(
+                      title: Text(list[index].name),
+                      onTap: () {
+                        Navigator.pop(context, list[index].id);
+                      },
+                    ),
+                  ),
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     ));
   }

@@ -195,3 +195,58 @@ class RegulationDropdownState extends State<RegulationDropdown> {
     // });
   }
 }
+
+class StatusDropdown extends StatefulWidget {
+  final List list;
+  final Function onChanged;
+
+  const StatusDropdown({Key key, this.list, this.onChanged}) : super(key: key);
+  @override
+  _StatusDropdownState createState() => _StatusDropdownState();
+}
+
+class _StatusDropdownState extends State<StatusDropdown> {
+  String dropdownValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 32,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.grey[200],
+        border: Border.all(),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton<String>(
+            itemHeight: 56,
+            // isExpanded: true,
+            value: dropdownValue,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: Colors.black),
+            underline: Container(
+              height: 1,
+              color: Colors.black38,
+            ),
+            onChanged: (newValue) {
+              setState(() {
+                dropdownValue = newValue;
+              });
+              widget.onChanged(newValue);
+            },
+            items: widget.list.map<DropdownMenuItem<String>>((status) {
+              return DropdownMenuItem<String>(
+                value: status,
+                child: Text(status),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}

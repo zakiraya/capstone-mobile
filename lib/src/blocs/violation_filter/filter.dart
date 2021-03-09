@@ -3,28 +3,30 @@ import 'package:equatable/equatable.dart';
 class Filter extends Equatable {
   final int branchId;
   final String status;
-  final String name;
+  final int regulationId;
 
-  Filter({this.branchId, this.status, this.name});
+  Filter({this.branchId, this.status, this.regulationId});
 
   @override
   List<Object> get props => [
         branchId,
         status,
-        name,
+        regulationId,
       ];
 
   @override
-  String toString() => '{ branchId: $branchId, status: $status, name: $name }';
+  String toString() =>
+      '{ branchId: $branchId, status: $status, regulationId: $regulationId }';
 
   Filter copyWith({
     int branchId,
     String status,
-    String name,
+    int regulationId,
   }) {
     return Filter(
-        branchId: branchId ?? this.branchId,
-        status: status ?? this.status,
-        name: name ?? this.name);
+      branchId: branchId ?? this.branchId,
+      status: status ?? this.status,
+      regulationId: regulationId ?? this.regulationId,
+    );
   }
 }

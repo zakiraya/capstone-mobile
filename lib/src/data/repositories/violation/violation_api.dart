@@ -33,7 +33,7 @@ class ViolationApi {
     int limit,
     String status,
     int branchId,
-    String name,
+    int regulationId,
   }) async {
     String url = violationUrl + '?Filter.IsDeleted=false';
     if (sort != null) {
@@ -48,8 +48,8 @@ class ViolationApi {
     if (status != null) {
       url += '&Filter.Status=$status';
     }
-    if (name != null) {
-      url += '&Filter.Name=$name';
+    if (regulationId != null) {
+      url += '&Filter.Name=$regulationId';
     }
     if (branchId != null) {
       url += '&Filter.BranchIds=$branchId';

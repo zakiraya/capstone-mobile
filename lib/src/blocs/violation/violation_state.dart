@@ -43,7 +43,7 @@ class ViolationLoadSuccess extends ViolationState {
 
   @override
   String toString() =>
-      'ViolationLoadSuccess { violation total: ${violations.length}, Has reach max $hasReachedMax }, activeFilter { branchId ${activeFilter.branchId} }';
+      'ViolationLoadSuccess { violation total: ${violations.length}, Has reach max $hasReachedMax }, activeFilter { $activeFilter }';
 }
 
 class ViolationLoadFailure extends ViolationState {}
