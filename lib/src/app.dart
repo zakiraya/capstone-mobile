@@ -206,7 +206,7 @@ class _AppViewState extends State<AppView> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-              body: Center(child: Text('init')),
+              body: Center(child: Text('')),
             ),
           );
         });
