@@ -53,19 +53,7 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   Container(
                     child: Text(
-                      '${user.lastName ?? 'full name'}' +
-                          ' ' +
-                          '${user.firstName ?? 'first name'}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  Container(
-                    child: Text('${user.email ?? 'mail'}'),
-                  ),
-                  Container(
-                    child: Text(
-                      '${user.branchName ?? 'branch name'}',
+                      '${user.branchName ?? ''}',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
@@ -76,6 +64,18 @@ class SettingsScreen extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
+                  ),
+                  Container(
+                    child: Text(
+                      '${user.lastName ?? 'full name'}' +
+                          ' ' +
+                          '${user.firstName ?? 'first name'}',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Container(
+                    child: Text('${user.email ?? 'mail'}'),
                   ),
                 ],
               )

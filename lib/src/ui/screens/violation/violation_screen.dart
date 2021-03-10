@@ -230,7 +230,10 @@ class ViolationListFilter extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(
           children: [
-            Text('Branch: '),
+            Container(
+              width: 64,
+              child: Text('Branch: '),
+            ),
             BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
                 builder: (context, state) {
               return GestureDetector(
@@ -270,9 +273,15 @@ class ViolationListFilter extends StatelessWidget {
                       child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(findBranchName(
-                                    state.filter.branchId, context) ??
-                                ''),
+                            Container(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(findBranchName(
+                                        state.filter.branchId, context) ??
+                                    'All branches'),
+                              ),
+                            ),
                             Icon(Icons.arrow_drop_down),
                           ]),
                     ),
@@ -330,7 +339,10 @@ class ViolationListFilter extends StatelessWidget {
         // ),
         Row(
           children: [
-            Text('Status: '),
+            Container(
+              width: 64,
+              child: Text('Status: '),
+            ),
             StatusDropdown(
                 onChanged: (value) {
                   BlocProvider.of<ViolationFilterBloc>(context)
@@ -359,7 +371,7 @@ String findBranchName(int id, BuildContext context) {
         )
         ?.name;
   }
-  return null;
+  return 'All branches';
 }
 
 String findRegulationName(int id, BuildContext context) {

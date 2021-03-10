@@ -15,6 +15,7 @@ import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:capstone_mobile/src/ui/widgets/tab_selector.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:capstone_mobile/src/ui/widgets/report/report_list.dart';
+import 'package:capstone_mobile/src/ui/widgets/notification/notification_list.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
@@ -179,17 +180,22 @@ class HomeTab extends StatelessWidget {
         Container(
           width: size.width * 0.2,
           height: size.height * 0.2,
-          color: Color(0xffE9EFFF),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/cover_home_app.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
         SizedBox(
           height: 16,
         ),
         Container(
           width: size.width * 0.2,
-          height: size.height * 0.2,
-          color: Colors.grey[200],
+          // height: size.height * 0.1,
+          color: Colors.grey[100],
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
             child: Column(
               children: [
                 Row(
@@ -207,7 +213,7 @@ class HomeTab extends StatelessWidget {
                         S.of(context).HOME_SEE_ALL,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: 16.0,
+                          fontSize: 12.0,
                         ),
                       ),
                       onTap: () {
@@ -224,6 +230,7 @@ class HomeTab extends StatelessWidget {
             ),
           ),
         ),
+        LatestNotificationList(),
         SizedBox(
           height: 16,
         ),
@@ -237,7 +244,8 @@ class HomeTab extends StatelessWidget {
             color: Colors.orange[400],
             height: 36,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -273,7 +281,8 @@ class HomeTab extends StatelessWidget {
             color: Colors.orange[400],
             height: 36,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

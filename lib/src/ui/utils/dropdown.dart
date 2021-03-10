@@ -227,7 +227,7 @@ class _StatusDropdownState extends State<StatusDropdown> {
             icon: Icon(Icons.arrow_drop_down),
             iconSize: 24,
             elevation: 16,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontFamily: 'Montserrat'),
             underline: Container(
               height: 1,
               color: Colors.black38,
