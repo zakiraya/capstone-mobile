@@ -144,13 +144,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         yield currentState.copyWith(
           hasReachedMax: violations.length < 20 ? true : false,
           violations: violations,
-          activeFilter: currentState.activeFilter.copyWith(
-            branchId:
-                event.filter?.branchId ?? currentState.activeFilter.branchId,
-            regulationId: event.filter?.regulationId ??
-                currentState.activeFilter.regulationId,
-            status: event.filter?.status ?? currentState.activeFilter.status,
-          ),
+          activeFilter: event.filter,
         );
       }
     } catch (e) {

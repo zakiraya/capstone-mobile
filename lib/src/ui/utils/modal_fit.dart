@@ -115,10 +115,11 @@ class ViolationModalFit extends StatelessWidget {
 }
 
 class ModalFit extends StatelessWidget {
-  const ModalFit({Key key, this.list, this.title}) : super(key: key);
+  ModalFit({Key key, this.list, this.title, this.value}) : super(key: key);
 
   final list;
   final String title;
+  final value;
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +149,11 @@ class ModalFit extends StatelessWidget {
                   context: context,
                   tiles: List<Widget>.generate(
                     list.length,
-                    (index) => ListTile(
+                    (index) => CheckboxListTile(
+                      value: value == list[index].id,
+                      controlAffinity: ListTileControlAffinity.leading,
                       title: Text(list[index].name),
-                      onTap: () {
+                      onChanged: (value) {
                         Navigator.pop(context, list[index].id);
                       },
                     ),

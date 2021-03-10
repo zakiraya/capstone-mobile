@@ -13,13 +13,23 @@ part 'violation_filter_state.dart';
 
 class ViolationFilterBloc
     extends Bloc<ViolationFilterEvent, ViolationFilterState> {
-  ViolationFilterBloc() : super(ViolationFilterState(filter: Filter()));
+  ViolationFilterBloc({this.violationbloc})
+      : super(ViolationFilterState(filter: Filter()));
+
+  final ViolationBloc violationbloc;
 
   @override
   Stream<ViolationFilterState> mapEventToState(
     ViolationFilterEvent event,
   ) async* {
     if (event is ViolationFilterBranchIdUpdated) {
+      violationbloc.add(FilterChanged(
+        token: event.token,
+        filter: Filter(
+            branchId: event.branchId,
+            status: state.filter.status,
+            regulationId: state.filter.regulationId),
+      ));
       yield state.copyWith(
         filter: Filter(
           branchId: event.branchId,
@@ -28,6 +38,13 @@ class ViolationFilterBloc
         ),
       );
     } else if (event is ViolationFilterRegulationUpdated) {
+      violationbloc.add(FilterChanged(
+        token: event.token,
+        filter: Filter(
+            branchId: state.filter.branchId,
+            status: state.filter.status,
+            regulationId: event.regulationId),
+      ));
       yield state.copyWith(
         filter: Filter(
           branchId: state.filter.branchId,
@@ -36,6 +53,13 @@ class ViolationFilterBloc
         ),
       );
     } else if (event is ViolationFilterStatusUpdated) {
+      violationbloc.add(FilterChanged(
+        token: event.token,
+        filter: Filter(
+            branchId: state.filter.branchId,
+            status: event.status,
+            regulationId: state.filter.regulationId),
+      ));
       yield state.copyWith(
         filter: Filter(
           branchId: state.filter.branchId,

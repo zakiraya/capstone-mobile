@@ -32,8 +32,9 @@ class FilterUpdated extends ViolationFilterEvent {
 
 class ViolationFilterBranchIdUpdated extends ViolationFilterEvent {
   final int branchId;
+  final String token;
 
-  ViolationFilterBranchIdUpdated({this.branchId});
+  ViolationFilterBranchIdUpdated({this.branchId, this.token});
   @override
   String toString() =>
       'ViolationFilterBranchIdUpdated { BranchId: $branchId  }';
@@ -41,8 +42,9 @@ class ViolationFilterBranchIdUpdated extends ViolationFilterEvent {
 
 class ViolationFilterRegulationUpdated extends ViolationFilterEvent {
   final int regulationId;
+  final String token;
 
-  ViolationFilterRegulationUpdated({this.regulationId});
+  ViolationFilterRegulationUpdated({this.regulationId, this.token});
   @override
   String toString() =>
       'ViolationFilterRegulationUpdated { RegulationId: $regulationId  }';
@@ -50,8 +52,9 @@ class ViolationFilterRegulationUpdated extends ViolationFilterEvent {
 
 class ViolationFilterStatusUpdated extends ViolationFilterEvent {
   final String status;
+  final String token;
 
-  ViolationFilterStatusUpdated({this.status});
+  ViolationFilterStatusUpdated({this.status, this.token});
   @override
   String toString() => 'ViolationFilterStatusUpdated { Status: $status  }';
 }
