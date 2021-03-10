@@ -55,14 +55,14 @@ class SettingsScreen extends StatelessWidget {
                     child: Text(
                       '${user.branchName ?? ''}',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Container(
                     child: Text(
                       '${user.roleName ?? 'role name'}',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Container(
@@ -71,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
                           ' ' +
                           '${user.firstName ?? 'first name'}',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Container(
