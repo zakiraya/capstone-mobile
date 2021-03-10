@@ -17,7 +17,6 @@ import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:capstone_mobile/src/ui/widgets/report/report_list.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:capstone_mobile/src/ui/utils/icons.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -32,7 +31,9 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ViolationFilterBloc(),
+            create: (context) => ViolationFilterBloc(
+              violationbloc: BlocProvider.of<ViolationBloc>(context),
+            ),
           ),
           BlocProvider(
             create: (context) => TabBloc(),

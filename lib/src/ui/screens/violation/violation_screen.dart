@@ -19,6 +19,7 @@ import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
+import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -238,39 +239,43 @@ class ViolationListFilter extends StatelessWidget {
                   context: context,
                   backgroundColor: Colors.transparent,
                   builder: (context) => ModalFit(
-                      title: 'Branches',
-                      list: (BlocProvider.of<BranchBloc>(context).state
-                              as BranchLoadSuccess)
-                          .branches),
+                    title: 'Branches',
+                    list: (BlocProvider.of<BranchBloc>(context).state
+                            as BranchLoadSuccess)
+                        .branches,
+                    value: state.filter.branchId,
+                  ),
                 ).then((value) {
-                  BlocProvider.of<ViolationBloc>(context).add(
-                    FilterChanged(
+                  if (value != null) {
+                    BlocProvider.of<ViolationFilterBloc>(context)
+                        .add(ViolationFilterBranchIdUpdated(
                       token: BlocProvider.of<AuthenticationBloc>(context)
                           .state
                           .token,
-                      filter: Filter(branchId: value),
-                    ),
-                  );
-                  BlocProvider.of<ViolationFilterBloc>(context)
-                      .add(ViolationFilterBranchIdUpdated(
-                    branchId: value,
-                  ));
+                      branchId: state.filter.branchId == value ? null : value,
+                    ));
+                  }
                 }),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[200],
-                    border: Border.all(),
-                  ),
-                  // color: Colors.grey[200],
-                  height: 32,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(children: [
-                      Text(
-                          findBranchName(state.filter.branchId, context) ?? ''),
-                      Icon(Icons.arrow_drop_down),
-                    ]),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: 112),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200],
+                      border: Border.all(),
+                    ),
+                    // color: Colors.grey[200],
+                    height: 32,
+                    child: Center(
+                      child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(findBranchName(
+                                    state.filter.branchId, context) ??
+                                ''),
+                            Icon(Icons.arrow_drop_down),
+                          ]),
+                    ),
                   ),
                 ),
               );
@@ -328,16 +333,11 @@ class ViolationListFilter extends StatelessWidget {
             Text('Status: '),
             StatusDropdown(
                 onChanged: (value) {
-                  BlocProvider.of<ViolationBloc>(context).add(
-                    FilterChanged(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token,
-                      filter: Filter(status: value),
-                    ),
-                  );
                   BlocProvider.of<ViolationFilterBloc>(context)
                       .add(ViolationFilterStatusUpdated(
+                    token: BlocProvider.of<AuthenticationBloc>(context)
+                        .state
+                        .token,
                     status: value,
                   ));
                 },
