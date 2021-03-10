@@ -74,6 +74,7 @@ class AuthenticationBloc
       );
       return user;
     } catch (e) {
+      print(e);
       return null;
     }
   }

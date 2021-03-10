@@ -48,8 +48,7 @@ class User extends Equatable {
       address: userInfo['address'],
       imagePath: userInfo['imagePath'],
       roleName: userInfo['account']['role']['name'],
-      branchName:
-          userInfo['branch'] == null ? null : userInfo['branch']['name'],
+      branchName: userInfo['branch']['name'],
     );
   }
 }

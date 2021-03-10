@@ -1,8 +1,8 @@
-import 'package:capstone_mobile/src/constants/constant.dart';
 import 'package:flutter/material.dart';
 
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
 class ReportCard extends StatelessWidget {

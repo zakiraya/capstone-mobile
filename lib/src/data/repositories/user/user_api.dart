@@ -19,6 +19,10 @@ class UserApi {
     final userJson =
         await baseApi.post(authenUrl, body, null) as Map<String, dynamic>;
 
+    if (userJson["code"] != 200) {
+      throw Exception('Unauthenticated !');
+    }
+
     return userJson['data']['accessToken'];
   }
 
@@ -30,6 +34,10 @@ class UserApi {
 
     final userJson =
         await baseApi.get(url, token, opts: opts) as Map<String, dynamic>;
+
+    if (userJson['code'] != 200) {
+      throw AuthenticationException('Error');
+    }
 
     return User.fromJson(userJson);
   }
@@ -50,6 +58,10 @@ class UserApi {
     };
 
     final responseJson = await baseApi.put(url, body, token);
+
+    if (responseJson['code'] != 200) {
+      throw FetchDataException(responseJson['message']);
+    }
 
     return responseJson['message'];
   }

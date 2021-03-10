@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Constant {
-  static const ROLE_QC = 'QC Manager';
-  static const ROLE_BM = 'Branch Manager';
-
   static final statusColors = {
     'Opening': Colors.blue,
     'Confirmed': Colors.green,
