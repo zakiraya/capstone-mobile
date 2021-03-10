@@ -61,7 +61,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                   Navigator.pop(context);
                 },
               ),
-              actions: violation.status.toLowerCase() == 'Opening'
+              actions: violation.status.toLowerCase() == 'opening'
                   ? [
                       Container(
                         width: 80,

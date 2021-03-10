@@ -129,8 +129,6 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
 
     try {
       if (currentState is ViolationLoadSuccess) {
-        print(currentState.activeFilter.branchId);
-        print(event.filter?.branchId);
         final List<Violation> violations =
             await violationRepository.fetchViolations(
           token: event.token,
