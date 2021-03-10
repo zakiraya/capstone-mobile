@@ -84,7 +84,7 @@ class _AppViewState extends State<AppView> {
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
       ),
-      // fontFamily: 'Montserrat',
+      fontFamily: 'Montserrat',
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 40.0,
