@@ -1,12 +1,12 @@
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
-import 'package:capstone_mobile/src/ui/widgets/violation/filter_button.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
-import 'package:capstone_mobile/src/blocs/regulation/regulation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
@@ -17,9 +17,8 @@ import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
-import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
-import 'package:capstone_mobile/src/data/models/branch/branch.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -277,7 +276,7 @@ class ViolationListFilter extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(findBranchName(
+                                child: Text(Utils.findBranchName(
                                         state.filter.branchId, context) ??
                                     'All branches'),
                               ),
@@ -356,35 +355,74 @@ class ViolationListFilter extends StatelessWidget {
                 list: ['Opening', 'Rejected', 'Confirmed', 'Excused']),
           ],
         ),
+        SizedBox(
+          height: 8.0,
+        ),
+        Row(
+          children: [
+            Container(
+              width: 64,
+              child: Text('Month: '),
+            ),
+            BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+                builder: (context, state) {
+              return GestureDetector(
+                onTap: () => showMonthPicker(
+                  context: context,
+                  firstDate: DateTime(DateTime.now().year - 1, 5),
+                  lastDate: DateTime(DateTime.now().year + 1, 9),
+                  initialDate: DateTime.now(),
+                  locale:
+                      Locale(BlocProvider.of<LocalizationBloc>(context).state),
+                ).then((value) {
+                  if (value != null) {
+                    print(value);
+                    BlocProvider.of<ViolationFilterBloc>(context)
+                        .add(ViolationFilterMonthUpdated(
+                      token: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .token,
+                      month: value,
+                    ));
+                  }
+                }),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: 80),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200],
+                      border: Border.all(),
+                    ),
+                    // color: Colors.grey[200],
+                    height: 32,
+                    child: Center(
+                      child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  state.filter.month != null
+                                      ? state.filter.month.month.toString()
+                                      : DateTime.now().month.toString(),
+                                ),
+                              ),
+                            ),
+                            Icon(Icons.arrow_drop_down),
+                          ]),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
       ]),
     );
   }
-}
-
-String findBranchName(int id, BuildContext context) {
-  var branchState = BlocProvider.of<BranchBloc>(context).state;
-  if (branchState is BranchLoadSuccess) {
-    return branchState.branches
-        .firstWhere(
-          (branch) => branch.id == id,
-          orElse: () => null,
-        )
-        ?.name;
-  }
-  return 'All branches';
-}
-
-String findRegulationName(int id, BuildContext context) {
-  var regulationState = BlocProvider.of<RegulationBloc>(context).state;
-  if (regulationState is RegulationLoadSuccess) {
-    return regulationState.regulations
-        .firstWhere(
-          (regulation) => regulation.id == id,
-          orElse: () => null,
-        )
-        ?.name;
-  }
-  return null;
 }
 
 class _ViolationList extends StatefulWidget {
