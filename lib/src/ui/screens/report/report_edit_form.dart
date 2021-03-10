@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/constants/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -6,7 +7,6 @@ import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart'
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
-import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
 class ReportEditForm extends StatelessWidget {
