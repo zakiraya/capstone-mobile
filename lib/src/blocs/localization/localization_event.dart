@@ -16,5 +16,5 @@ class LocalizationUpdated extends LocalizationEvent {
   List<Object> get props => [languageCode];
 
   @override
-  String toString() => 'TabUpdated { tab: $languageCode }';
+  String toString() => 'LocalizationUpdated { tab: $languageCode }';
 }

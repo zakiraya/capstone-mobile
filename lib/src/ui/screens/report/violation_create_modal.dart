@@ -57,23 +57,17 @@ class _ModalBodyState extends State<ModalBody> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      // onTap: () {
-      //   FocusScopeNode currentFocus = FocusScope.of(context);
-
-      //   if (!currentFocus.hasPrimaryFocus) {
-      //     currentFocus.unfocus();
-      //   }
-      // },
-      child: Material(
-        clipBehavior: Clip.antiAlias,
-        // borderRadius: BorderRadius.circular(16.0),
-        child: SafeArea(
-          top: false,
-          child: BlocProvider(
-            create: (context) => ViolationCreateBloc(),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+    return Material(
+      clipBehavior: Clip.antiAlias,
+      // borderRadius: BorderRadius.circular(16.0),
+      child: SafeArea(
+        top: false,
+        child: BlocProvider(
+          create: (context) => ViolationCreateBloc(),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              height: widget.size.height * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,13 +105,13 @@ class _ModalBodyState extends State<ModalBody> {
                       ),
                     ),
                   ),
-                  Container(
-                    child: _ViolationDescriptionInput(
+                  DropdownFieldRegulation(
                       initValue: widget.isEditing == true
-                          ? widget.violation.description
-                          : null,
-                    ),
-                  ),
+                          ? Regulation(
+                              id: widget.violation.regulationId,
+                              name: widget.violation.regulationName,
+                            )
+                          : null),
                   SizedBox(
                     height: 16,
                   ),
@@ -130,13 +124,14 @@ class _ModalBodyState extends State<ModalBody> {
                       ),
                     ),
                   ),
-                  DropdownFieldRegulation(
+                  Container(
+                    child: _ViolationDescriptionInput(
                       initValue: widget.isEditing == true
-                          ? Regulation(
-                              id: widget.violation.regulationId,
-                              name: widget.violation.regulationName,
-                            )
-                          : null),
+                          ? widget.violation.description
+                          : null,
+                    ),
+                  ),
+
                   // Container(
                   //   child: RegulationDropdown(
                   //     initValue: widget.isEditing == true
@@ -260,7 +255,7 @@ class _ModalBodyState extends State<ModalBody> {
                                   }
                                 : null,
                             child: Text(
-                                '${widget.isEditing == true ? S.of(context).VIOLATION_CREATE_MODAL_ADD : S.of(context).VIOLATION_CREATE_MODAL_ADD}'),
+                                '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}'),
                             style: ElevatedButton.styleFrom(
                               elevation: 5.0,
                               primary: Theme.of(context).primaryColor,

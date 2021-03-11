@@ -115,9 +115,15 @@ class _AppViewState extends State<AppView> {
               debugShowCheckedModeBanner: false,
               navigatorKey: _navigatorKey,
               builder: (context, child) {
+                print('here');
+                print(
+                  Localizations.localeOf(context).toString(),
+                );
                 BlocProvider.of<LocalizationBloc>(context).add(
-                    LocalizationUpdated(
-                        Localizations.localeOf(context).toString()));
+                  LocalizationUpdated(
+                    Localizations.localeOf(context).toString(),
+                  ),
+                );
 
                 return BlocListener<AuthenticationBloc, AuthenticationState>(
                   listener: (context, state) {

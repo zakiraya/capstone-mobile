@@ -8,7 +8,7 @@ part 'localization_event.dart';
 part 'localization_state.dart';
 
 class LocalizationBloc extends Bloc<LocalizationEvent, String> {
-  LocalizationBloc() : super('en');
+  LocalizationBloc() : super('en_US');
 
   @override
   Stream<String> mapEventToState(
