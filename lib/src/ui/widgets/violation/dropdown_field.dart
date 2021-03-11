@@ -88,9 +88,12 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
 }
 
 class DropdownFieldRegulation extends StatefulWidget {
+  final Regulation initValue;
+
+  const DropdownFieldRegulation({Key key, this.initValue}) : super(key: key);
   @override
   _DropdownFieldRegulationState createState() =>
-      _DropdownFieldRegulationState();
+      _DropdownFieldRegulationState(initValue: initValue);
 }
 
 class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
@@ -99,8 +102,10 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
   RegulationRepository _regulationRepository = RegulationRepository();
   List<Regulation> _regulations = List();
   List<String> _regulationNames = List();
-  String _initValue;
+  Regulation initValue;
   final myController = TextEditingController();
+
+  _DropdownFieldRegulationState({this.initValue});
 
   Future<String> getBranches() async {
     var regulations = await _regulationRepository.fetchRegulationes(
@@ -131,6 +136,18 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
     super.initState();
     this.getBranches();
     myController.addListener(_printLatestValue);
+    if (widget.initValue != null) {
+      myController.text = initValue.name;
+
+      context.read<ViolationCreateBloc>().add(
+            ViolationRegulationChanged(
+              regulation: Regulation(
+                id: widget.initValue.id,
+                name: widget.initValue.name,
+              ),
+            ),
+          );
+    }
   }
 
   @override
@@ -157,7 +174,7 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
                 ),
               );
         },
-        value: _initValue,
+        value: 'wefwaef',
         hintText: 'Choose a regulation',
         // labelText: 'Branch',
         items: _regulationNames,
