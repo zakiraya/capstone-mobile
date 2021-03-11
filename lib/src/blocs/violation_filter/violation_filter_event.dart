@@ -58,3 +58,12 @@ class ViolationFilterStatusUpdated extends ViolationFilterEvent {
   @override
   String toString() => 'ViolationFilterStatusUpdated { Status: $status  }';
 }
+
+class ViolationFilterMonthUpdated extends ViolationFilterEvent {
+  final DateTime month;
+  final String token;
+
+  ViolationFilterMonthUpdated({this.month, this.token});
+  @override
+  String toString() => 'ViolationFilterStatusUpdated { Month: $month  }';
+}
