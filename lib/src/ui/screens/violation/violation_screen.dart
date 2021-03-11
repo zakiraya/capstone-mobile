@@ -1,5 +1,5 @@
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
-import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/src/constants/constant.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
