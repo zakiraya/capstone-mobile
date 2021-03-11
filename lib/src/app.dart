@@ -1,13 +1,5 @@
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
-import 'package:capstone_mobile/src/blocs/regulation/regulation_bloc.dart';
-import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
-import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
-import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/data/repositories/notification/notification_repository.dart';
+import 'package:capstone_mobile/src/ui/mavca_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,11 +7,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
-import 'package:capstone_mobile/src/blocs/notification/notification_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:capstone_mobile/src/services/firebase/notification.dart';
-import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 
@@ -113,95 +103,46 @@ class _AppViewState extends State<AppView> {
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                      create: (context) => ViolationBloc(
-                            violationRepository: ViolationRepository(),
-                          )..add(ViolationRequested(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
-                            ))),
-                  BlocProvider(
-                      create: (context) =>
-                          ReportBloc(reportRepository: ReportRepository())
-                            ..add(ReportRequested(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
-                            ))),
-                  BlocProvider(
-                    create: (context) => NotificationBloc(
-                        notificationRepository: NotificationRepository())
-                      ..add(NotificationRequested(
-                        token: BlocProvider.of<AuthenticationBloc>(context)
-                            .state
-                            .token,
-                      )),
-                  ),
-                  BlocProvider(
-                    create: (context) =>
-                        BranchBloc(branchRepository: BranchRepository())
-                          ..add(BranchRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
-                          )),
-                  ),
-                  BlocProvider(
-                    create: (context) => RegulationBloc(
-                        regulationRepository: RegulationRepository())
-                      ..add(RegulationRequested(
-                        token: BlocProvider.of<AuthenticationBloc>(context)
-                            .state
-                            .token,
-                      )),
-                  )
-                ],
-                child: MaterialApp(
-                  localizationsDelegates: [
-                    S.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: S.delegate.supportedLocales,
-                  theme: themeData,
-                  debugShowCheckedModeBanner: false,
-                  navigatorKey: _navigatorKey,
-                  builder: (context, child) {
-                    BlocProvider.of<LocalizationBloc>(context).add(
-                        LocalizationUpdated(
-                            Localizations.localeOf(context).toString()));
+            return MaterialApp(
+              localizationsDelegates: [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              theme: themeData,
+              debugShowCheckedModeBanner: false,
+              navigatorKey: _navigatorKey,
+              builder: (context, child) {
+                BlocProvider.of<LocalizationBloc>(context).add(
+                    LocalizationUpdated(
+                        Localizations.localeOf(context).toString()));
 
-                    return BlocListener<AuthenticationBloc,
-                        AuthenticationState>(
-                      listener: (context, state) {
-                        switch (state.status) {
-                          case AuthenticationStatus.authenticated:
-                            _navigator.pushAndRemoveUntil<void>(
-                              HomeScreen.route(),
-                              (route) => false,
-                            );
-                            break;
-                          case AuthenticationStatus.unauthenticated:
-                            _navigator.pushAndRemoveUntil<void>(
-                              LoginScreen.route(),
-                              (route) => false,
-                            );
-                            break;
-                          default:
-                            break;
-                        }
-                      },
-                      child: child,
-                    );
+                return BlocListener<AuthenticationBloc, AuthenticationState>(
+                  listener: (context, state) {
+                    switch (state.status) {
+                      case AuthenticationStatus.authenticated:
+                        _navigator.pushAndRemoveUntil<void>(
+                          MavcaApp.route(),
+                          (route) => false,
+                        );
+                        break;
+                      case AuthenticationStatus.unauthenticated:
+                        _navigator.pushAndRemoveUntil<void>(
+                          LoginScreen.route(),
+                          (route) => false,
+                        );
+                        break;
+                      default:
+                        break;
+                    }
                   },
-                  onGenerateRoute: (_) => SplashScreen.route(),
-                ));
+                  child: child,
+                );
+              },
+              onGenerateRoute: (_) => SplashScreen.route(),
+            );
           }
           return MaterialApp(
             debugShowCheckedModeBanner: false,
