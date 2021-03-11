@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +13,25 @@ part 'report_state.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   final ReportRepository reportRepository;
+  final AuthenticationRepository _authenticationRepository;
+  StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
-  ReportBloc({@required this.reportRepository}) : super(ReportInitial());
+  ReportBloc({
+    @required this.reportRepository,
+    @required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        super(ReportInitial()) {
+    _authenticationStatusSubscription = _authenticationRepository.status.listen(
+      (status) => add(ReportAuthenticationStatusChanged(status: status)),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _authenticationStatusSubscription?.cancel();
+    _authenticationRepository.dispose();
+    return super.close();
+  }
 
   @override
   Stream<ReportState> mapEventToState(
@@ -23,6 +41,12 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       yield* _mapReportRequestedToState(event);
     } else if (event is FilterChanged) {
       yield* _mapFilterChangedToState(event);
+    } else if (event is ReportAuthenticationStatusChanged) {
+      if (event.status == AuthenticationStatus.unauthenticated) {
+        yield (ReportInitial());
+      } else if (event.status == AuthenticationStatus.authenticated) {
+        add(ReportRequested(token: _authenticationRepository.token));
+      }
     }
   }
 

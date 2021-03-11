@@ -41,3 +41,11 @@ class FilterChanged extends ReportEvent {
   @override
   String toString() => ' FilterChanged: { ${filter.toString()} } ';
 }
+
+class ReportAuthenticationStatusChanged extends ReportEvent {
+  ReportAuthenticationStatusChanged({this.status});
+
+  final AuthenticationStatus status;
+  @override
+  List<Object> get props => [status];
+}

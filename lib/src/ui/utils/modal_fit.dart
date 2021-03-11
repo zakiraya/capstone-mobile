@@ -123,7 +123,6 @@ class ModalFit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(list.length);
     var size = MediaQuery.of(context).size;
     return Material(
         child: SafeArea(

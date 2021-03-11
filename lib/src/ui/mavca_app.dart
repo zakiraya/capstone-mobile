@@ -24,13 +24,13 @@ class MavcaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(
-          create: (context) => ViolationBloc(
-                violationRepository: ViolationRepository(),
-              )..add(ViolationRequested(
-                  token:
-                      BlocProvider.of<AuthenticationBloc>(context).state.token,
-                ))),
+      // BlocProvider(
+      //     create: (context) => ViolationBloc(
+      //           violationRepository: ViolationRepository(),
+      //         )..add(ViolationRequested(
+      //             token:
+      //                 BlocProvider.of<AuthenticationBloc>(context).state.token,
+      //           ))),
       BlocProvider(
           create: (context) => ReportBloc(reportRepository: ReportRepository())
             ..add(ReportRequested(

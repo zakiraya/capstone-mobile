@@ -11,7 +11,7 @@ class SignUpFailure implements Exception {}
 class SignInFailure implements Exception {}
 
 class AuthenticationRepository {
-  final _controller = StreamController<AuthenticationStatus>();
+  final _controller = StreamController<AuthenticationStatus>.broadcast();
   String token = '';
   String username = '';
   final UserApi userApi;

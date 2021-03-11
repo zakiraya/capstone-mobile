@@ -131,7 +131,8 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                         child: Text(
                           "${violation.status}",
                           style: TextStyle(
-                              color: Constant.statusColors[violation.status]),
+                              color: Constant
+                                  .violationStatusColors[violation.status]),
                         ),
                       ),
                     ],

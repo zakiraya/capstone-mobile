@@ -58,7 +58,7 @@ class ReportEditForm extends StatelessWidget {
                     TextSpan(
                       text: report.status,
                       style: TextStyle(
-                        color: Constant.statusColors[report.status],
+                        color: Constant.reportStatusColors[report.status],
                       ),
                     ),
                   ],

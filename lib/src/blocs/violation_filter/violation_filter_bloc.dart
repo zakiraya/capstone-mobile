@@ -14,7 +14,12 @@ part 'violation_filter_state.dart';
 class ViolationFilterBloc
     extends Bloc<ViolationFilterEvent, ViolationFilterState> {
   ViolationFilterBloc({this.violationbloc})
-      : super(ViolationFilterState(filter: Filter()));
+      : super(ViolationFilterState(
+            filter:
+                (violationbloc.state as ViolationLoadSuccess).activeFilter))
+                {
+                  print(state.filter);
+                }
 
   final ViolationBloc violationbloc;
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,10 +14,26 @@ part 'violation_event.dart';
 part 'violation_state.dart';
 
 class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
-  ViolationBloc({@required this.violationRepository})
-      : super(ViolationInitial());
+  ViolationBloc({
+    @required this.violationRepository,
+    @required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        super(ViolationInitial()) {
+    _authenticationStatusSubscription = _authenticationRepository.status.listen(
+      (status) => add(ViolationAuthenticationStatusChanged(status: status)),
+    );
+  }
 
   final ViolationRepository violationRepository;
+  final AuthenticationRepository _authenticationRepository;
+  StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
+
+  @override
+  Future<void> close() {
+    _authenticationStatusSubscription?.cancel();
+    _authenticationRepository.dispose();
+    return super.close();
+  }
 
   @override
   Stream<Transition<ViolationEvent, ViolationState>> transformEvents(
@@ -34,10 +51,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     ViolationEvent event,
   ) async* {
     final currentState = state;
-    if ((event is ViolationRequested
-        // && !_hasReachedMax(currentState)
-
-        )) {
+    if ((event is ViolationRequested)) {
       try {
         if (currentState is ViolationInitial) {
           final List<Violation> violations =
@@ -121,8 +135,23 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
       yield* _mapViolationUpdateToState(event);
     } else if (event is ViolationDelete) {
       yield* _mapViolationDeleteToState(event);
+    } else if (event is ViolationAuthenticationStatusChanged) {
+      if (event.status == AuthenticationStatus.unauthenticated) {
+        yield (ViolationInitial());
+      } else if (event.status == AuthenticationStatus.authenticated) {
+        add(ViolationRequested(token: _authenticationRepository.token));
+      }
     }
   }
+
+  // Future<ViolationState> _mapAuthenticationStatusChangedToState(
+  //   AuthenticationStatusChanged event,
+  // ) async {
+  //   switch (event.status) {
+  //     case AuthenticationStatus.unauthenticated:
+  //       add(ViolationRequested(token: _authenticationRepository.token));
+  //   }
+  // }
 
   Stream<ViolationState> _mapFilterChangeToState(FilterChanged event) async* {
     final currentState = state;

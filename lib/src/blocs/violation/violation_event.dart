@@ -67,3 +67,12 @@ class ViolationDelete extends ViolationEvent {
   @override
   List<Object> get props => [token, id];
 }
+
+class ViolationAuthenticationStatusChanged extends ViolationEvent {
+  const ViolationAuthenticationStatusChanged({this.status});
+
+  final AuthenticationStatus status;
+
+  @override
+  List<Object> get props => [status];
+}
