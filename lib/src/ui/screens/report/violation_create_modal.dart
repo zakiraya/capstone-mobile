@@ -4,6 +4,7 @@ import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dar
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,13 +58,13 @@ class _ModalBodyState extends State<ModalBody> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+      // onTap: () {
+      //   FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
+      //   if (!currentFocus.hasPrimaryFocus) {
+      //     currentFocus.unfocus();
+      //   }
+      // },
       child: Material(
         clipBehavior: Clip.antiAlias,
         // borderRadius: BorderRadius.circular(16.0),
@@ -129,7 +130,13 @@ class _ModalBodyState extends State<ModalBody> {
                       ),
                     ),
                   ),
-                  DropdownFieldRegulation(),
+                  DropdownFieldRegulation(
+                      initValue: widget.isEditing == true
+                          ? Regulation(
+                              id: widget.violation.regulationId,
+                              name: widget.violation.regulationName,
+                            )
+                          : null),
                   // Container(
                   //   child: RegulationDropdown(
                   //     initValue: widget.isEditing == true
@@ -284,6 +291,13 @@ class _ViolationDescriptionInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (initValue != null) {
+      BlocProvider.of<ViolationCreateBloc>(context).add(
+        ViolationDescriptionChanged(
+          violationDescription: initValue,
+        ),
+      );
+    }
     return BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
         buildWhen: (previous, current) =>
             previous.violationDescription != current.violationDescription,
@@ -294,7 +308,8 @@ class _ViolationDescriptionInput extends StatelessWidget {
             onChanged: (violationDescription) =>
                 context.read<ViolationCreateBloc>().add(
                       ViolationDescriptionChanged(
-                          violationDescription: violationDescription),
+                        violationDescription: violationDescription,
+                      ),
                     ),
             decoration: InputDecoration(
               fillColor: Colors.grey[200],
