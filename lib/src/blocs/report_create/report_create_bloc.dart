@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
@@ -18,12 +19,15 @@ part 'report_create_event.dart';
 part 'report_create_state.dart';
 
 class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
-  ReportCreateBloc(
-      {@required this.branchRepository, @required this.reportRepository})
-      : super(ReportCreateState());
+  ReportCreateBloc({
+    @required this.branchRepository,
+    @required this.reportRepository,
+    @required this.authenticationRepository,
+  }) : super(ReportCreateState());
 
   final ReportRepository reportRepository;
   final BranchRepository branchRepository;
+  final AuthenticationRepository authenticationRepository;
 
   @override
   Stream<ReportCreateState> mapEventToState(
@@ -58,7 +62,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
   ReportCreateState _mapReportBranchChangetoState(
       ReportBranchChanged event, ReportCreateState state) {
     final reportBranch = ReportBranch.dirty(event.reportBranchId);
-    // state.props.remove(state?.reportBranch);
     return state.copyWith(
       reportBranch: reportBranch,
       status: Formz.validate([
@@ -70,17 +73,16 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
   }
 
   ReportCreateState _mapReportDesriptionChangeToState(
-      ReportDescriptionChanged event, ReportCreateState state) {
+    ReportDescriptionChanged event,
+    ReportCreateState state,
+  ) {
     final reportDescription = ReportDescription.dirty(event.reportDescription);
+    print(state.reportDescription.value);
     return state.copyWith(
       reportDescription: reportDescription,
       isEditing: event.isEditing,
       status: Formz.validate(
-        [
-          reportDescription,
-          state.reportListViolation,
-          state.reportBranch,
-        ],
+        [],
       ),
     );
   }
@@ -94,8 +96,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     if (list == null) {
       list = List();
     }
-
-    print(list.length);
 
     list.add(event.reportViolation);
 
@@ -118,8 +118,7 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
         var result = await reportRepository.createReport(
-            token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI",
+            token: authenticationRepository.token,
             report: Report(
               name: reportNameGenerate(
                   state.reportBranch.value, DateTime.now(), 1),
@@ -138,47 +137,37 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
   }
 
   Stream<ReportCreateState> _mapReportEditSubmittedToState(
-      ReportEdited event, ReportCreateState state) async* {
-    if (state.status.isValidated || event.isDraft) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
-      try {
-        print(event.report.id);
-        var result = await reportRepository.editReport(
-            token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InFjIiwicm9sZUlkIjoiNiIsInJvbGVOYW1lIjoiUUMgTWFuYWdlciIsImp0aSI6IjAyNDNjMTQxLWYwMWEtNDY3Ny05NWM0LTE2NjE5Y2EzNzA4ZSIsIm5iZiI6MTYxMjA2ODMyNCwiZXhwIjoxNjEyMDY4NjI0LCJpYXQiOjE2MTIwNjgzMjQsImF1ZCI6Ik1hdmNhIn0.dK4_IdMsgrfvzc_8TnN5hPOXhFdfqOOh08gSFcb5WiI",
-            report: Report(
-              id: event.report.id,
-              name: event.report.name,
-              branchId: event.report.branchId,
-              description: state.reportDescription.value,
-            ),
-            isDraft: event.isDraft);
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
-      } catch (e) {
-        print(e);
-        yield state.copyWith(status: FormzStatus.submissionFailure);
-      }
+    ReportEdited event,
+    ReportCreateState state,
+  ) async* {
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      var result = await reportRepository.editReport(
+          token: authenticationRepository.token,
+          report: event.report.copyWith(
+            qcNote: state.reportDescription.value,
+          ));
+      yield state.copyWith(status: FormzStatus.submissionSuccess);
+    } catch (e) {
+      print(e);
+      yield state.copyWith(status: FormzStatus.submissionFailure);
     }
   }
 
   ReportCreateState _mapReportEditToState(
-      ReportEditing event, ReportCreateState state) {
-    final ReportBranch reportBranch = ReportBranch.dirty(event.report.branchId);
-    final ReportListViolation reportlistViolation =
-        ReportListViolation.dirty(event.report.violations);
+    ReportEditing event,
+    ReportCreateState state,
+  ) {
+    // final ReportListViolation reportlistViolation =
+    //     ReportListViolation.dirty(event.report.violations);
     final ReportDescription reportDescription =
-        ReportDescription.dirty(event.report.description);
+        ReportDescription.dirty(event.report.qcNote);
     return state.copyWith(
-      reportBranch: reportBranch,
-      reportListViolation: reportlistViolation,
+      // reportListViolation: reportlistViolation,
       reportDescription: reportDescription,
       isEditing: false,
       status: Formz.validate(
-        [
-          reportDescription,
-          reportBranch,
-          reportlistViolation,
-        ],
+        [],
       ),
     );
   }

@@ -47,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "POPUP_CREATE_VIOLATION_SUCCESS" : MessageLookupByLibrary.simpleMessage("CREATE NEW SUCCESSFULLY!"),
     "REGULATION" : MessageLookupByLibrary.simpleMessage("Regulation"),
     "REPORT" : MessageLookupByLibrary.simpleMessage("Report"),
+    "REPORT_EDIT_SCREEN_QC_NOTE" : MessageLookupByLibrary.simpleMessage("Comment"),
     "REPORT_SCREEN_NO_REPORTS" : MessageLookupByLibrary.simpleMessage("There are no reports"),
     "SUBMITTED_BY" : MessageLookupByLibrary.simpleMessage("Submitted by"),
     "SUBMIT_BUTTON" : MessageLookupByLibrary.simpleMessage("Submit"),

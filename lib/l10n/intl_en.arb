@@ -34,6 +34,7 @@
     "VIOLATION_STATUS_CONFIRMED": "Confirmed",
     "VIOLATION_STATUS_REJECTED": "Rejected",
     "REPORT_SCREEN_NO_REPORTS": "There are no reports",
+    "REPORT_EDIT_SCREEN_QC_NOTE": "Comment",
     "LANGUAGE": "Language",
     "LANGUAGE_VN": "Vietnamese",
     "LANGUAGE_EN": "English",

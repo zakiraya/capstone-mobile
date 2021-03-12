@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_create_form.dart';
@@ -35,6 +36,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
       ),
       body: BlocProvider(
         create: (context) => ReportCreateBloc(
+          authenticationRepository:
+              RepositoryProvider.of<AuthenticationRepository>(context),
           reportRepository: ReportRepository(),
           branchRepository: BranchRepository(),
         ),

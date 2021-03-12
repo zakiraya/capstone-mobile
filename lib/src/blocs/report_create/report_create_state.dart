@@ -7,11 +7,9 @@ class ReportCreateState extends Equatable {
     this.reportDescription = const ReportDescription.pure(),
     this.reportBranch = const ReportBranch.pure(),
     this.reportListViolation = const ReportListViolation.pure(),
-    this.report,
     this.isEditing = false,
   });
 
-  final Report report;
   final bool isEditing;
   final FormzStatus status;
   final ReportName reportName;
@@ -45,6 +43,5 @@ class ReportCreateState extends Equatable {
         reportBranch,
         reportListViolation,
         isEditing,
-        report,
       ];
 }

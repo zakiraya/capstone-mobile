@@ -12,7 +12,8 @@ class Report extends Equatable {
   final String createdAt;
   final String updatedAt;
   final int createdBy;
-  List<Violation> violations;
+  final List<Violation> violations;
+  final String qcNote;
 
   Report({
     this.id,
@@ -25,6 +26,7 @@ class Report extends Equatable {
     this.updatedAt,
     this.createdBy,
     this.violations,
+    this.qcNote,
   });
 
   List<Map<String, dynamic>> convertListViolationToMap(
@@ -79,6 +81,7 @@ class Report extends Equatable {
       createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
       status: json['status'],
       violations: json['violationCreate'],
+      qcNote: json['qcNote'],
     );
   }
 
@@ -89,6 +92,7 @@ class Report extends Equatable {
     int createdBy,
     String description,
     List<Violation> violations,
+    String qcNote,
   }) {
     return Report(
       status: status ?? this.status,
@@ -98,6 +102,7 @@ class Report extends Equatable {
       description: description ?? this.description,
       violations: violations ?? this.violations,
       id: id ?? this.id,
+      qcNote: qcNote ?? this.qcNote,
     );
   }
 
@@ -109,5 +114,6 @@ class Report extends Equatable {
         branchId,
         description,
         createdBy,
+        qcNote,
       ];
 }

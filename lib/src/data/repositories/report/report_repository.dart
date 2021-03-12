@@ -57,12 +57,7 @@ class ReportRepository {
   Future<String> editReport({
     @required String token,
     @required Report report,
-    bool isDraft = true,
   }) async {
-    isDraft
-        ? report = report.copyWith(status: 'Draft')
-        : report = report.copyWith(status: 'Pending');
-
     var result = await _reportApi.editReport(
       token: token,
       report: report,
