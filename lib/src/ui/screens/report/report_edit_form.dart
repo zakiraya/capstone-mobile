@@ -13,20 +13,19 @@ class ReportEditForm extends StatelessWidget {
   const ReportEditForm({
     Key key,
     @required this.report,
-    @required this.theme,
     @required this.descriptionTextFieldController,
     @required this.isEditing,
     @required this.size,
   }) : super(key: key);
 
   final Report report;
-  final ThemeData theme;
   final TextEditingController descriptionTextFieldController;
   final bool isEditing;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.only(left: 16, top: 8, right: 16),
       child: ListView(
@@ -103,13 +102,33 @@ class ReportEditForm extends StatelessWidget {
                   height: 16,
                 ),
                 Container(
-                  child: Text(S.of(context).COMMENTS + ": ",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(
+                    S.of(context).DESCRIPTION + ": ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 4,
                 ),
                 _ReportDescriptionInput(
                   descriptionTextFieldController:
                       descriptionTextFieldController,
-                  report: report,
+                  description: report.description,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  child: Text(
+                    S.of(context).COMMENTS + ": ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                _ReportQCNote(
+                  qcNote: report.qcNote,
                   isEditing: isEditing,
                 ),
               ],
@@ -123,7 +142,7 @@ class ReportEditForm extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           SizedBox(
-            height: 16,
+            height: 4,
           ),
           buildViolationList([
             Violation(branchName: 'fsdf'),
@@ -135,7 +154,6 @@ class ReportEditForm extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _SaveButton(
-                      size: size,
                       report: report,
                     ),
                     _SubmitButton(
@@ -157,13 +175,11 @@ class _ReportDescriptionInput extends StatelessWidget {
   const _ReportDescriptionInput({
     Key key,
     @required this.descriptionTextFieldController,
-    @required this.report,
-    @required this.isEditing,
+    @required this.description,
   }) : super(key: key);
 
   final TextEditingController descriptionTextFieldController;
-  final Report report;
-  final bool isEditing;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -175,14 +191,55 @@ class _ReportDescriptionInput extends StatelessWidget {
           key: const Key('editForm_reportDescription_textField'),
           controller: descriptionTextFieldController,
           decoration: InputDecoration(
-            filled: isEditing,
-            fillColor: isEditing ? Colors.grey[400] : null,
-            hintText: report.description,
-            border: isEditing
-                ? OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  )
-                : InputBorder.none,
+            filled: true,
+            fillColor: Colors.grey[200],
+            hintText: description,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          onChanged: (description) {
+            context.read<ReportCreateBloc>().add(
+                  ReportDescriptionChanged(
+                    reportDescription: description,
+                    isEditing: true,
+                  ),
+                );
+          },
+          enabled: false,
+        );
+      },
+    );
+  }
+}
+
+class _ReportQCNote extends StatelessWidget {
+  const _ReportQCNote({
+    Key key,
+    @required this.qcNote,
+    @required this.isEditing,
+  }) : super(key: key);
+
+  final String qcNote;
+  final bool isEditing;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ReportCreateBloc, ReportCreateState>(
+      buildWhen: (previous, current) =>
+          previous.reportDescription != current.reportDescription,
+      builder: (context, state) {
+        return TextField(
+          key: const Key('editForm_reportQCNote_textField'),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[200],
+            hintText: qcNote,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
           ),
           onChanged: (description) {
             context.read<ReportCreateBloc>().add(
@@ -229,7 +286,9 @@ class _SubmitButton extends StatelessWidget {
             onPressed: state.status.isValidated && state.isEditing == true
                 ? () {
                     context.read<ReportCreateBloc>().add(
-                          ReportEdited(report: report),
+                          ReportEdited(
+                            id: report.id,
+                          ),
                         );
                   }
                 : null,
@@ -250,22 +309,21 @@ class _SubmitButton extends StatelessWidget {
 class _SaveButton extends StatelessWidget {
   const _SaveButton({
     Key key,
-    @required this.size,
     this.report,
   }) : super(key: key);
 
-  final Size size;
   final Report report;
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return BlocBuilder<ReportCreateBloc, ReportCreateState>(
       buildWhen: (previous, current) => previous.isEditing != current.isEditing,
       builder: (context, state) {
         return Container(
           width: size.width * 0.4,
           child: ElevatedButton(
-            key: const Key('reportForm_saveDraft_raisedButton'),
+            key: const Key('reportForm_save_elevatedButton'),
             child: const Text(
               'Save',
               style: TextStyle(
@@ -277,8 +335,7 @@ class _SaveButton extends StatelessWidget {
                 ? () {
                     context.read<ReportCreateBloc>().add(
                           ReportEdited(
-                            report: report,
-                            isDraft: true,
+                            id: report.id,
                           ),
                         );
 

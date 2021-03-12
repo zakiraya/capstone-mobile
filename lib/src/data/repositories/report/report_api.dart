@@ -41,13 +41,7 @@ class ReportApi {
       url += '&Filter.BranchIds=$branchId';
     }
 
-    print(token);
-
     final reportJson = await _baseApi.get(url, token, opts: opts);
-
-    if (reportJson['code'] != 200) {
-      throw FetchDataException(reportJson['message']);
-    }
 
     final reports = reportJson['data']['result'] as List;
     return reports.map((report) => Report.fromJson(report)).toList();
@@ -61,8 +55,8 @@ class ReportApi {
     final url = reportUrl + '/' + report.id.toString();
     print(url);
     final body = <String, dynamic>{
-      'name': report.name,
-      'description': report.description,
+      'qcNote': report.qcNote,
+      'description': 'description',
       'status': report.status,
     };
 

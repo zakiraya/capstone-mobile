@@ -19,9 +19,9 @@ class _NavigationBarState extends State<NavigationBar> {
   // NavigatorState get _navigator => _navigatorKey.currentState;
 
   static List<Widget> _widgetOptions = <Widget>[
-    ReportsScreen(),
-    ViolationScreen(),
-    SettingsScreen(),
+    // ReportsScreen(),
+    // ViolationScreen(),
+    // SettingsScreen(),
   ];
 
   static List<String> _titles = ['Reports', 'Violations', 'Settings'];

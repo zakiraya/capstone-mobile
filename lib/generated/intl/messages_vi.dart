@@ -47,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "POPUP_CREATE_VIOLATION_SUCCESS" : MessageLookupByLibrary.simpleMessage("TẠO MỚI THÀNH CÔNG!"),
     "REGULATION" : MessageLookupByLibrary.simpleMessage("Quy định"),
     "REPORT" : MessageLookupByLibrary.simpleMessage("Báo cáo"),
+    "REPORT_EDIT_SCREEN_QC_NOTE" : MessageLookupByLibrary.simpleMessage("Đánh giá"),
     "REPORT_SCREEN_NO_REPORTS" : MessageLookupByLibrary.simpleMessage("Không có báo cáo"),
     "SUBMITTED_BY" : MessageLookupByLibrary.simpleMessage("Được gửi bởi"),
     "SUBMIT_BUTTON" : MessageLookupByLibrary.simpleMessage("Gửi"),

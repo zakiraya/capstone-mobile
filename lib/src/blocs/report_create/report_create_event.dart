@@ -79,11 +79,9 @@ class ReportEditing extends ReportCreateEvent {
 }
 
 class ReportEdited extends ReportCreateEvent {
-  const ReportEdited({@required this.report, this.isDraft = true});
-
-  final Report report;
-  final bool isDraft;
+  final int id;
+  const ReportEdited({@required this.id});
 
   @override
-  List<Object> get props => [report, isDraft];
+  List<Object> get props => [id];
 }

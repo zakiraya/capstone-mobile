@@ -34,6 +34,7 @@
     "VIOLATION_STATUS_CONFIRMED": "Confirmed",
     "VIOLATION_STATUS_REJECTED": "Rejected",
     "REPORT_SCREEN_NO_REPORTS": "Không có báo cáo",
+    "REPORT_EDIT_SCREEN_QC_NOTE": "Đánh giá",
     "LANGUAGE": "Ngôn ngữ",
     "LANGUAGE_VN": "Tiếng Việt",
     "LANGUAGE_EN": "Tiếng Anh",

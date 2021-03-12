@@ -385,6 +385,16 @@ class S {
     );
   }
 
+  /// `Comment`
+  String get REPORT_EDIT_SCREEN_QC_NOTE {
+    return Intl.message(
+      'Comment',
+      name: 'REPORT_EDIT_SCREEN_QC_NOTE',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get LANGUAGE {
     return Intl.message(
