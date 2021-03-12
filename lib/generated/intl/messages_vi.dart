@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "NEW_VIOLATION" : MessageLookupByLibrary.simpleMessage("Thêm vi phạm"),
     "PASSWORD" : MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "POPUP_CREATE_VIOLATION_FAIL" : MessageLookupByLibrary.simpleMessage("ĐÃ XẢY RA LỖI!"),
+    "POPUP_CREATE_VIOLATION_SUBMITTING" : MessageLookupByLibrary.simpleMessage("ĐANG XỬ LÍ YÊU CẦU"),
     "POPUP_CREATE_VIOLATION_SUCCESS" : MessageLookupByLibrary.simpleMessage("TẠO MỚI THÀNH CÔNG!"),
     "REGULATION" : MessageLookupByLibrary.simpleMessage("Quy định"),
     "REPORT" : MessageLookupByLibrary.simpleMessage("Báo cáo"),

@@ -494,6 +494,16 @@ class S {
       args: [],
     );
   }
+
+  /// `PROCESSING REQUEST`
+  String get POPUP_CREATE_VIOLATION_SUBMITTING {
+    return Intl.message(
+      'PROCESSING REQUEST',
+      name: 'POPUP_CREATE_VIOLATION_SUBMITTING',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
