@@ -21,7 +21,7 @@
     "HOME_REPORT_LIST": "Report list",
     "HOME_VIOLATION_LIST": "Violation list",
     "VIOLATION_SCREEN_CREATE_NEW_BUTTON": "Create new",
-    "VIOLATION_SCREEN_FETCH_FAIL": "Create new",
+    "VIOLATION_SCREEN_FETCH_FAIL": "Fetch fail",
     "VIOLATION_SCREEN_RELOAD": "Reload",
     "VIOLATION_SCREEN_NO_VIOLATIONS": "There is no violations",
     "VIOLATION_CREATE_SCREEN_DROPDOWN_FIELD": "Branch",

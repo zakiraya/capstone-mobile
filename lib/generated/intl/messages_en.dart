@@ -56,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "VIOLATION_CREATE_SCREEN_ADD_VIOLATION_CARD" : MessageLookupByLibrary.simpleMessage("New violation"),
     "VIOLATION_CREATE_SCREEN_DROPDOWN_FIELD" : MessageLookupByLibrary.simpleMessage("Branch"),
     "VIOLATION_SCREEN_CREATE_NEW_BUTTON" : MessageLookupByLibrary.simpleMessage("Create new"),
-    "VIOLATION_SCREEN_FETCH_FAIL" : MessageLookupByLibrary.simpleMessage("Create new"),
+    "VIOLATION_SCREEN_FETCH_FAIL" : MessageLookupByLibrary.simpleMessage("Fetch fail"),
     "VIOLATION_SCREEN_NO_VIOLATIONS" : MessageLookupByLibrary.simpleMessage("There is no violations"),
     "VIOLATION_SCREEN_RELOAD" : MessageLookupByLibrary.simpleMessage("Reload"),
     "VIOLATION_STATUS" : MessageLookupByLibrary.simpleMessage("Status"),

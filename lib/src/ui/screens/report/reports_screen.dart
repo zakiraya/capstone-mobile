@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/ui/screens/filter/report_filter_screen.dart';
 import 'package:capstone_mobile/src/ui/widgets/report/report_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +60,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ],
       ),
       body: BlocProvider(
-        create: (context) => ReportBloc(reportRepository: ReportRepository())
-          ..add(ReportRequested(
-              token: BlocProvider.of<AuthenticationBloc>(context).state.token)),
+        create: (context) => ReportBloc(
+            authenticationRepository:
+                RepositoryProvider.of<AuthenticationRepository>(context),
+            reportRepository: ReportRepository())
+          ..add(ReportRequested()),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -202,8 +206,27 @@ class ReportsTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(),
+              BlocBuilder<ReportBloc, ReportState>(
+                builder: (context, state) {
+                  if (state is ReportLoadSuccess) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(context, ReportFilterScreen.route());
+                      },
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            ],
           ),
           BlocBuilder<ReportBloc, ReportState>(
             builder: (context, state) {
@@ -219,11 +242,7 @@ class ReportsTab extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           BlocProvider.of<ReportBloc>(context)
-                              .add(ReportRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
-                          ));
+                              .add(ReportRequested());
                         },
                         child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
                         style: ElevatedButton.styleFrom(
@@ -250,18 +269,12 @@ class ReportsTab extends StatelessWidget {
                         if (metrics.pixels == 0) {
                           BlocProvider.of<ReportBloc>(context)
                               .add(ReportRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
                             isRefresh: true,
                             filter: state.activeFilter,
                           ));
                         } else {
                           BlocProvider.of<ReportBloc>(context)
                               .add(ReportRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
                             filter: state.activeFilter,
                           ));
                         }

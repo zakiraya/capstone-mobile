@@ -255,10 +255,10 @@ class S {
     );
   }
 
-  /// `Create new`
+  /// `Fetch fail`
   String get VIOLATION_SCREEN_FETCH_FAIL {
     return Intl.message(
-      'Create new',
+      'Fetch fail',
       name: 'VIOLATION_SCREEN_FETCH_FAIL',
       desc: '',
       args: [],
