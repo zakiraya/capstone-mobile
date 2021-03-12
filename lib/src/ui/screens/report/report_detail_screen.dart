@@ -22,14 +22,6 @@ class ReportDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (report.status.toLowerCase() == 'opening') {
-      BlocProvider.of<ReportCreateBloc>(context).add(
-        ReportEditing(
-          report: report,
-        ),
-      );
-    }
-
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
 
@@ -45,6 +37,14 @@ class ReportDetailScreen extends StatelessWidget {
             ),
         child: BlocBuilder<LocalizationBloc, String>(
           builder: (context, state) {
+            // if (report.status.toLowerCase() == 'opening') {
+            //     BlocProvider.of<ReportCreateBloc>(context).add(
+            //       ReportEditing(
+            //         report: report,
+            //       ),
+            //     );
+            //   }
+
             return Scaffold(
               appBar: AppBar(
                 elevation: 0,

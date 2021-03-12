@@ -73,17 +73,16 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
   }
 
   ReportCreateState _mapReportDesriptionChangeToState(
-      ReportDescriptionChanged event, ReportCreateState state) {
+    ReportDescriptionChanged event,
+    ReportCreateState state,
+  ) {
     final reportDescription = ReportDescription.dirty(event.reportDescription);
+    print(state.reportDescription.value);
     return state.copyWith(
       reportDescription: reportDescription,
       isEditing: event.isEditing,
       status: Formz.validate(
-        [
-          reportDescription,
-          state.reportListViolation,
-          state.reportBranch,
-        ],
+        [],
       ),
     );
   }
@@ -97,8 +96,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     if (list == null) {
       list = List();
     }
-
-    print(list.length);
 
     list.add(event.reportViolation);
 
@@ -143,21 +140,17 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     ReportEdited event,
     ReportCreateState state,
   ) async* {
-    if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
-      try {
-        var result = await reportRepository.editReport(
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      var result = await reportRepository.editReport(
           token: authenticationRepository.token,
-          report: Report(
-            id: event.id,
+          report: event.report.copyWith(
             qcNote: state.reportDescription.value,
-          ),
-        );
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
-      } catch (e) {
-        print(e);
-        yield state.copyWith(status: FormzStatus.submissionFailure);
-      }
+          ));
+      yield state.copyWith(status: FormzStatus.submissionSuccess);
+    } catch (e) {
+      print(e);
+      yield state.copyWith(status: FormzStatus.submissionFailure);
     }
   }
 

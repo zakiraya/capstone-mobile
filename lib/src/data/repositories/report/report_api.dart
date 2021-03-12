@@ -53,10 +53,9 @@ class ReportApi {
     Map<String, String> opts,
   }) async {
     final url = reportUrl + '/' + report.id.toString();
-    print(url);
     final body = <String, dynamic>{
       'qcNote': report.qcNote,
-      'description': 'description',
+      'description': report.description,
       'status': report.status,
     };
 

@@ -81,7 +81,7 @@ class Report extends Equatable {
       createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
       status: json['status'],
       violations: json['violationCreate'],
-      qcNote: json['qcNnote'],
+      qcNote: json['qcNote'],
     );
   }
 
@@ -114,5 +114,6 @@ class Report extends Equatable {
         branchId,
         description,
         createdBy,
+        qcNote,
       ];
 }

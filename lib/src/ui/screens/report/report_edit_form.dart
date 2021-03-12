@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -26,148 +28,164 @@ class ReportEditForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Padding(
-      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
-      child: ListView(
-        children: [
-          Container(
-            child: Text(
-              '${report.name}',
-              style: TextStyle(
-                color: theme.primaryColor,
-                fontSize: theme.textTheme.headline5.fontSize,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocListener<ReportCreateBloc, ReportCreateState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionSuccess) {
+            CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
+            ).then((value) {
+              BlocProvider.of<ReportBloc>(context).add(
+                ReportRequested(
+                  isRefresh: true,
+                ),
+              );
+            });
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+          child: ListView(
             children: [
               Container(
-                child: Text(S.of(context).SUBMITTED_BY + ": "),
+                child: Text(
+                  '${report.name}',
+                  style: TextStyle(
+                    color: theme.primaryColor,
+                    fontSize: theme.textTheme.headline5.fontSize,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Text(S.of(context).SUBMITTED_BY + ": "),
+                  ),
+                  Container(
+                      child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: S.of(context).VIOLATION_STATUS + ': ',
+                            style: TextStyle(
+                              color: Colors.black,
+                            )),
+                        TextSpan(
+                          text: report.status,
+                          style: TextStyle(
+                            color: Constant.reportStatusColors[report.status],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+                ],
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: 16,
               ),
               Container(
-                  child: RichText(
-                text: TextSpan(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextSpan(
-                        text: S.of(context).VIOLATION_STATUS + ': ',
-                        style: TextStyle(
-                          color: Colors.black,
-                        )),
-                    TextSpan(
-                      text: report.status,
-                      style: TextStyle(
-                        color: Constant.reportStatusColors[report.status],
+                    Container(
+                      child: Text(
+                        S.of(context).BRANCH + ':',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
+                    Text(report.branchName ?? 'branch name'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(S.of(context).CREATED_ON + ": ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Text(report.createdAt ?? 'created on'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(S.of(context).UPDATED_ON + ": ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Text(report.updatedAt ?? 'created on'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(
+                        S.of(context).DESCRIPTION + ": ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    _ReportDescriptionInput(
+                      descriptionTextFieldController:
+                          descriptionTextFieldController,
+                      description: report.description,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(
+                        S.of(context).COMMENTS + ": ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    _ReportQCNote(
+                      qcNote: report.qcNote,
+                      isEditing: isEditing,
+                    ),
                   ],
                 ),
-              )),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                child: Text(S.of(context).HOME_VIOLATION_LIST + ": ",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              buildViolationList([
+                Violation(branchName: 'fsdf'),
+                Violation(branchName: 'fsdf'),
+              ]),
+              isEditing == false
+                  ? Container()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _SaveButton(
+                          report: report,
+                        ),
+                        _SubmitButton(
+                          size: size,
+                          report: report,
+                        ),
+                      ],
+                    ),
+              SizedBox(
+                height: 32,
+              ),
             ],
           ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(
-                    S.of(context).BRANCH + ':',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Text(report.branchName ?? 'branch name'),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text(S.of(context).CREATED_ON + ": ",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Text(report.createdAt ?? 'created on'),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text(S.of(context).UPDATED_ON + ": ",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Text(report.updatedAt ?? 'created on'),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text(
-                    S.of(context).DESCRIPTION + ": ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                _ReportDescriptionInput(
-                  descriptionTextFieldController:
-                      descriptionTextFieldController,
-                  description: report.description,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text(
-                    S.of(context).COMMENTS + ": ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                _ReportQCNote(
-                  qcNote: report.qcNote,
-                  isEditing: isEditing,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Container(
-            child: Text(S.of(context).HOME_VIOLATION_LIST + ": ",
-                style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          buildViolationList([
-            Violation(branchName: 'fsdf'),
-            Violation(branchName: 'fsdf'),
-          ]),
-          isEditing == false
-              ? Container()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _SaveButton(
-                      report: report,
-                    ),
-                    _SubmitButton(
-                      size: size,
-                      report: report,
-                    ),
-                  ],
-                ),
-          SizedBox(
-            height: 32,
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
@@ -230,7 +248,8 @@ class _ReportQCNote extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.reportDescription != current.reportDescription,
       builder: (context, state) {
-        return TextField(
+        return TextFormField(
+          initialValue: qcNote,
           key: const Key('editForm_reportQCNote_textField'),
           decoration: InputDecoration(
             filled: true,
@@ -241,10 +260,10 @@ class _ReportQCNote extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           ),
-          onChanged: (description) {
+          onChanged: (newValue) {
             context.read<ReportCreateBloc>().add(
                   ReportDescriptionChanged(
-                    reportDescription: description,
+                    reportDescription: newValue,
                     isEditing: true,
                   ),
                 );
@@ -284,13 +303,7 @@ class _SubmitButton extends StatelessWidget {
               ),
             ),
             onPressed: state.status.isValidated && state.isEditing == true
-                ? () {
-                    context.read<ReportCreateBloc>().add(
-                          ReportEdited(
-                            id: report.id,
-                          ),
-                        );
-                  }
+                ? null
                 : null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,
@@ -335,11 +348,9 @@ class _SaveButton extends StatelessWidget {
                 ? () {
                     context.read<ReportCreateBloc>().add(
                           ReportEdited(
-                            id: report.id,
+                            report: report,
                           ),
                         );
-
-                    Navigator.pop(context);
                   }
                 : null,
             style: ElevatedButton.styleFrom(
