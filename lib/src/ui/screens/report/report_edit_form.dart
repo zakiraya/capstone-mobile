@@ -1,4 +1,6 @@
+import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -184,7 +186,14 @@ class ReportEditForm extends StatelessWidget {
                 Violation(branchName: 'fsdf'),
                 Violation(branchName: 'fsdf'),
               ]),
-              isEditing == false
+              SizedBox(
+                height: 32,
+              ),
+              BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .user
+                          .roleName ==
+                      Constant.ROLE_BM
                   ? Container()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -286,8 +295,12 @@ class _ReportQCNote extends StatelessWidget {
                   ),
                 );
           },
-          enabled: isEditing,
-          maxLines: isEditing ? 5 : null,
+          enabled: BlocProvider.of<AuthenticationBloc>(context)
+                  .state
+                  .user
+                  .roleName !=
+              Constant.ROLE_BM,
+          maxLines: 5,
         );
       },
     );

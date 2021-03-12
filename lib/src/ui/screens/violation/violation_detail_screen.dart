@@ -61,7 +61,12 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                   Navigator.pop(context);
                 },
               ),
-              actions: violation.status.toLowerCase() == 'opening'
+              actions: violation.status.toLowerCase() == 'opening' &&
+                      BlocProvider.of<AuthenticationBloc>(context)
+                              .state
+                              .user
+                              .roleName ==
+                          Constant.ROLE_QC
                   ? [
                       Container(
                         width: 80,
