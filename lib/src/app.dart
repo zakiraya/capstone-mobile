@@ -123,23 +123,15 @@ class _AppViewState extends State<AppView> {
                               RepositoryProvider.of<AuthenticationRepository>(
                                   context),
                           violationRepository: ViolationRepository(),
-                        )..add(ViolationRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
-                          ))),
+                        )),
                 BlocProvider(
-                    lazy: true,
+                    lazy: false,
                     create: (context) => ReportBloc(
                           reportRepository: ReportRepository(),
                           authenticationRepository:
                               RepositoryProvider.of<AuthenticationRepository>(
                                   context),
-                        )..add(ReportRequested(
-                            token: BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .token,
-                          ))),
+                        )),
                 BlocProvider(
                   create: (context) => NotificationBloc(
                       notificationRepository: NotificationRepository())

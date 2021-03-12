@@ -57,7 +57,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     try {
       if (currentState is ReportInitial || currentState is ReportLoadFailure) {
         final List<Report> reports = await reportRepository.fetchReports(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           page: 0,
         );
@@ -72,7 +72,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
 
       if (currentState is ReportLoadSuccess && event.isRefresh == true) {
         final List<Report> reports = await reportRepository.fetchReports(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           page: 0,
           branchId: currentState.activeFilter?.branchId,
@@ -87,7 +87,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
 
       if (currentState is ReportLoadSuccess && !_hasReachedMax(currentState)) {
         final List<Report> reports = await reportRepository.fetchReports(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           page: currentState.reports.length / 20,
           branchId: currentState.activeFilter?.branchId,
@@ -113,7 +113,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     try {
       if (currentState is ReportLoadSuccess) {
         final List<Report> reports = await reportRepository.fetchReports(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           page: 0,
           branchId: event.filter?.branchId,
