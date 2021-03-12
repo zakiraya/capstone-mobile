@@ -23,11 +23,11 @@ class ReportDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (report.status.toLowerCase() == 'opening') {
-      context.read<ReportCreateBloc>().add(
-            ReportEditing(
-              report: report,
-            ),
-          );
+      BlocProvider.of<ReportCreateBloc>(context).add(
+        ReportEditing(
+          report: report,
+        ),
+      );
     }
 
     var theme = Theme.of(context);
