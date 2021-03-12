@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/src/blocs/blocs.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -122,7 +124,12 @@ class HomeView extends StatelessWidget {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: activeTab == AppTab.violations
+          floatingActionButton: activeTab == AppTab.violations &&
+                  BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .user
+                          .roleName ==
+                      Constant.ROLE_QC
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

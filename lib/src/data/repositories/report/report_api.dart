@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
-import '../../../../Api/Exceptions.dart';
 
 class ReportApi {
   final http.Client httpClient;
