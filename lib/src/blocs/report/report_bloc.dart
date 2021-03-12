@@ -45,7 +45,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       if (event.status == AuthenticationStatus.unauthenticated) {
         yield (ReportInitial());
       } else if (event.status == AuthenticationStatus.authenticated) {
-        add(ReportRequested(token: _authenticationRepository.token));
+        add(ReportRequested());
       }
     }
   }

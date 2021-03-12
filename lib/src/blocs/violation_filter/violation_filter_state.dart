@@ -19,21 +19,3 @@ class ViolationFilterState extends Equatable {
   @override
   String toString() => 'ViolationFilterState: { $filter }';
 }
-
-// class ViolationFilterInProgress extends ViolationFilterState {}
-
-// class ViolationFilterSucess extends ViolationFilterState {
-//   final List<Violation> filteredViolations;
-//   final  activeFilter;
-
-//   ViolationFilterSucess(this.filteredViolations, this.activeFilter);
-
-//   @override
-//   List<Object> get props => [filteredViolations, activeFilter];
-
-//   @override
-//   String toString() {
-//     return 'FilteredTodosLoadSuccess { filteredTodos: $filteredViolations, activeFilter: $activeFilter }';
-//   }
-// }
-// class ViolationFilterSucess extends ViolationFilterState {}

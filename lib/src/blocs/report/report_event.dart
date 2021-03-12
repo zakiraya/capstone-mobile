@@ -9,17 +9,15 @@ abstract class ReportEvent extends Equatable {
 
 class ReportRequested extends ReportEvent {
   const ReportRequested({
-    @required this.token,
     this.filter,
     this.isRefresh,
   });
 
-  final String token;
   final Filter filter;
   final bool isRefresh;
 
   @override
-  List<Object> get props => [token, filter];
+  List<Object> get props => [filter];
 
   @override
   String toString() =>
@@ -28,15 +26,13 @@ class ReportRequested extends ReportEvent {
 
 class FilterChanged extends ReportEvent {
   const FilterChanged({
-    @required this.token,
     this.filter,
   });
 
-  final String token;
   final Filter filter;
 
   @override
-  List<Object> get props => [token, filter];
+  List<Object> get props => [filter];
 
   @override
   String toString() => ' FilterChanged: { ${filter.toString()} } ';

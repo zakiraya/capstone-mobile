@@ -1,30 +1,28 @@
 import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
 
-import 'package:capstone_mobile/src/blocs/violation_filter/filter.dart';
-import '../violation/violation_bloc.dart';
+part 'report_filter_event.dart';
+part 'report_filter_state.dart';
 
-part 'violation_filter_event.dart';
-part 'violation_filter_state.dart';
+class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
+  final ReportBloc reportBloc;
 
-class ViolationFilterBloc
-    extends Bloc<ViolationFilterEvent, ViolationFilterState> {
-  ViolationFilterBloc({@required this.violationbloc})
-      : super(ViolationFilterState(
-            filter:
-                (violationbloc.state as ViolationLoadSuccess).activeFilter));
-
-  final ViolationBloc violationbloc;
+  ReportFilterBloc({@required this.reportBloc})
+      : super(ReportFilterState(
+          filter: (reportBloc.state as ReportLoadSuccess).activeFilter,
+        ));
 
   @override
-  Stream<ViolationFilterState> mapEventToState(
-    ViolationFilterEvent event,
+  Stream<ReportFilterState> mapEventToState(
+    ReportFilterEvent event,
   ) async* {
-    if (event is ViolationFilterBranchIdUpdated) {
-      violationbloc.add(FilterChanged(
-        token: event.token,
+    if (event is ReportFilterBranchIdUpdated) {
+      reportBloc.add(FilterChanged(
         filter: Filter(
           branchId: event.branchId,
           status: state.filter.status,
@@ -40,9 +38,8 @@ class ViolationFilterBloc
           month: state.filter.month,
         ),
       );
-    } else if (event is ViolationFilterRegulationUpdated) {
-      violationbloc.add(FilterChanged(
-        token: event.token,
+    } else if (event is ReportFilterRegulationUpdated) {
+      reportBloc.add(FilterChanged(
         filter: Filter(
           branchId: state.filter.branchId,
           status: state.filter.status,
@@ -58,9 +55,8 @@ class ViolationFilterBloc
           month: state.filter.month,
         ),
       );
-    } else if (event is ViolationFilterStatusUpdated) {
-      violationbloc.add(FilterChanged(
-        token: event.token,
+    } else if (event is ReportFilterStatusUpdated) {
+      reportBloc.add(FilterChanged(
         filter: Filter(
           branchId: state.filter.branchId,
           status: event.status,
@@ -76,9 +72,8 @@ class ViolationFilterBloc
           month: state.filter.month,
         ),
       );
-    } else if (event is ViolationFilterMonthUpdated) {
-      violationbloc.add(FilterChanged(
-        token: event.token,
+    } else if (event is ReportFilterMonthUpdated) {
+      reportBloc.add(FilterChanged(
         filter: Filter(
           branchId: state.filter.branchId,
           status: state.filter.status,
@@ -95,5 +90,6 @@ class ViolationFilterBloc
         ),
       );
     }
+    // TODO: implement mapEventToState
   }
 }
