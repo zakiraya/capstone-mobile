@@ -68,9 +68,9 @@ class _ModalBodyState extends State<ModalBody> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               height: widget.size.height * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                // mainAxisSize: MainAxisSize.min,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // action button
                   Row(
@@ -150,28 +150,34 @@ class _ModalBodyState extends State<ModalBody> {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   _image == null
-                      ? GestureDetector(
-                          onTap: getImage,
-                          child: Card(
-                            color: Colors.grey,
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: Colors.white,
+                      ? Row(
+                          children: [
+                            GestureDetector(
+                              onTap: getImage,
+                              child: Card(
+                                color: Colors.grey,
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.22,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        S.of(context).ADD_IMAGE,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    S.of(context).ADD_IMAGE,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         )
                       : Container(),
                   _image != null
