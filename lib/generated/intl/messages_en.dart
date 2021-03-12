@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "NEW_VIOLATION" : MessageLookupByLibrary.simpleMessage("New violation"),
     "PASSWORD" : MessageLookupByLibrary.simpleMessage("Password"),
     "POPUP_CREATE_VIOLATION_FAIL" : MessageLookupByLibrary.simpleMessage("CREATE NEW FAIL!"),
+    "POPUP_CREATE_VIOLATION_SUBMITTING" : MessageLookupByLibrary.simpleMessage("PROCESSING REQUEST"),
     "POPUP_CREATE_VIOLATION_SUCCESS" : MessageLookupByLibrary.simpleMessage("CREATE NEW SUCCESSFULLY!"),
     "REGULATION" : MessageLookupByLibrary.simpleMessage("Regulation"),
     "REPORT" : MessageLookupByLibrary.simpleMessage("Report"),

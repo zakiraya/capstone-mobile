@@ -31,6 +31,7 @@ class ReportEditForm extends StatelessWidget {
     return BlocListener<ReportCreateBloc, ReportCreateState>(
         listener: (context, state) {
           if (state.status.isSubmissionSuccess) {
+            Navigator.pop(context);
             CoolAlert.show(
               context: context,
               type: CoolAlertType.success,
@@ -42,6 +43,23 @@ class ReportEditForm extends StatelessWidget {
                 ),
               );
             });
+          }
+          if (state.status.isSubmissionInProgress) {
+            CoolAlert.show(
+              barrierDismissible: false,
+              context: context,
+              type: CoolAlertType.loading,
+              text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+            );
+          }
+          if (state.status.isSubmissionFailure) {
+            Navigator.pop(context);
+            CoolAlert.show(
+              context: context,
+              type: CoolAlertType.error,
+              title: "Oops...",
+              text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
+            );
           }
         },
         child: Padding(
@@ -302,9 +320,7 @@ class _SubmitButton extends StatelessWidget {
                 letterSpacing: 1.5,
               ),
             ),
-            onPressed: state.status.isValidated && state.isEditing == true
-                ? null
-                : null,
+            onPressed: null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,
               primary: Theme.of(context).primaryColor,
