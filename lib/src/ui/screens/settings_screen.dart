@@ -162,7 +162,6 @@ class SettingsScreen extends StatelessWidget {
               ),
               height: 48,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     flex: 5,
@@ -184,9 +183,14 @@ class SettingsScreen extends StatelessWidget {
                     flex: 1,
                     child: Flag(
                       'VN',
-                      height: 24,
+                      height: 28,
+                      width: 28,
+                      fit: BoxFit.fill,
                     ),
                   ),
+                  SizedBox(
+                    width: 8,
+                  )
                 ],
               ),
             ),
@@ -200,7 +204,6 @@ class SettingsScreen extends StatelessWidget {
               ),
               height: 48,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     flex: 5,
@@ -208,11 +211,11 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         CircularCheckBox(
                             activeColor: Colors.green,
-                            value: activeLanguage == 'en',
+                            value: activeLanguage == 'en_US',
                             onChanged: (value) {
                               context
                                   .read<LocalizationBloc>()
-                                  .add(LocalizationUpdated('en'));
+                                  .add(LocalizationUpdated('en_US'));
                             }),
                         Text(S.of(context).LANGUAGE_EN),
                       ],
@@ -221,11 +224,15 @@ class SettingsScreen extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Flag(
-                      'US',
+                      'GB',
                       height: 20,
                       width: 20,
+                      fit: BoxFit.fill,
                     ),
                   ),
+                  SizedBox(
+                    width: 8,
+                  )
                 ],
               ),
             ),

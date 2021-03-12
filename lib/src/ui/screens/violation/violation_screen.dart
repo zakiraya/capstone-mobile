@@ -1,24 +1,17 @@
-import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
+import 'package:capstone_mobile/src/ui/screens/filter/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
-import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
-import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ViolationScreen extends StatefulWidget {
   static Route route() {
@@ -206,221 +199,29 @@ class ViolationTab extends StatelessWidget {
                 // FilterButton(
                 //   visible: true,
                 // ),
+                Container(),
+                BlocBuilder<ViolationBloc, ViolationState>(
+                  builder: (context, state) {
+                    if (state is ViolationLoadSuccess) {
+                      return IconButton(
+                        icon: Icon(
+                          Icons.filter_alt_outlined,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, FilterScreen.route());
+                        },
+                      );
+                    }
+                    return Container();
+                  },
+                ),
               ],
             ),
-            ViolationListFilter(),
             _ViolationList(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class ViolationListFilter extends StatelessWidget {
-  const ViolationListFilter({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          children: [
-            Container(
-              width: 64,
-              child: Text('Branch: '),
-            ),
-            BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
-                builder: (context, state) {
-              return GestureDetector(
-                onTap: () => showMaterialModalBottomSheet(
-                  expand: false,
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => ModalFit(
-                    title: 'Branches',
-                    list: (BlocProvider.of<BranchBloc>(context).state
-                            as BranchLoadSuccess)
-                        .branches,
-                    value: state.filter.branchId,
-                  ),
-                ).then((value) {
-                  if (value != null) {
-                    BlocProvider.of<ViolationFilterBloc>(context)
-                        .add(ViolationFilterBranchIdUpdated(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token,
-                      branchId: state.filter.branchId == value ? null : value,
-                    ));
-                  }
-                }),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: 112),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.grey[200],
-                      border: Border.all(),
-                    ),
-                    // color: Colors.grey[200],
-                    height: 32,
-                    child: Center(
-                      child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(Utils.findBranchName(
-                                        state.filter.branchId, context) ??
-                                    'All branches'),
-                              ),
-                            ),
-                            Icon(Icons.arrow_drop_down),
-                          ]),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-        SizedBox(
-          height: 8.0,
-        ),
-        // Row(
-        //   children: [
-        //     Text('Regulation: '),
-        //     BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
-        //         builder: (context, state) {
-        //       return GestureDetector(
-        //         onTap: () => showMaterialModalBottomSheet(
-        //           expand: false,
-        //           context: context,
-        //           backgroundColor: Colors.transparent,
-        //           builder: (context) => ModalFit(
-        //               title: 'Regulations',
-        //               list: (BlocProvider.of<RegulationBloc>(context).state
-        //                       as RegulationLoadSuccess)
-        //                   .regulations),
-        //         ).then((value) {
-        //           BlocProvider.of<ViolationBloc>(context).add(
-        //             FilterChanged(
-        //               token: BlocProvider.of<AuthenticationBloc>(context)
-        //                   .state
-        //                   .token,
-        //               filter: Filter(regulationId: value),
-        //             ),
-        //           );
-        //           BlocProvider.of<ViolationFilterBloc>(context)
-        //               .add(ViolationFilterRegulationUpdated(
-        //             regulationId: value,
-        //           ));
-        //         }),
-        //         child: Container(
-        //           color: Colors.grey[200],
-        //           height: 32,
-        //           child: Row(children: [
-        //             Text(findRegulationName(
-        //                     state.filter.regulationId, context) ??
-        //                 ''),
-        //             Icon(Icons.arrow_drop_down),
-        //           ]),
-        //         ),
-        //       );
-        //     }),
-        //   ],
-        // ),
-        Row(
-          children: [
-            Container(
-              width: 64,
-              child: Text('Status: '),
-            ),
-            StatusDropdown(
-                onChanged: (value) {
-                  BlocProvider.of<ViolationFilterBloc>(context)
-                      .add(ViolationFilterStatusUpdated(
-                    token: BlocProvider.of<AuthenticationBloc>(context)
-                        .state
-                        .token,
-                    status: value,
-                  ));
-                },
-                list: ['Opening', 'Rejected', 'Confirmed', 'Excused']),
-          ],
-        ),
-        SizedBox(
-          height: 8.0,
-        ),
-        Row(
-          children: [
-            Container(
-              width: 64,
-              child: Text('Month: '),
-            ),
-            BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
-                builder: (context, state) {
-              return GestureDetector(
-                onTap: () => showMonthPicker(
-                  context: context,
-                  firstDate: DateTime(DateTime.now().year - 1, 5),
-                  lastDate: DateTime(DateTime.now().year + 1, 9),
-                  initialDate: DateTime.now(),
-                  locale:
-                      Locale(BlocProvider.of<LocalizationBloc>(context).state),
-                ).then((value) {
-                  if (value != null) {
-                    print(value);
-                    BlocProvider.of<ViolationFilterBloc>(context)
-                        .add(ViolationFilterMonthUpdated(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token,
-                      month: value,
-                    ));
-                  }
-                }),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: 80),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.grey[200],
-                      border: Border.all(),
-                    ),
-                    // color: Colors.grey[200],
-                    height: 32,
-                    child: Center(
-                      child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  state.filter.month != null
-                                      ? state.filter.month.month.toString()
-                                      : DateTime.now().month.toString(),
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.arrow_drop_down),
-                          ]),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-      ]),
     );
   }
 }
@@ -575,8 +376,8 @@ class ViolationCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                    color:
-                        Constant.statusColors[violation.status] ?? Colors.green,
+                    color: Constant.violationStatusColors[violation.status] ??
+                        Colors.green,
                     width: 5),
               ),
             ),
@@ -598,7 +399,8 @@ class ViolationCard extends StatelessWidget {
                       Text(
                         "${violation?.status ?? "Status"}",
                         style: TextStyle(
-                          color: Constant.statusColors[violation.status],
+                          color:
+                              Constant.violationStatusColors[violation.status],
                         ),
                       ),
                     ],

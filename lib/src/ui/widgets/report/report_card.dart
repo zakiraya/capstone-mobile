@@ -39,7 +39,8 @@ class ReportCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: Constant.statusColors[report.status] ?? Colors.black,
+                  color: Constant.reportStatusColors[report.status] ??
+                      Colors.black,
                   width: 5,
                 ),
               ),
@@ -63,7 +64,7 @@ class ReportCard extends StatelessWidget {
                       Text(
                         "${report.status ?? "Status"}",
                         style: TextStyle(
-                          color: Constant.statusColors[report.status],
+                          color: Constant.reportStatusColors[report.status],
                         ),
                       ),
                     ],
