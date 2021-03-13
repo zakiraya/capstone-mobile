@@ -215,11 +215,13 @@ class HomeTab extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      child: Text(
-                        S.of(context).HOME_SEE_ALL,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.0,
+                      child: Container(
+                        child: Text(
+                          S.of(context).HOME_SEE_ALL,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.0,
+                          ),
                         ),
                       ),
                       onTap: () {

@@ -129,8 +129,25 @@ class LatestNotificationList extends StatelessWidget {
           );
         } else if (state is NotificationLoadFailure) {
           return Center(
-              child: Container(
-            child: Text('Notification load fail'),
+              child: Column(
+            children: [
+              Container(
+                child: Text(S.of(context).THERE_IS_NO +
+                    ' ' +
+                    S.of(context).NOTIFICATION),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<NotificationBloc>(context)
+                      .add(NotificationRequested());
+                },
+                child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey[200],
+                  onPrimary: Colors.black,
+                ),
+              ),
+            ],
           ));
         } else if (state is NotificationLoadSuccess) {
           var notifications = state.notifications;
@@ -142,7 +159,8 @@ class LatestNotificationList extends StatelessWidget {
           }
           return Column(children: [
             Container(
-              color: Colors.blue[50],
+              color:
+                  notifications[0].isRead ? Colors.grey[50] : Colors.blue[50],
               child: ListTile(
                 leading: Image.asset(
                   "assets/report.png",
@@ -163,7 +181,7 @@ class LatestNotificationList extends StatelessWidget {
                       ]),
                 ),
                 subtitle: Text(
-                  '1m ago',
+                  ' ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(notifications[0].createdAt)} ',
                   style: TextStyle(fontSize: 12),
                 ),
 
@@ -172,7 +190,8 @@ class LatestNotificationList extends StatelessWidget {
               ),
             ),
             Container(
-              color: Colors.blue[50],
+              color:
+                  notifications[0].isRead ? Colors.grey[50] : Colors.blue[50],
               child: ListTile(
                 leading: Image.asset(
                   "assets/report.png",
@@ -193,7 +212,7 @@ class LatestNotificationList extends StatelessWidget {
                       ]),
                 ),
                 subtitle: Text(
-                  '1m ago',
+                  ' ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(notifications[1].createdAt)} ',
                   style: TextStyle(fontSize: 12),
                 ),
 
