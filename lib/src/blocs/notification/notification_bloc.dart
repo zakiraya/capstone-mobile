@@ -15,6 +15,13 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final AuthenticationRepository _authenticationRepository;
   StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
+  @override
+  Future<void> close() {
+    _authenticationStatusSubscription?.cancel();
+    _authenticationRepository.dispose();
+    return super.close();
+  }
+
   NotificationBloc({
     @required this.notificationRepository,
     @required AuthenticationRepository authenticationRepository,
