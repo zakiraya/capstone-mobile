@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static String formatDate(DateTime date) {
@@ -12,6 +13,10 @@ class Utils {
         date.month.toString().padLeft(2, '0') +
         '-' +
         date.year.toString();
+  }
+
+  static String yMMMd(DateTime date, String locale) {
+    return DateFormat.yMMMd(locale).format(date);
   }
 
   static Future<void> getImage() async {

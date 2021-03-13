@@ -8,12 +8,19 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class NotificationRequested extends NotificationEvent {
-  final String token;
-
-  NotificationRequested({@required this.token});
+  NotificationRequested();
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [];
 
   @override
   String toString() => ' NotificationRequested ';
+}
+
+class NotificationAuthenticationStatusChanged extends NotificationEvent {
+  const NotificationAuthenticationStatusChanged({this.status});
+
+  final AuthenticationStatus status;
+
+  @override
+  List<Object> get props => [status];
 }
