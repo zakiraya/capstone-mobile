@@ -6,6 +6,7 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:intl/intl.dart';
 
 class SettingsScreen extends StatelessWidget {
   static Route route() {
@@ -174,6 +175,7 @@ class SettingsScreen extends StatelessWidget {
                               context
                                   .read<LocalizationBloc>()
                                   .add(LocalizationUpdated('vi'));
+                              Intl.defaultLocale = 'vi';
                             }),
                         Text(S.of(context).LANGUAGE_VN)
                       ],
@@ -216,6 +218,7 @@ class SettingsScreen extends StatelessWidget {
                               context
                                   .read<LocalizationBloc>()
                                   .add(LocalizationUpdated('en_US'));
+                              Intl.defaultLocale = 'en_US';
                             }),
                         Text(S.of(context).LANGUAGE_EN),
                       ],

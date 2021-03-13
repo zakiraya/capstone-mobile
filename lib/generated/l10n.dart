@@ -85,6 +85,16 @@ class S {
     );
   }
 
+  /// `Notifications`
+  String get NOTIFICATION {
+    return Intl.message(
+      'Notifications',
+      name: 'NOTIFICATION',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `belongs to`
   String get BELONGS_TO {
     return Intl.message(
@@ -200,6 +210,26 @@ class S {
     return Intl.message(
       'Submit',
       name: 'SUBMIT_BUTTON',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `load fail!`
+  String get LOAD_FAIL {
+    return Intl.message(
+      'load fail!',
+      name: 'LOAD_FAIL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no`
+  String get THERE_IS_NO {
+    return Intl.message(
+      'There is no',
+      name: 'THERE_IS_NO',
       desc: '',
       args: [],
     );

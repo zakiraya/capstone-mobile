@@ -7,7 +7,7 @@ import 'package:capstone_mobile/src/data/models/notification/notification.dart';
 class NotificationApi {
   final http.Client httpClient;
   BaseApi _baseApi = BaseApi();
-  final notificationUrl = 'notifications';
+  final notificationUrl = 'employee-notifications';
 
   NotificationApi({@required this.httpClient});
 

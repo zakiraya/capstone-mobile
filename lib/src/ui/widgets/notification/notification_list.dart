@@ -1,7 +1,9 @@
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class NotificationList extends StatelessWidget {
   const NotificationList({
@@ -19,14 +21,16 @@ class NotificationList extends StatelessWidget {
         } else if (state is NotificationLoadFailure) {
           return Center(
               child: Container(
-            child: Text('Notification load fail'),
+            child: Text(
+                S.of(context).NOTIFICATION + ' ' + S.of(context).LOAD_FAIL),
           ));
         } else if (state is NotificationLoadSuccess) {
           var notifications = state.notifications;
 
           if (notifications.isEmpty) {
             return Center(
-              child: Text('there is no notifications'),
+              child: Text(
+                  S.of(context).THERE_IS_NO + ' ' + S.of(context).NOTIFICATION),
             );
           }
           return Expanded(
@@ -34,10 +38,9 @@ class NotificationList extends StatelessWidget {
                 itemCount: state.notifications.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    color: // notifications[index].isRead
-                        //     ? Colors.grey[50]
-                        //     : Colors.blue,
-                        Colors.blue[50],
+                    color: notifications[index].isRead
+                        ? Colors.grey[50]
+                        : Colors.blue[50],
                     child: ListTile(
                       leading: Image.asset(
                         "assets/report.png",
@@ -60,7 +63,7 @@ class NotificationList extends StatelessWidget {
                             ]),
                       ),
                       subtitle: Text(
-                        '1m ago',
+                        ' ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(notifications[index].createdAt)} ',
                         style: TextStyle(fontSize: 12),
                       ),
 
