@@ -9,7 +9,6 @@ import 'package:capstone_mobile/src/data/repositories/notification/notification_
 import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/ui/mavca_app.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,13 +132,13 @@ class _AppViewState extends State<AppView> {
                                   context),
                         )),
                 BlocProvider(
+                  lazy: false,
                   create: (context) => NotificationBloc(
+                      authenticationRepository:
+                          RepositoryProvider.of<AuthenticationRepository>(
+                              context),
                       notificationRepository: NotificationRepository())
-                    ..add(NotificationRequested(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token,
-                    )),
+                    ..add(NotificationRequested()),
                 ),
                 BlocProvider(
                   create: (context) =>
