@@ -1,10 +1,11 @@
 part of 'authentication_bloc.dart';
 
 class AuthenticationState extends Equatable {
-  const AuthenticationState._(
-      {this.user = User.empty,
-      this.token = '',
-      this.status: AuthenticationStatus.unknown});
+  const AuthenticationState._({
+    this.user = User.empty,
+    this.token = '',
+    this.status: AuthenticationStatus.unknown,
+  });
 
   const AuthenticationState.unknown() : this._();
 
@@ -17,7 +18,10 @@ class AuthenticationState extends Equatable {
             status: AuthenticationStatus.authenticated);
 
   const AuthenticationState.unauthenticated()
-      : this._(token: '', status: AuthenticationStatus.unauthenticated);
+      : this._(
+          token: '',
+          status: AuthenticationStatus.unauthenticated,
+        );
 
   final User user;
   final String token;

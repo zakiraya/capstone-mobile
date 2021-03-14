@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:capstone_mobile/Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 
 import 'package:capstone_mobile/src/data/repositories/user/user_api.dart';
@@ -8,7 +9,9 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class SignUpFailure implements Exception {}
 
-class SignInFailure implements Exception {}
+class SignInFailure extends AppException {
+  SignInFailure([message]) : super(message, "Authorization error: ");
+}
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>.broadcast();
@@ -37,8 +40,10 @@ class AuthenticationRepository {
           ? _controller.add(AuthenticationStatus.authenticated)
           : _controller.add(AuthenticationStatus.unauthenticated);
       this.username = username;
+    } on AuthorizationException catch (e) {
+      throw AuthorizationException();
     } catch (e) {
-      throw SignInFailure();
+      throw SignInFailure(e.toString());
     }
 
     return token;

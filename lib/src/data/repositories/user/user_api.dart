@@ -1,5 +1,7 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
+import 'package:capstone_mobile/Api/Exceptions.dart';
 import 'package:capstone_mobile/src/data/models/models.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +20,11 @@ class UserApi {
     final userJson =
         await baseApi.post(authenUrl, body, null) as Map<String, dynamic>;
 
+    String roleName = userJson['data']['roleName'];
+    if (roleName != Constant.ROLE_BM && roleName != Constant.ROLE_QC) {
+      throw AuthorizationException('You are not allow to access this function');
+    }
+
     return userJson['data']['accessToken'];
   }
 
@@ -29,6 +36,11 @@ class UserApi {
 
     final userJson =
         await baseApi.get(url, token, opts: opts) as Map<String, dynamic>;
+
+    String roleName = userJson['data']['account']['role']['name'];
+    if (roleName != Constant.ROLE_BM && roleName != Constant.ROLE_QC) {
+      throw AuthorizationException('You are not allow to access this function');
+    }
 
     return User.fromJson(userJson);
   }

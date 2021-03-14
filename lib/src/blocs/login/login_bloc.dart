@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/Api/Exceptions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
@@ -67,7 +68,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: state.password.value,
         );
         yield state.copyWith(status: FormzStatus.submissionSuccess);
-      } on Exception catch (_) {
+      } on AuthorizationException catch (e) {
+        yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            message: 'You are not allow to access this device');
+      } catch (e) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }

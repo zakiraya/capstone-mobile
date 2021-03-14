@@ -15,7 +15,10 @@ class LoginForm extends StatelessWidget {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              SnackBar(
+                  content: Text(state.message.isEmpty
+                      ? 'Authentication Failure'
+                      : state.message)),
             );
         }
       },
@@ -37,32 +40,6 @@ class LoginForm extends StatelessWidget {
     );
   }
 }
-
-// class _ErrorText extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<LoginBloc, LoginState>(
-//       builder: (context, state) {
-//         if (state.status.isSubmissionSuccess) {
-//           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-//             builder: (context, state) {
-//               if (state.status == AuthenticationStatus.unauthenticated) {
-//                 return Container(
-//                   child: Text(
-//                     'Login failed!',
-//                     style: TextStyle(color: Colors.red),
-//                   ),
-//                 );
-//               }
-//               return Container();
-//             },
-//           );
-//         }
-//         return Container();
-//       },
-//     );
-// //   }
-// }
 
 class _UsernameInput extends StatelessWidget {
   @override

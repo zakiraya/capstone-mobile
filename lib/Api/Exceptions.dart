@@ -29,3 +29,7 @@ class InvalidInputException extends AppException {
 class AuthenticationException extends AppException {
   AuthenticationException([message]) : super(message, "Authentication error: ");
 }
+
+class AuthorizationException extends AppException {
+  AuthorizationException([message]) : super(message, "Authorization error: ");
+}
