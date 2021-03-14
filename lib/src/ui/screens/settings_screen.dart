@@ -76,7 +76,12 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    child: Text('${user.email ?? 'mail'}'),
+                    child: Text(
+                      '${user.email ?? 'mail'}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ],
               )

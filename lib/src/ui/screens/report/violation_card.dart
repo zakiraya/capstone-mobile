@@ -24,8 +24,7 @@ class ViolationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shadowColor: Theme.of(context).primaryColor,
+      elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
@@ -38,92 +37,84 @@ class ViolationCard extends StatelessWidget {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
+        child: ClipPath(
+          clipper: ShapeBorderClipper(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: Colors.grey[200], width: 5),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      // Text(
-                      //   "Branch: ${violation.branchName ?? ""}",
-                      //   style: TextStyle(fontSize: 12),
-                      // ),
-                      // SizedBox(
-                      //   height: 8,
-                      // ),
-                      SizedBox(
-                        height: 16,
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(S.of(context).VIOLATION +
+                                  ' ' +
+                                  S.of(context).BELONGS_TO +
+                                  ' ' +
+                                  "${violation.regulationName ?? "Violation name"}"),
+                              SizedBox(
+                                height: 16,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      Text(S.of(context).VIOLATION +
-                          ' ' +
-                          S.of(context).BELONGS_TO +
-                          ' ' +
-                          "${violation.regulationName ?? "Violation name"}"),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text("Regulation: ${violation.regulationName ?? ""}",
-                      //         style: TextStyle(fontSize: 10)),
-                      //   ],
-                      // ),
+                      PopupMenuButton(
+                        onSelected: (action) {
+                          switch (action) {
+                            case ExtraAction.edit:
+                              showModalOne(
+                                context,
+                                violation: violation,
+                                position: position,
+                                isEditing: true,
+                              );
+                              break;
+                            case ExtraAction.remove:
+                              BlocProvider.of<ViolationListBloc>(context)
+                                  .add(ViolationListRemove(
+                                position: position,
+                              ));
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuItem<ExtraAction>>[
+                          PopupMenuItem<ExtraAction>(
+                            value: ExtraAction.edit,
+                            child: Text(S.of(context).EDIT),
+                          ),
+                          PopupMenuItem<ExtraAction>(
+                            value: ExtraAction.remove,
+                            child: Text(S.of(context).DELETE),
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ),
-              ),
-              PopupMenuButton(
-                onSelected: (action) {
-                  switch (action) {
-                    case ExtraAction.edit:
-                      showModalOne(
-                        context,
-                        violation: violation,
-                        position: position,
-                        isEditing: true,
-                      );
-                      break;
-                    case ExtraAction.remove:
-                      BlocProvider.of<ViolationListBloc>(context)
-                          .add(ViolationListRemove(
-                        position: position,
-                      ));
-                      break;
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuItem<ExtraAction>>[
-                  PopupMenuItem<ExtraAction>(
-                    value: ExtraAction.edit,
-                    child: Text('Edit'),
-                  ),
-                  PopupMenuItem<ExtraAction>(
-                    value: ExtraAction.remove,
-                    child: Text('Remove'),
-                  ),
                 ],
-              )
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.delete_outlined,
-              //     size: 16.0,
-              //     color: Colors.red,
-              //   ),
-              //   onPressed: () {
-              //     context
-              //         .read<ViolationListBloc>()
-              //         .add(ViolationListRemove(position: position));
-              //   },
-              // ),
-            ],
+              ),
+            ),
           ),
         ),
       ),

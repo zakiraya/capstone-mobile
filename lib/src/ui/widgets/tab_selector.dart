@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/data/models/tab.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,6 @@ class TabSelector extends StatelessWidget {
       height: 28,
     ),
   ];
-  final List<String> _labels = [
-    'Home',
-    'Reports',
-    'Violations',
-    'Settings',
-  ];
 
   TabSelector({
     Key key,
@@ -38,6 +33,12 @@ class TabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> _labels = [
+      S.of(context).HOME,
+      S.of(context).REPORT,
+      S.of(context).VIOLATION,
+      S.of(context).SETTINGS,
+    ];
     return BottomNavigationBar(
       // showSelectedLabels: false,
       type: BottomNavigationBarType.fixed,

@@ -1,15 +1,14 @@
+import 'package:capstone_mobile/src/blocs/branch/branch_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
-import 'package:capstone_mobile/src/ui/screens/filter/filter_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/filter/violation_filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_create_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
-import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
@@ -36,61 +35,22 @@ class ViolationTab extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Expanded(
-                //     child: Container(
-                //   height: 24,
-                //   child: TextField(
-                //     decoration: InputDecoration(
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(24),
-                //       ),
-                //       contentPadding: const EdgeInsets.symmetric(
-                //           vertical: 2.0, horizontal: 8),
-                //       hintText: 'Search by regulation',
-                //       hintStyle: TextStyle(fontSize: 12),
-                //       suffixIcon: Icon(Icons.search),
-                //     ),
-                //     onSubmitted: (text) {
-                //       BlocProvider.of<ViolationBloc>(context).add(
-                //         FilterChanged(
-                //           token: BlocProvider.of<AuthenticationBloc>(context)
-                //               .state
-                //               .token,
-                //           filter: (BlocProvider.of<ViolationBloc>(context).state
-                //                   as ViolationLoadSuccess)
-                //               .activeFilter
-                //               .copyWith(regulationId: 1),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // )),
-                // FilterButton(
-                //   visible: true,
-                // ),
                 Container(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, FilterScreen.route());
+                    Navigator.push(context, ViolationFilterScreen.route());
                   },
                   child: Container(
                     height: 40,
                     child: Row(
                       children: [
-                        BlocBuilder<ViolationBloc, ViolationState>(
-                          builder: (context, state) {
-                            if (state is ViolationLoadSuccess) {
-                              return Icon(
-                                Icons.filter_alt_outlined,
-                                color: Colors.grey,
-                              );
-                            }
-                            return Container();
-                          },
+                        Icon(
+                          Icons.filter_alt_outlined,
+                          color: Colors.grey,
                         ),
                         Container(
                           child: Text(
-                            'Filter',
+                            S.of(context).FILTER,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Color(0xff828282),

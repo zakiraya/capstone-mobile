@@ -89,7 +89,7 @@ class HomeView extends StatelessWidget {
                       image: AssetImage('assets/brand_name.png'),
                     ),
                     SizedBox(
-                      height: 6.0,
+                      height: 8.0,
                     ),
                   ],
                 ),
@@ -188,7 +188,7 @@ class HomeTab extends StatelessWidget {
           height: size.height * 0.2,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/cover_home_app.png'),
+              image: AssetImage('assets/cover.png'),
               fit: BoxFit.fill,
             ),
           ),

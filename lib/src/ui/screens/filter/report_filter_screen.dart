@@ -7,6 +7,7 @@ import 'package:capstone_mobile/src/blocs/report_filter/report_filter_bloc.dart'
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ReportFilterScreen extends StatelessWidget {
@@ -33,40 +34,59 @@ class ReportFilterScreen extends StatelessWidget {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            title: Text(
-              'Filter',
-              style: TextStyle(
-                color: theme.primaryColor,
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image(
+                  width: size.width * 0.07,
+                  image: AssetImage('assets/logo.png'),
+                ),
+                SizedBox(
+                  width: 8.0,
+                ),
+                Column(
+                  children: [
+                    Image(
+                      width: size.width * 0.2,
+                      image: AssetImage('assets/brand_name.png'),
+                    ),
+                    SizedBox(
+                      height: 6.0,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            leading: IconButton(
-              color: theme.primaryColor,
-              icon: Icon(Icons.arrow_back_ios),
-              iconSize: 16.0,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+
+            // IconButton(
+            //   color: theme.primaryColor,
+            //   icon: Icon(Icons.arrow_back_ios),
+            //   iconSize: 16.0,
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(0.0),
             child: ListView(
               children: [
-                TimePicker(),
-                SizedBox(height: 16),
                 Container(
                   color: Colors.orange[400],
-                  height: 36,
+                  height: 40,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          S.of(context).VIOLATION_STATUS,
+                          S.of(context).FILTER,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
@@ -75,83 +95,48 @@ class ReportFilterScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                StatusGrid(),
+                SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TimePicker(),
+                ),
+                SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Container(
+                    child: Text(
+                      S.of(context).VIOLATION_STATUS,
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: StatusGrid(),
+                ),
                 BlocProvider.of<AuthenticationBloc>(context)
                             .state
                             .user
                             .roleName ==
                         Constant.ROLE_QC
-                    ? Column(
-                        children: [
-                          Container(
-                            color: Colors.orange[400],
-                            height: 36,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    S.of(context).BRANCH,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Text(
+                                S.of(context).BRANCH,
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                          ),
-                          BranchGrid()
-                        ],
+                            BranchGrid()
+                          ],
+                        ),
                       )
                     : Container(),
-                // Row(
-                //   children: [
-                //     Text('Regulation: '),
-                //     BlocBuilder<ReportFilterBloc, ReportFilterState>(
-                //         builder: (context, state) {
-                //       return GestureDetector(
-                //         onTap: () => showMaterialModalBottomSheet(
-                //           expand: false,
-                //           context: context,
-                //           backgroundColor: Colors.transparent,
-                //           builder: (context) => ModalFit(
-                //               title: 'Regulations',
-                //               list: (BlocProvider.of<RegulationBloc>(context).state
-                //                       as RegulationLoadSuccess)
-                //                   .regulations),
-                //         ).then((value) {
-                //           BlocProvider.of<ReportBloc>(context).add(
-                //             FilterChanged(
-                //               token: BlocProvider.of<AuthenticationBloc>(context)
-                //                   .state
-                //                   .token,
-                //               filter: Filter(regulationId: value),
-                //             ),
-                //           );
-                //           BlocProvider.of<ReportFilterBloc>(context)
-                //               .add(ReportFilterRegulationUpdated(
-                //             regulationId: value,
-                //           ));
-                //         }),
-                //         child: Container(
-                //           color: Colors.grey[200],
-                //           height: 32,
-                //           child: Row(children: [
-                //             Text(findRegulationName(
-                //                     state.filter.regulationId, context) ??
-                //                 ''),
-                //             Icon(Icons.arrow_drop_down),
-                //           ]),
-                //         ),
-                //       );
-                //     }),
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -170,7 +155,12 @@ class TimePicker extends StatelessWidget {
       children: [
         Container(
           width: 64,
-          child: Text('Month: '),
+          child: Text(
+            S.of(context).MONTH + ':',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         BlocBuilder<ReportFilterBloc, ReportFilterState>(
             builder: (context, state) {
@@ -209,8 +199,16 @@ class TimePicker extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               state.filter.month != null
-                                  ? state.filter.month.month.toString()
-                                  : DateTime.now().month.toString(),
+                                  ? DateFormat.MMM(
+                                          BlocProvider.of<LocalizationBloc>(
+                                                  context)
+                                              .state)
+                                      .format(state.filter.month)
+                                  : DateFormat.MMM(
+                                          BlocProvider.of<LocalizationBloc>(
+                                                  context)
+                                              .state)
+                                      .format(DateTime.now()),
                             ),
                           ),
                         ),
@@ -249,7 +247,7 @@ class StatusGrid extends StatelessWidget {
                   onChanged: (value) {
                     BlocProvider.of<ReportFilterBloc>(context)
                         .add(ReportFilterStatusUpdated(
-                      status: list[index],
+                      status: value ? list[index] : null,
                     ));
                   },
                 ),
@@ -275,44 +273,50 @@ class BranchGrid extends StatelessWidget {
           .branches;
       var size = MediaQuery.of(context).size;
 
-      return BlocBuilder<ReportFilterBloc, ReportFilterState>(
-        builder: (context, state) {
-          return GridView.count(
-            childAspectRatio: 4,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            children: List.generate(list?.length, (index) {
-              return Row(
-                children: [
-                  Checkbox(
-                    value: BlocProvider.of<ReportFilterBloc>(context)
-                            .state
-                            .filter
-                            .branchId ==
-                        list[index].id,
-                    onChanged: (value) {
-                      BlocProvider.of<ReportFilterBloc>(context)
-                          .add(ReportFilterBranchIdUpdated(
-                        branchId: list[index].id,
-                      ));
-                    },
-                  ),
-                  Container(
-                    height: 20,
-                    width: size.width * 0.3,
-                    // color: Colors.red,
-                    child: Text(
-                      list[index].name,
-                      overflow: TextOverflow.visible,
-                    ),
-                  ),
-                ],
+      return BlocBuilder<BranchBloc, BranchState>(builder: (context, state) {
+        if (state is BranchLoadInProgress) {
+          return Container();
+        } else if (state is BranchLoadSuccess) {
+          return BlocBuilder<ReportFilterBloc, ReportFilterState>(
+            builder: (context, state) {
+              return GridView.count(
+                childAspectRatio: 3.5,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                children: List.generate(list?.length, (index) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: BlocProvider.of<ReportFilterBloc>(context)
+                                .state
+                                .filter
+                                .branchId ==
+                            list[index].id,
+                        onChanged: (value) {
+                          BlocProvider.of<ReportFilterBloc>(context)
+                              .add(ReportFilterBranchIdUpdated(
+                            branchId: value ? list[index].id : null,
+                          ));
+                        },
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: Text(
+                            list[index].name,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               );
-            }),
+            },
           );
-        },
-      );
+        }
+        return Container();
+      });
     }
     return Container();
   }

@@ -77,8 +77,6 @@ class _ModalBodyState extends State<ModalBody> {
             child: Container(
               height: widget.size.height * 0.8,
               child: ListView(
-                // mainAxisSize: MainAxisSize.min,
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // action button
                   Row(
@@ -92,6 +90,7 @@ class _ModalBodyState extends State<ModalBody> {
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 24.0,
+                              fontWeight: FontWeight.w600,
                             )),
                       ),
                       IconButton(
@@ -107,11 +106,14 @@ class _ModalBodyState extends State<ModalBody> {
                   ),
                   Container(
                     child: Text(
-                      S.of(context).DESCRIPTION,
+                      S.of(context).REGULATION + ': ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
                   ),
                   DropdownFieldRegulation(
                       initValue: widget.isEditing == true
@@ -126,11 +128,14 @@ class _ModalBodyState extends State<ModalBody> {
                   // regulation dropdown
                   Container(
                     child: Text(
-                      S.of(context).REGULATION,
+                      S.of(context).DESCRIPTION + ': ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
                   ),
                   Container(
                     child: _ViolationDescriptionInput(
@@ -154,9 +159,10 @@ class _ModalBodyState extends State<ModalBody> {
                     height: 16,
                   ),
                   Container(
-                    child: Text(S.of(context).EVIDENCE,
+                    child: Text(S.of(context).EVIDENCE + ': ',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
+
                   _image == null
                       ? Row(
                           children: [
@@ -189,49 +195,63 @@ class _ModalBodyState extends State<ModalBody> {
                         )
                       : Container(),
                   _image != null
-                      ? Stack(
+                      ? Row(
                           children: [
-                            Container(
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: _image == null
-                                      ? AssetImage('assets/avt.jpg')
-                                      : FileImage(_image),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _image = null;
-                                  });
-                                },
+                            Stack(children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.235,
+                                alignment: Alignment.bottomLeft,
                                 child: Container(
-                                  height: 24,
-                                  width: 24,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.22,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.red),
-                                  ),
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Colors.red,
-                                    size: 16.0,
+                                    borderRadius: BorderRadius.circular(2),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: _image == null
+                                          ? AssetImage('assets/avt.jpg')
+                                          : FileImage(_image),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _image = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 24,
+                                    width: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.red),
+                                    ),
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Colors.red,
+                                      size: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
                           ],
                         )
                       : Container(),
+                  SizedBox(
+                    height: 24,
+                  ),
                   Center(
                     child: Builder(builder: (context) {
                       return BlocBuilder<ViolationCreateBloc,
@@ -257,10 +277,6 @@ class _ModalBodyState extends State<ModalBody> {
                                           regulationName: state
                                               .violationRegulation.value.name,
                                           imagePath: _image.path,
-                                          // branchId:
-                                          //     state.violationBranch.value.id,
-                                          // branchName:
-                                          //     state.violationBranch.value.name,
                                         ),
                                         widget.position,
                                       ],
@@ -268,7 +284,11 @@ class _ModalBodyState extends State<ModalBody> {
                                   }
                                 : null,
                             child: Text(
-                                '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}'),
+                              '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             style: ElevatedButton.styleFrom(
                               elevation: 5.0,
                               primary: Theme.of(context).primaryColor,

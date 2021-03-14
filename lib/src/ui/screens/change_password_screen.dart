@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/ui/utils/custom_text_field.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -26,37 +28,41 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
-    return BlocProvider(
-      create: (context) => ChangePasswordCubit(
-          userRepository:
-              UserRepository(userApi: UserApi(httpClient: http.Client()))),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: theme.scaffoldBackgroundColor,
-          title: Text(
-            'Change password',
-            style: TextStyle(color: Colors.black),
-          ),
-          leading: IconButton(
-            iconSize: 16.0,
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
+    return BlocBuilder<LocalizationBloc, String>(
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => ChangePasswordCubit(
+              userRepository:
+                  UserRepository(userApi: UserApi(httpClient: http.Client()))),
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              elevation: 0.0,
+              backgroundColor: theme.scaffoldBackgroundColor,
+              title: Text(
+                S.of(context).CHANGE_PASSWORD,
+                style: TextStyle(color: Colors.black),
+              ),
+              leading: IconButton(
+                iconSize: 16.0,
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: theme.primaryColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: _ChangePasswordForm(),
+            ),
           ),
-        ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: _ChangePasswordForm(),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -82,7 +88,7 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
             CoolAlert.show(
               context: context,
               type: CoolAlertType.success,
-              text: "Success",
+              text: S.of(context).CHANGE_PASSWORD_SCREEN_CHANGE_SUCCESS,
             ).then((value) {
               context
                   .read<AuthenticationBloc>()
@@ -92,11 +98,11 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
           if (state.status.isSubmissionFailure) {
             Navigator.pop(context);
             CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.error,
-                    title: "Oops...",
-                    text: 'Your current password is not valid!')
-                .then((value) {});
+              context: context,
+              type: CoolAlertType.error,
+              title: "Oops...",
+              text: S.of(context).CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR,
+            ).then((value) {});
           }
         },
         child: Container(
@@ -107,11 +113,16 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                 BlocBuilder<ChangePasswordCubit, ChangePasswordRequested>(
                   builder: (context, state) {
                     return CustomTextField(
-                      label: "Current password",
+                      label:
+                          S.of(context).CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD,
                       placeholder: '',
                       isHidden: true,
                       errorText: state.oldPassword.invalid
-                          ? 'Current password must not be empty'
+                          ? S
+                                  .of(context)
+                                  .CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD +
+                              ' ' +
+                              S.of(context).CHANGE_PASSWORD_SCREEN_EMPTY
                           : null,
                       onChange: (value) {
                         context
@@ -124,11 +135,13 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                 BlocBuilder<ChangePasswordCubit, ChangePasswordRequested>(
                   builder: (context, state) {
                     return CustomTextField(
-                      label: "New password",
+                      label: S.of(context).CHANGE_PASSWORD_SCREEN_NEW_PASSWORD,
                       placeholder: '',
                       isHidden: true,
                       errorText: state.newPassword.invalid
-                          ? 'New password must not be empty'
+                          ? S.of(context).CHANGE_PASSWORD_SCREEN_NEW_PASSWORD +
+                              ' ' +
+                              S.of(context).CHANGE_PASSWORD_SCREEN_EMPTY
                           : null,
                       onChange: (value) {
                         context
@@ -149,12 +162,13 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                   },
                 ),
                 CustomTextField(
-                    label: "Confirm password",
+                    label:
+                        S.of(context).CHANGE_PASSWORD_SCREEN_CONFIRM_PASSWORD,
                     placeholder: '',
                     isHidden: true,
                     errorText: isConfirmed
                         ? null
-                        : 'Confirm password must be the same as new password',
+                        : S.of(context).CHANGE_PASSWORD_SCREEN_CONFIRM_ERROR,
                     onChange: (value) {
                       confirmPassword = value;
                       if (confirmPassword ==
@@ -194,9 +208,8 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                                   CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.confirm,
-                                      // text: "Are you sure to change password?",
-                                      confirmBtnText: "Yes",
-                                      cancelBtnText: "No",
+                                      confirmBtnText: S.of(context).YES,
+                                      cancelBtnText: S.of(context).NO,
                                       confirmBtnColor:
                                           Theme.of(context).primaryColor,
                                       onConfirmBtnTap: () {
@@ -218,7 +231,11 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                                         context: context,
                                         builder: (context) {
                                           return SimpleDialog(
-                                            title: const Text('Submitting...'),
+                                            title: Text(
+                                              S
+                                                  .of(context)
+                                                  .POPUP_CREATE_VIOLATION_SUBMITTING,
+                                            ),
                                             children: [
                                               Center(
                                                 child:
@@ -233,11 +250,11 @@ class __ChangePasswordFormState extends State<_ChangePasswordForm> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            'Change',
+                            S.of(context).CHANGE,
                             style: TextStyle(
-                              fontSize: 14,
-                              letterSpacing: 2.2,
+                              fontSize: 16,
                               color: Colors.white,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         );

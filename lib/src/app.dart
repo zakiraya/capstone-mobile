@@ -132,7 +132,6 @@ class _AppViewState extends State<AppView> {
                                   context),
                         )),
                 BlocProvider(
-                  lazy: false,
                   create: (context) => NotificationBloc(
                       authenticationRepository:
                           RepositoryProvider.of<AuthenticationRepository>(
@@ -141,14 +140,12 @@ class _AppViewState extends State<AppView> {
                     ..add(NotificationRequested()),
                 ),
                 BlocProvider(
-                  create: (context) =>
-                      BranchBloc(branchRepository: BranchRepository())
-                        ..add(BranchRequested(
-                          token: BlocProvider.of<AuthenticationBloc>(context)
-                              .state
-                              .token,
-                        )),
-                ),
+                    lazy: false,
+                    create: (context) => BranchBloc(
+                        authenticationRepository:
+                            RepositoryProvider.of<AuthenticationRepository>(
+                                context),
+                        branchRepository: BranchRepository())),
                 BlocProvider(
                   create: (context) => RegulationBloc(
                       regulationRepository: RegulationRepository())

@@ -24,21 +24,31 @@ class ReportsTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(),
-              BlocBuilder<ReportBloc, ReportState>(
-                builder: (context, state) {
-                  if (state is ReportLoadSuccess) {
-                    return IconButton(
-                      icon: Icon(
+              GestureDetector(
+                onTap: () {
+                  print('asdfsdf');
+                  Navigator.push(context, ReportFilterScreen.route());
+                },
+                child: Container(
+                  height: 40,
+                  child: Row(
+                    children: [
+                      Icon(
                         Icons.filter_alt_outlined,
                         color: Colors.grey,
                       ),
-                      onPressed: () {
-                        Navigator.push(context, ReportFilterScreen.route());
-                      },
-                    );
-                  }
-                  return Container();
-                },
+                      Container(
+                        child: Text(
+                          S.of(context).FILTER,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff828282),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
