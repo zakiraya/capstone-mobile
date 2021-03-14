@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/filter/filter_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,139 +13,7 @@ import 'package:capstone_mobile/src/ui/utils/image_picker.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
-
-class ViolationScreen extends StatefulWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(
-        settings: RouteSettings(name: "/ViolationScreen"),
-        builder: (_) => ViolationScreen());
-  }
-
-  @override
-  _ViolationScreenState createState() => _ViolationScreenState();
-}
-
-class _ViolationScreenState extends State<ViolationScreen> {
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        title: FlutterLogo(),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                ViolationCreateScreen.route(),
-              );
-            },
-            child: Container(
-              width: 156,
-              height: 32,
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Text(
-                  "CREATE NEW +",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Violation',
-                        style: TextStyle(
-                          color: theme.primaryColor,
-                          fontSize: theme.textTheme.headline1.fontSize,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text(
-                            'List',
-                            style: TextStyle(
-                              color: theme.primaryColor,
-                              fontSize: theme.textTheme.headline1.fontSize,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              height:
-                                  (theme.textTheme.headline1.fontSize + 15) / 2,
-                              width: 46,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom:
-                                      BorderSide(color: Colors.black, width: 2),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                ImagePickerButton(),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(),
-                // FilterButton(
-                //   visible: true,
-                // ),
-              ],
-            ),
-            _ViolationList(),
-          ],
-        ),
-      ),
-    );
-  }
-}
+import 'package:intl/intl.dart';
 
 class ViolationTab extends StatelessWidget {
   @override
@@ -200,21 +69,37 @@ class ViolationTab extends StatelessWidget {
                 //   visible: true,
                 // ),
                 Container(),
-                BlocBuilder<ViolationBloc, ViolationState>(
-                  builder: (context, state) {
-                    if (state is ViolationLoadSuccess) {
-                      return IconButton(
-                        icon: Icon(
-                          Icons.filter_alt_outlined,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, FilterScreen.route());
-                        },
-                      );
-                    }
-                    return Container();
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, FilterScreen.route());
                   },
+                  child: Container(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        BlocBuilder<ViolationBloc, ViolationState>(
+                          builder: (context, state) {
+                            if (state is ViolationLoadSuccess) {
+                              return Icon(
+                                Icons.filter_alt_outlined,
+                                color: Colors.grey,
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                        Container(
+                          child: Text(
+                            'Filter',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff828282),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -424,7 +309,7 @@ class ViolationCard extends StatelessWidget {
                       Text(""),
                       Text(
                         S.of(context).CREATED_ON +
-                            ": ${violation.createdAt ?? "date time"}",
+                            ": ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(violation.createdAt) ?? "date time"}",
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[400],

@@ -34,9 +34,11 @@ class ViolationRegulationChanged extends ViolationCreateEvent {
 //   List<Object> get props => [branch];
 // }
 
-class ViolationAdded extends ViolationCreateEvent {
-  const ViolationAdded();
+class ViolationUpdated extends ViolationCreateEvent {
+  final Violation violation;
+
+  const ViolationUpdated({@required this.violation});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [violation];
 }

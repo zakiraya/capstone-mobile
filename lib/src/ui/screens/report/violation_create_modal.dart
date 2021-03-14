@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
@@ -63,7 +66,12 @@ class _ModalBodyState extends State<ModalBody> {
       child: SafeArea(
         top: false,
         child: BlocProvider(
-          create: (context) => ViolationCreateBloc(),
+          create: (context) => ViolationCreateBloc(
+            violationBloc: BlocProvider.of<ViolationBloc>(context),
+            authenticationRepository:
+                RepositoryProvider.of<AuthenticationRepository>(context),
+            violationRepository: ViolationRepository(),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -242,7 +250,6 @@ class _ModalBodyState extends State<ModalBody> {
                                       context,
                                       [
                                         Violation(
-                                          name: state.name,
                                           description:
                                               state.violationDescription.value,
                                           regulationId: state

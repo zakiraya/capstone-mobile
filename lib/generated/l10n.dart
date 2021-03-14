@@ -45,6 +45,26 @@ class S {
     );
   }
 
+  /// `of`
+  String get OF {
+    return Intl.message(
+      'of',
+      name: 'OF',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get EMAIL {
+    return Intl.message(
+      'Email',
+      name: 'EMAIL',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password`
   String get PASSWORD {
     return Intl.message(
@@ -485,6 +505,16 @@ class S {
     );
   }
 
+  /// `Save`
+  String get SAVE {
+    return Intl.message(
+      'Save',
+      name: 'SAVE',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit`
   String get EDIT {
     return Intl.message(
@@ -500,6 +530,16 @@ class S {
     return Intl.message(
       'Delete',
       name: 'DELETE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get REMOVE {
+    return Intl.message(
+      'Remove',
+      name: 'REMOVE',
       desc: '',
       args: [],
     );

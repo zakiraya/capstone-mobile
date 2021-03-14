@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:formz/formz.dart';
 
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
-import 'package:capstone_mobile/src/ui/utils/dropdown.dart';
 
 class ViolationCreateEditForm extends StatefulWidget {
   const ViolationCreateEditForm({
@@ -61,19 +62,32 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ViolationBloc, ViolationState>(
+    var theme = Theme.of(context);
+    return BlocListener<ViolationCreateBloc, ViolationCreateState>(
       listener: (context, state) {
-        if (state is ViolationLoadSuccess) {
-          Navigator.of(context)
-              .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
+        if (state.status.isSubmissionSuccess) {
+          Navigator.pop(context);
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
+          ).then((value) => Navigator.pop(context));
         }
-        if (state is ViolationLoadFailure) {
+        if (state.status.isSubmissionInProgress) {
+          CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.loading,
+            text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+          );
+        }
+        if (state.status.isSubmissionFailure) {
           CoolAlert.show(
             context: context,
             type: CoolAlertType.error,
             title: "Oops...",
-            text: "Sorry, something went wrong",
-          );
+            text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
+          ).then((value) => Navigator.pop(context));
         }
       },
       child: GestureDetector(
@@ -85,21 +99,36 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
           child: ListView(
             children: [
               // action button
+              Container(
+                child: Text(
+                  S.of(context).VIOLATION +
+                      ' ' +
+                      S.of(context).OF +
+                      ' ' +
+                      '${widget.violation.regulationName}',
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: theme.textTheme.headline5.fontSize,
+                  ),
+                ),
+              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
+                    child: Text(S.of(context).VIOLATION_STATUS + ': '),
+                  ),
+                  Container(
                     child: Text(
-                      'Violation of ${widget.violation.name}',
+                      "${widget.violation?.status}",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                          color: Constant
+                              .violationStatusColors[widget.violation?.status]),
                     ),
                   ),
                 ],
@@ -110,22 +139,35 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
               // regulation dropdown
               Container(
                 child: Text(
-                  'Regulation:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  '- ' + S.of(context).REGULATION + ':',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Container(
-                child: RegulationDropdown(
+              SizedBox(
+                height: 8,
+              ),
+              DropdownFieldRegulation(
                   initValue: widget.isEditing == true
                       ? Regulation(
                           id: widget.violation.regulationId,
                           name: widget.violation.regulationName,
                         )
-                      : null,
+                      : null),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                child: Text(
+                  '- ' + S.of(context).DESCRIPTION + ':',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 8,
               ),
               Container(
                 child: _ViolationDescriptionInput(
@@ -139,7 +181,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                 height: 16,
               ),
               Container(
-                child: Text('Evidence:',
+                child: Text('- ' + S.of(context).EVIDENCE + ':',
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               SizedBox(
@@ -200,61 +242,75 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                       ),
                     )
                   : Container(),
-              Container(
-                child: BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
-                  buildWhen: (previous, current) =>
-                      previous.status != current.status,
-                  builder: (context, state) {
-                    var bloc = BlocProvider.of<ViolationCreateBloc>(context);
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.3),
-                      child: ElevatedButton(
-                        onPressed: state.status.isValid && _image != null
-                            ? () {
-                                widget.onSaveCallBack(
-                                  widget.violation.copyWith(
-                                    name: widget.violation.name,
-                                    description:
-                                        bloc.state.violationDescription.value,
-                                    regulationId:
-                                        bloc.state.violationRegulation.value.id,
-                                    regulationName: bloc
-                                        .state.violationRegulation.value.name,
-                                    imagePath: _image.path,
-                                    // branchId:
-                                    //     bloc.state.violationBranch.value.id,
-                                    // branchName:
-                                    //     bloc.state.violationBranch.value.name,
-                                  ),
-                                );
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return SimpleDialog(
-                                        title: const Text('Submitting...'),
-                                        children: [
-                                          Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        ],
-                                      );
-                                    });
-                              }
-                            : null,
-                        child: Text(
-                            '${widget.isEditing == true ? 'Save' : 'Add'}'),
-                        style: ElevatedButton.styleFrom(),
-                      ),
-                    );
-                  },
-                ),
+              SizedBox(
+                height: 24.0,
               ),
+              _ActionButton(image: _image, widget: widget, theme: theme),
+              SizedBox(
+                height: 24,
+              )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    Key key,
+    @required File image,
+    @required this.widget,
+    @required this.theme,
+  })  : _image = image,
+        super(key: key);
+
+  final File _image;
+  final widget;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: BlocBuilder<ViolationCreateBloc, ViolationCreateState>(
+        buildWhen: (previous, current) => previous.status != current.status,
+        builder: (context, state) {
+          var bloc = BlocProvider.of<ViolationCreateBloc>(context);
+
+          return Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.3),
+            child: ElevatedButton(
+              onPressed: state.status.isValid && _image != null
+                  ? () {
+                      bloc.add(
+                        ViolationUpdated(
+                          violation: widget.violation.copyWith(
+                            name: widget.violation.name,
+                            description: bloc.state.violationDescription.value,
+                            regulationId:
+                                bloc.state.violationRegulation.value.id,
+                            regulationName:
+                                bloc.state.violationRegulation.value.name,
+                            imagePath: _image.path,
+                          ),
+                        ),
+                      );
+                      // widget.onSaveCallBack(
+
+                      // );
+                    }
+                  : null,
+              child: Text(
+                  '${widget.isEditing == true ? S.of(context).SAVE : 'Add'}'),
+              style: ElevatedButton.styleFrom(
+                primary: theme.primaryColor,
+                elevation: 5,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -300,19 +356,21 @@ class __ViolationDescriptionInputState
                     ),
                   );
             },
+            style: TextStyle(fontSize: 14),
             decoration: InputDecoration(
-              filled: true,
               fillColor: Colors.grey[200],
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              labelText: 'Description:',
-              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              filled: true,
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
               errorText: state.violationDescription.invalid
                   ? 'invalid violation description'
                   : null,
             ),
-            maxLines: 5,
+            // minLines: 5,
+            maxLines: null,
           );
         });
   }

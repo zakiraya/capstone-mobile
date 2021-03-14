@@ -1,5 +1,7 @@
 {
     "title": "xin chào",
+    "OF": "thuộc",
+    "EMAIL": "Email",
     "PASSWORD": "Mật khẩu",
     "REPORT": "Báo cáo",
     "BRANCH": "Chi nhánh",
@@ -45,7 +47,9 @@
     "LOGOUT": "Đăng xuất",
     "LOGIN": "Đăng nhập",
     "EDIT": "Sửa",
+    "SAVE": "Lưu",
     "DELETE": "Xóa",
+    "REMOVE": "",
     "POPUP_CREATE_VIOLATION_SUCCESS": "TẠO MỚI THÀNH CÔNG!",
     "POPUP_CREATE_VIOLATION_FAIL": "ĐÃ XẢY RA LỖI!",
     "POPUP_CREATE_VIOLATION_SUBMITTING": "ĐANG XỬ LÍ YÊU CẦU"
