@@ -1,9 +1,10 @@
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:capstone_mobile/src/blocs/blocs.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_form.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 
@@ -61,85 +62,14 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Container(
-            width: 80,
-            child: Center(
-              child: Container(
-                width: 80,
-                height: 28,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog<void>(
-                      context: context,
-                      barrierDismissible: false, // user must tap button!
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Do you want to delete this violation?'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              onPressed: () {
-                                BlocProvider.of<ViolationBloc>(context)
-                                    .add(ViolationDelete(
-                                  token: BlocProvider.of<AuthenticationBloc>(
-                                          context)
-                                      .state
-                                      .token,
-                                  id: widget.violation.id,
-                                ));
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return SimpleDialog(
-                                        title: const Text('Submitting...'),
-                                        children: [
-                                          Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        ],
-                                      );
-                                    });
-                              },
-                            ),
-                            TextButton(
-                              child: Text('Cancel'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Text(
-                    'Delete',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-        ],
       ),
       body: BlocProvider(
-        create: (context) => ViolationCreateBloc(),
+        create: (context) => ViolationCreateBloc(
+          violationBloc: BlocProvider.of<ViolationBloc>(context),
+          authenticationRepository:
+              RepositoryProvider.of<AuthenticationRepository>(context),
+          violationRepository: ViolationRepository(),
+        ),
         child: ViolationCreateEditForm(
           violation: widget.violation,
           size: size,

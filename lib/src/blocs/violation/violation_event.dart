@@ -43,16 +43,10 @@ class FilterChanged extends ViolationEvent {
 }
 
 class ViolationUpdate extends ViolationEvent {
-  const ViolationUpdate({
-    @required this.token,
-    @required this.violation,
-  });
-
-  final String token;
-  final Violation violation;
+  const ViolationUpdate();
 
   @override
-  List<Object> get props => [token, violation];
+  List<Object> get props => [];
 }
 
 class ViolationDelete extends ViolationEvent {

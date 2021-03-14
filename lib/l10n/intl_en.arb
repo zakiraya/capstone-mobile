@@ -1,5 +1,7 @@
 {
     "title": "hello",
+    "OF": "of",
+    "EMAIL": "Email",
     "PASSWORD": "Password",
     "REPORT": "Report",
     "BRANCH": "Branch",
@@ -44,8 +46,10 @@
     "CHANGE_PASSWORD": "Change password",
     "LOGOUT": "Log out",
     "LOGIN": "Log in",
+    "SAVE": "Save",
     "EDIT": "Edit",
     "DELETE": "Delete",
+    "REMOVE": "Remove",
     "POPUP_CREATE_VIOLATION_SUCCESS": "CREATE NEW SUCCESSFULLY!",
     "POPUP_CREATE_VIOLATION_FAIL": "CREATE NEW FAIL!",
     "POPUP_CREATE_VIOLATION_SUBMITTING": "PROCESSING REQUEST"

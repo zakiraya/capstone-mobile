@@ -144,15 +144,6 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     }
   }
 
-  // Future<ViolationState> _mapAuthenticationStatusChangedToState(
-  //   AuthenticationStatusChanged event,
-  // ) async {
-  //   switch (event.status) {
-  //     case AuthenticationStatus.unauthenticated:
-  //       add(ViolationRequested(token: _authenticationRepository.token));
-  //   }
-  // }
-
   Stream<ViolationState> _mapFilterChangeToState(FilterChanged event) async* {
     final currentState = state;
 
@@ -187,25 +178,19 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     final currentState = state;
     try {
       if (currentState is ViolationLoadSuccess) {
-        await violationRepository.editViolation(
-          token: event.token,
-          violation: event.violation,
-        );
-
         final List<Violation> updatedViolations =
             await violationRepository.fetchViolations(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           limit: currentState.violations.length,
         );
 
         yield currentState.copyWith(
           violations: updatedViolations,
-          screen: '/ViolationDetailScreen',
         );
       }
     } catch (e) {
-      print(' _mapViolationUpdateToState');
+      print(' _mapViolationUpdateToState error');
       print(e);
     }
   }
@@ -213,15 +198,16 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
   Stream<ViolationState> _mapViolationDeleteToState(
       ViolationDelete event) async* {
     final currentState = state;
+    // yield
     try {
       if (currentState is ViolationLoadSuccess) {
         await violationRepository.deleteViolation(
-          token: event.token,
+          token: _authenticationRepository.token,
           id: event.id,
         );
         final List<Violation> updatedViolations =
             await violationRepository.fetchViolations(
-          token: event.token,
+          token: _authenticationRepository.token,
           sort: 'desc id',
           limit: currentState.violations.length,
         );

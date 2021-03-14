@@ -6,7 +6,7 @@ class Violation extends Equatable {
   final String name;
   final String status;
   final String violationCode;
-  final String createdAt;
+  final DateTime createdAt;
   String imagePath;
   final String description;
   final int regulationId;
@@ -50,7 +50,7 @@ class Violation extends Equatable {
       branchId: json['branch']['id'],
       branchName: json['branch']['name'],
       description: json['description'],
-      createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
+      createdAt: DateTime.parse(json['createdAt']),
       status: json['status'],
       regulationId: json['regulation']['id'],
       regulationName: json['regulation']['name'],
@@ -59,6 +59,7 @@ class Violation extends Equatable {
   }
 
   Violation copyWith({
+    DateTime createdAt,
     int id,
     String name,
     String imagePath,
@@ -90,7 +91,6 @@ class Violation extends Equatable {
 
     violations.forEach((violation) {
       list.add(<String, dynamic>{
-        'name': 'violation name',
         'description': violation.description,
         'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,

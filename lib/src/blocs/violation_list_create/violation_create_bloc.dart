@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_description.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_regulation.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
@@ -13,7 +17,15 @@ part 'violation_create_state.dart';
 
 class ViolationCreateBloc
     extends Bloc<ViolationCreateEvent, ViolationCreateState> {
-  ViolationCreateBloc() : super(ViolationCreateState());
+  final ViolationRepository violationRepository;
+  final AuthenticationRepository authenticationRepository;
+  final ViolationBloc violationBloc;
+
+  ViolationCreateBloc({
+    @required this.violationRepository,
+    @required this.authenticationRepository,
+    @required this.violationBloc,
+  }) : super(ViolationCreateState());
 
   @override
   Stream<ViolationCreateState> mapEventToState(
@@ -27,68 +39,60 @@ class ViolationCreateBloc
     //  else if (event is ViolationBranchChanged) {
     //   yield _mapViolationBranchChangetoState(event, state);
     // }
-    else if (event is ViolationAdded) {
+    else if (event is ViolationUpdated) {
       yield* _mapViolationCreateAddedToState(event, state);
     }
   }
-}
 
-ViolationCreateState _mapViolationRegulationChangetoState(
-    ViolationRegulationChanged event, ViolationCreateState state) {
-  final regulation = ViolationRegulation.dirty(event.regulation);
-  return state.copyWith(
-    violationRegulation: regulation,
-    status: Formz.validate([
-      state.violationDescription,
-      regulation,
-      // state.violationBranch,
-    ]),
-  );
-}
-
-// ViolationCreateState _mapViolationBranchChangetoState(
-//     ViolationBranchChanged event, ViolationCreateState state) {
-//   final branch = ViolationBranch.dirty(event.branch);
-//   return state.copyWith(
-//     violationBranch: branch,
-//     status: Formz.validate([
-//       state.violationDescription,
-//       state.violationRegulation,
-//       branch,
-//     ]),
-//   );
-// }
-
-ViolationCreateState _mapViolationDescriptionToState(
-    ViolationDescriptionChanged event, ViolationCreateState state) {
-  final violationDescription =
-      ViolationDescription.dirty(event.violationDescription);
-  return state.copyWith(
-    violationDescription: violationDescription,
-    status: Formz.validate(
-      [
-        violationDescription,
-        state.violationRegulation,
+  ViolationCreateState _mapViolationRegulationChangetoState(
+      ViolationRegulationChanged event, ViolationCreateState state) {
+    final regulation = ViolationRegulation.dirty(event.regulation);
+    return state.copyWith(
+      violationRegulation: regulation,
+      status: Formz.validate([
+        state.violationDescription,
+        regulation,
         // state.violationBranch,
-      ],
-    ),
-  );
-}
+      ]),
+    );
+  }
 
-Stream<ViolationCreateState> _mapViolationCreateAddedToState(
-    ViolationAdded event, ViolationCreateState state) async* {
-  if (state.status.isValidated) {
-    yield state.copyWith(status: FormzStatus.submissionInProgress);
-    try {
-      DateTime date = DateTime.now();
-      yield state.copyWith(
-        status: FormzStatus.submissionSuccess,
-        createdDate: formatDate(date),
-        name: 'violation name',
-      );
-    } catch (e) {
-      print(e);
-      yield state.copyWith(status: FormzStatus.invalid);
+  ViolationCreateState _mapViolationDescriptionToState(
+      ViolationDescriptionChanged event, ViolationCreateState state) {
+    final violationDescription =
+        ViolationDescription.dirty(event.violationDescription);
+    return state.copyWith(
+      violationDescription: violationDescription,
+      status: Formz.validate(
+        [
+          violationDescription,
+          state.violationRegulation,
+          // state.violationBranch,
+        ],
+      ),
+    );
+  }
+
+  Stream<ViolationCreateState> _mapViolationCreateAddedToState(
+    ViolationUpdated event,
+    ViolationCreateState state,
+  ) async* {
+    if (state.status.isValidated) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      try {
+        await violationRepository.editViolation(
+          token: authenticationRepository.token,
+          violation: event.violation,
+        );
+
+        violationBloc.add(ViolationUpdate());
+        yield state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        );
+      } catch (e) {
+        print(e);
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
     }
   }
 }
