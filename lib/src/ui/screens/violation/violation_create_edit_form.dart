@@ -65,12 +65,15 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
     return BlocListener<ViolationCreateBloc, ViolationCreateState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          Navigator.pop(context);
+          // Navigator.pop(context);
           CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
-          ).then((value) => Navigator.pop(context));
+          ).then((value) {
+            Navigator.of(context)
+                .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
+          });
         }
         if (state.status.isSubmissionInProgress) {
           CoolAlert.show(

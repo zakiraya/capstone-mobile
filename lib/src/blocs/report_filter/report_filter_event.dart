@@ -12,6 +12,9 @@ class ReportFilterBranchIdUpdated extends ReportFilterEvent {
 
   ReportFilterBranchIdUpdated({this.branchId});
   @override
+  List<Object> get props => [branchId];
+
+  @override
   String toString() => 'ReportFilterBranchIdUpdated { BranchId: $branchId  }';
 }
 
@@ -19,6 +22,8 @@ class ReportFilterRegulationUpdated extends ReportFilterEvent {
   final int regulationId;
 
   ReportFilterRegulationUpdated({this.regulationId});
+  @override
+  List<Object> get props => [regulationId];
   @override
   String toString() =>
       'ReportFilterRegulationUpdated { RegulationId: $regulationId  }';
@@ -29,13 +34,17 @@ class ReportFilterStatusUpdated extends ReportFilterEvent {
 
   ReportFilterStatusUpdated({this.status});
   @override
+  List<Object> get props => [status];
+  @override
   String toString() => 'ReportFilterStatusUpdated { Status: $status  }';
 }
 
 class ReportFilterMonthUpdated extends ReportFilterEvent {
-  final DateTime month;
+  final DateTime date;
 
-  ReportFilterMonthUpdated({this.month});
+  ReportFilterMonthUpdated({this.date});
   @override
-  String toString() => 'ReportFilterStatusUpdated { Month: $month  }';
+  List<Object> get props => [date];
+  @override
+  String toString() => 'ReportFilterStatusUpdated { Date: $date  }';
 }

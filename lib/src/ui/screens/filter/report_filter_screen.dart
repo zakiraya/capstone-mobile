@@ -156,13 +156,10 @@ class TimePicker extends StatelessWidget {
               initialDate: DateTime.now(),
               locale: Locale(BlocProvider.of<LocalizationBloc>(context).state),
             ).then((value) {
-              if (value != null) {
-                print(value);
-                BlocProvider.of<ReportFilterBloc>(context)
-                    .add(ReportFilterMonthUpdated(
-                  month: value,
-                ));
-              }
+              BlocProvider.of<ReportFilterBloc>(context)
+                  .add(ReportFilterMonthUpdated(
+                date: value,
+              ));
             }),
             child: ConstrainedBox(
               constraints: BoxConstraints(minWidth: 80),
@@ -172,7 +169,6 @@ class TimePicker extends StatelessWidget {
                   color: Colors.grey[200],
                   border: Border.all(),
                 ),
-                // color: Colors.grey[200],
                 height: 32,
                 child: Center(
                   child: Row(
@@ -182,12 +178,12 @@ class TimePicker extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              state.filter.month != null
+                              state.filter.date != null
                                   ? DateFormat.MMM(
                                           BlocProvider.of<LocalizationBloc>(
                                                   context)
                                               .state)
-                                      .format(state.filter.month)
+                                      .format(state.filter.date)
                                   : DateFormat.MMM(
                                           BlocProvider.of<LocalizationBloc>(
                                                   context)
@@ -278,6 +274,7 @@ class BranchGrid extends StatelessWidget {
                                 .branchId ==
                             list[index].id,
                         onChanged: (value) {
+                          print(value);
                           BlocProvider.of<ReportFilterBloc>(context)
                               .add(ReportFilterBranchIdUpdated(
                             branchId: value ? list[index].id : null,

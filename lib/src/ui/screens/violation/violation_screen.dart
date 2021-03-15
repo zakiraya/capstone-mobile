@@ -112,11 +112,7 @@ class __ViolationListState extends State<_ViolationList> {
               Text(S.of(context).VIOLATION_SCREEN_FETCH_FAIL),
               ElevatedButton(
                 onPressed: () {
-                  _violationBloc.add(ViolationRequested(
-                    token: BlocProvider.of<AuthenticationBloc>(context)
-                        .state
-                        .token,
-                  ));
+                  _violationBloc.add(ViolationRequested());
                 },
                 child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
                 style: ElevatedButton.styleFrom(
@@ -145,19 +141,11 @@ class __ViolationListState extends State<_ViolationList> {
             if (metrics.atEdge) {
               if (metrics.pixels == 0) {
                 _violationBloc.add(ViolationRequested(
-                  token:
-                      BlocProvider.of<AuthenticationBloc>(context).state.token,
                   isRefresh: true,
-                  filter: state.activeFilter,
                 ));
               } else {
                 _violationBloc.add(
-                  ViolationRequested(
-                    token: BlocProvider.of<AuthenticationBloc>(context)
-                        .state
-                        .token,
-                    filter: state.activeFilter,
-                  ),
+                  ViolationRequested(),
                 );
               }
             }

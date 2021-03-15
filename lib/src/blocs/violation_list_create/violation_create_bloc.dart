@@ -85,7 +85,7 @@ class ViolationCreateBloc
           violation: event.violation,
         );
 
-        violationBloc.add(ViolationUpdate());
+        violationBloc.add(ViolationRequested(isRefresh: true));
         yield state.copyWith(
           status: FormzStatus.submissionSuccess,
         );

@@ -32,8 +32,8 @@ class BaseApi {
       );
       responseJson = _returnResponse(response);
     } catch (e) {
-      print(e);
-      throw Exception(e.toString());
+      print(e.toString());
+      throw Exception();
     }
 
     return responseJson;

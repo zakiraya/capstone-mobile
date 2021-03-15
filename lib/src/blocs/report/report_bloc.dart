@@ -58,7 +58,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       if (currentState is ReportInitial || currentState is ReportLoadFailure) {
         final List<Report> reports = await reportRepository.fetchReports(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           page: 0,
         );
 
@@ -73,10 +73,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       if (currentState is ReportLoadSuccess && event.isRefresh == true) {
         final List<Report> reports = await reportRepository.fetchReports(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           page: 0,
-          branchId: currentState.activeFilter?.branchId,
-          status: currentState.activeFilter?.status,
+          branchId: currentState.activeFilter.branchId,
+          status: currentState.activeFilter.status,
+          date: currentState.activeFilter.date,
         );
 
         yield currentState.copyWith(
@@ -88,10 +89,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       if (currentState is ReportLoadSuccess && !_hasReachedMax(currentState)) {
         final List<Report> reports = await reportRepository.fetchReports(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           page: currentState.reports.length / 20,
           branchId: currentState.activeFilter?.branchId,
           status: currentState.activeFilter?.status,
+          date: currentState.activeFilter.date,
         );
         yield reports.isEmpty
             ? currentState.copyWith(hasReachedMax: true)
@@ -114,10 +116,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       if (currentState is ReportLoadSuccess) {
         final List<Report> reports = await reportRepository.fetchReports(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           page: 0,
           branchId: event.filter?.branchId,
           status: event.filter?.status,
+          date: event.filter?.date,
         );
 
         yield currentState.copyWith(

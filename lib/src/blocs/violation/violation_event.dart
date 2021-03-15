@@ -9,34 +9,27 @@ abstract class ViolationEvent extends Equatable {
 
 class ViolationRequested extends ViolationEvent {
   const ViolationRequested({
-    @required this.token,
-    this.filter,
     this.isRefresh = false,
   });
 
-  final String token;
   final bool isRefresh;
-  final Filter filter;
 
   @override
-  List<Object> get props => [token, filter, isRefresh];
+  List<Object> get props => [isRefresh];
 
   @override
-  String toString() =>
-      ' ViolationRequested: { ${filter.toString()}, $isRefresh }';
+  String toString() => ' ViolationRequested: {  $isRefresh }';
 }
 
 class FilterChanged extends ViolationEvent {
   const FilterChanged({
-    @required this.token,
     this.filter,
   });
 
-  final String token;
   final Filter filter;
 
   @override
-  List<Object> get props => [token, filter];
+  List<Object> get props => [filter];
 
   @override
   String toString() => ' FilterChanged: { ${filter.toString()} } ';

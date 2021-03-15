@@ -1,4 +1,6 @@
 import 'package:capstone_mobile/src/blocs/blocs.dart';
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/blocs/report_filter/report_filter_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +37,11 @@ class HomeScreen extends StatelessWidget {
           BlocProvider(
             create: (context) => ViolationFilterBloc(
               violationbloc: BlocProvider.of<ViolationBloc>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => ReportFilterBloc(
+              reportBloc: BlocProvider.of<ReportBloc>(context),
             ),
           ),
           BlocProvider(
@@ -101,7 +108,9 @@ class HomeView extends StatelessWidget {
                     child: Text(
                       activeTab == AppTab.reports
                           ? S.of(context).HOME_REPORT_LIST
-                          : S.of(context).HOME_VIOLATION_LIST,
+                          : activeTab == AppTab.violations
+                              ? S.of(context).HOME_VIOLATION_LIST
+                              : '',
                       style: TextStyle(
                         color: theme.primaryColor,
                         fontSize: 24,
