@@ -4,13 +4,13 @@ class Filter extends Equatable {
   final int branchId;
   final String status;
   final int regulationId;
-  final DateTime month;
+  final DateTime date;
 
   Filter({
     this.branchId,
     this.status,
     this.regulationId,
-    this.month,
+    this.date,
   });
 
   @override
@@ -18,24 +18,24 @@ class Filter extends Equatable {
         branchId,
         status,
         regulationId,
-        month,
+        date,
       ];
 
   @override
   String toString() =>
-      '{ branchId: $branchId, status: $status, regulationId: $regulationId , month: $month }';
+      '{ branchId: $branchId, status: $status, regulationId: $regulationId , date: $date }';
 
   Filter copyWith({
     int branchId,
     String status,
     int regulationId,
-    DateTime month,
+    DateTime date,
   }) {
     return Filter(
       branchId: branchId ?? this.branchId,
       status: status ?? this.status,
       regulationId: regulationId ?? this.regulationId,
-      month: month ?? this.month,
+      date: date ?? this.date,
     );
   }
 }

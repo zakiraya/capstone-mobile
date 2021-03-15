@@ -14,7 +14,7 @@ class ReportFilterState extends Equatable {
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [filter];
 
   @override
   String toString() => 'ReportFilterState: { $filter }';

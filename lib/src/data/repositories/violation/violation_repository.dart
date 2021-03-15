@@ -19,6 +19,7 @@ class ViolationRepository {
     String status,
     int branchId,
     int regulationId,
+    DateTime date,
   }) async {
     return await _violationApi.getViolations(
       token: token,
@@ -28,6 +29,7 @@ class ViolationRepository {
       branchId: branchId,
       regulationId: regulationId,
       status: status,
+      date: date,
     );
   }
 

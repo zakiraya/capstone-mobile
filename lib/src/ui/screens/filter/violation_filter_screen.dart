@@ -45,7 +45,7 @@ class ViolationFilterScreen extends StatelessWidget {
             title: Transform(
               transform: Matrix4.translationValues(-37.0, 1, 0.0),
               child: Text(
-                "back",
+                S.of(context).BACK,
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
             ),
@@ -91,7 +91,7 @@ class ViolationFilterScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Container(
                     child: Text(
-                      S.of(context).VIOLATION_STATUS,
+                      S.of(context).VIOLATION_STATUS + ":",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -112,7 +112,7 @@ class ViolationFilterScreen extends StatelessWidget {
                           children: [
                             Container(
                               child: Text(
-                                S.of(context).BRANCH,
+                                S.of(context).BRANCH + ':',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -202,9 +202,7 @@ class TimePicker extends StatelessWidget {
               if (value != null) {
                 BlocProvider.of<ViolationFilterBloc>(context)
                     .add(ViolationFilterMonthUpdated(
-                  token:
-                      BlocProvider.of<AuthenticationBloc>(context).state.token,
-                  month: value,
+                  date: value,
                 ));
               }
             }),
@@ -225,12 +223,12 @@ class TimePicker extends StatelessWidget {
                         Container(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(state.filter.month != null
+                            child: Text(state.filter.date != null
                                 ? DateFormat.MMM(
                                         BlocProvider.of<LocalizationBloc>(
                                                 context)
                                             .state)
-                                    .format(state.filter.month)
+                                    .format(state.filter.date)
                                 : DateFormat.MMM(
                                         BlocProvider.of<LocalizationBloc>(
                                                 context)
@@ -274,9 +272,6 @@ class StatusGrid extends StatelessWidget {
                   onChanged: (value) {
                     BlocProvider.of<ViolationFilterBloc>(context)
                         .add(ViolationFilterStatusUpdated(
-                      token: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .token,
                       status: value ? list[index] : null,
                     ));
                   },
@@ -327,10 +322,6 @@ class BranchGrid extends StatelessWidget {
                           onChanged: (value) {
                             BlocProvider.of<ViolationFilterBloc>(context)
                                 .add(ViolationFilterBranchIdUpdated(
-                              token:
-                                  BlocProvider.of<AuthenticationBloc>(context)
-                                      .state
-                                      .token,
                               branchId: value ? list[index].id : null,
                             ));
                           },

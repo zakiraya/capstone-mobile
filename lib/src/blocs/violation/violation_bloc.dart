@@ -56,8 +56,8 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         if (currentState is ViolationInitial) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
-            token: event.token,
-            sort: 'desc id',
+            token: _authenticationRepository.token,
+            sort: 'desc createdAt',
             page: 0,
           );
 
@@ -72,8 +72,8 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         if (currentState is ViolationLoadFailure) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
-            token: event.token,
-            sort: 'desc id',
+            token: _authenticationRepository.token,
+            sort: 'desc createdAt',
             page: 0,
           );
 
@@ -88,12 +88,13 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         if (currentState is ViolationLoadSuccess && event.isRefresh == true) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
-            token: event.token,
-            sort: 'desc id',
+            token: _authenticationRepository.token,
+            sort: 'desc createdAt',
             page: 0,
             branchId: currentState.activeFilter?.branchId,
             regulationId: currentState.activeFilter?.regulationId,
             status: currentState.activeFilter?.status,
+            date: currentState.activeFilter.date,
           );
 
           yield currentState.copyWith(
@@ -106,21 +107,19 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
             !_hasReachedMax(currentState)) {
           final List<Violation> violations =
               await violationRepository.fetchViolations(
-            token: event.token,
-            sort: 'desc id',
+            token: _authenticationRepository.token,
+            sort: 'desc createdAt',
             page: currentState.violations.length / 20,
-            branchId:
-                event.filter?.branchId ?? currentState.activeFilter.branchId,
-            regulationId: event.filter?.regulationId ??
-                currentState.activeFilter.regulationId,
-            status: event.filter?.status ?? currentState.activeFilter.status,
+            branchId: currentState.activeFilter?.branchId,
+            regulationId: currentState.activeFilter?.regulationId,
+            status: currentState.activeFilter?.status,
+            date: currentState.activeFilter.date,
           );
 
           yield violations.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : currentState.copyWith(
                   violations: currentState.violations + violations,
-                  // violations: violations,
                   hasReachedMax: false,
                 );
           return;
@@ -139,7 +138,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
       if (event.status == AuthenticationStatus.unauthenticated) {
         yield (ViolationInitial());
       } else if (event.status == AuthenticationStatus.authenticated) {
-        add(ViolationRequested(token: _authenticationRepository.token));
+        add(ViolationRequested());
       }
     }
   }
@@ -151,14 +150,13 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
       if (currentState is ViolationLoadSuccess) {
         final List<Violation> violations =
             await violationRepository.fetchViolations(
-          token: event.token,
-          sort: 'desc id',
+          token: _authenticationRepository.token,
+          sort: 'desc createdAt',
           page: 0,
-          branchId:
-              event.filter?.branchId ?? currentState.activeFilter.branchId,
-          regulationId: event.filter?.regulationId ??
-              currentState.activeFilter.regulationId,
-          status: event.filter?.status ?? currentState.activeFilter.status,
+          branchId: event.filter?.branchId,
+          regulationId: event.filter?.regulationId,
+          status: event.filter?.status,
+          date: event.filter?.date,
         );
 
         yield currentState.copyWith(
@@ -169,7 +167,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
       }
     } catch (e) {
       print(' _mapFilterChangeToState: ');
-      print(e);
+      print(e.toString());
     }
   }
 
@@ -181,7 +179,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         final List<Violation> updatedViolations =
             await violationRepository.fetchViolations(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           limit: currentState.violations.length,
         );
 
@@ -190,8 +188,8 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         );
       }
     } catch (e) {
-      print(' _mapViolationUpdateToState error');
-      print(e);
+      print(' _mapViolationUpdateToState');
+      print(e.toString());
     }
   }
 
@@ -208,7 +206,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
         final List<Violation> updatedViolations =
             await violationRepository.fetchViolations(
           token: _authenticationRepository.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           limit: currentState.violations.length,
         );
         yield (state as ViolationLoadSuccess).copyWith(

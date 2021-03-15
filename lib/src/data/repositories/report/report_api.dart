@@ -1,3 +1,4 @@
+import 'package:date_util/date_util.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +19,7 @@ class ReportApi {
     double page,
     int limit,
     int branchId,
+    DateTime date,
     Map<String, String> opts,
   }) async {
     String url = reportUrl + '?Filter.IsDeleted=false';
@@ -27,18 +29,28 @@ class ReportApi {
     if (sort != null) {
       url += '&Sort.Orders=$sort';
     }
-
     if (page != null) {
       url += '&PageIndex=${page.ceil()}';
     }
-
     if (limit != null) {
       url += '&Limit=$limit';
     }
-
     if (branchId != null) {
       url += '&Filter.BranchIds=$branchId';
     }
+    if (date != null) {
+      var dateUtility = DateUtil();
+      var month = date.month;
+      var year = date.year;
+      var daysInMonth = dateUtility.daysInMonth(month, year);
+      var from = '$year-$month-01';
+      var to = '$year-$month-$daysInMonth';
+
+      url += '&Filter.FromDate=$from';
+      url += '&Filter.ToDate=$to';
+    }
+
+    print(url);
 
     final reportJson = await _baseApi.get(url, token, opts: opts);
 

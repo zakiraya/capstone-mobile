@@ -17,6 +17,7 @@ class ReportRepository {
     double page,
     int limit,
     int branchId,
+    DateTime date,
   }) async {
     return await _reportApi.getReports(
       token: token,
@@ -24,6 +25,7 @@ class ReportRepository {
       page: page,
       limit: limit,
       branchId: branchId,
+      date: date,
     );
   }
 

@@ -35,7 +35,6 @@ class ViolationListForm extends StatelessWidget {
           ).then((value) {
             BlocProvider.of<ViolationBloc>(context).add(
               ViolationRequested(
-                token: BlocProvider.of<AuthenticationBloc>(context).state.token,
                 isRefresh: true,
               ),
             );

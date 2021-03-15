@@ -27,7 +27,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: event.branchId,
           status: state.filter.status,
           regulationId: state.filter.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       ));
       yield state.copyWith(
@@ -35,7 +35,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: event.branchId,
           status: state.filter.status,
           regulationId: state.filter.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       );
     } else if (event is ReportFilterRegulationUpdated) {
@@ -44,7 +44,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: state.filter.status,
           regulationId: event.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       ));
       yield state.copyWith(
@@ -52,7 +52,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: state.filter.status,
           regulationId: event.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       );
     } else if (event is ReportFilterStatusUpdated) {
@@ -61,7 +61,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: event.status,
           regulationId: state.filter.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       ));
       yield state.copyWith(
@@ -69,7 +69,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: event.status,
           regulationId: state.filter.regulationId,
-          month: state.filter.month,
+          date: state.filter.date,
         ),
       );
     } else if (event is ReportFilterMonthUpdated) {
@@ -78,7 +78,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: state.filter.status,
           regulationId: state.filter.regulationId,
-          month: event.month,
+          date: event.date,
         ),
       ));
       yield state.copyWith(
@@ -86,7 +86,7 @@ class ReportFilterBloc extends Bloc<ReportFilterEvent, ReportFilterState> {
           branchId: state.filter.branchId,
           status: state.filter.status,
           regulationId: state.filter.regulationId,
-          month: event.month,
+          date: event.date,
         ),
       );
     }
