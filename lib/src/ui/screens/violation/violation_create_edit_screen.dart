@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
@@ -48,35 +50,46 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        leading: IconButton(
-          iconSize: 16,
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: theme.primaryColor,
+    return BlocBuilder<LocalizationBloc, String>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            leading: IconButton(
+              iconSize: 16,
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: theme.primaryColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Transform(
+              transform: Matrix4.translationValues(-37.0, 1, 0.0),
+              child: Text(
+                S.of(context).BACK,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: BlocProvider(
-        create: (context) => ViolationCreateBloc(
-          violationBloc: BlocProvider.of<ViolationBloc>(context),
-          authenticationRepository:
-              RepositoryProvider.of<AuthenticationRepository>(context),
-          violationRepository: ViolationRepository(),
-        ),
-        child: ViolationCreateEditForm(
-          violation: widget.violation,
-          size: size,
-          onSaveCallBack: widget.onSaveCallBack,
-          isEditing: widget.isEditing,
-        ),
-      ),
+          body: BlocProvider(
+            create: (context) => ViolationCreateBloc(
+              violationBloc: BlocProvider.of<ViolationBloc>(context),
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context),
+              violationRepository: ViolationRepository(),
+            ),
+            child: ViolationCreateEditForm(
+              violation: widget.violation,
+              size: size,
+              onSaveCallBack: widget.onSaveCallBack,
+              isEditing: widget.isEditing,
+            ),
+          ),
+        );
+      },
     );
   }
 }

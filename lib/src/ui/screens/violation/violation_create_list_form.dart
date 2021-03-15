@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -8,7 +9,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
@@ -39,8 +39,15 @@ class ViolationListForm extends StatelessWidget {
                 isRefresh: true,
               ),
             );
-            Navigator.pop(context);
           });
+        }
+        if (state.status.isSubmissionInProgress) {
+          Navigator.pop(context);
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.loading,
+            text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+          );
         }
         if (state.status.isSubmissionFailure) {
           Navigator.pop(context);
@@ -94,15 +101,16 @@ class ViolationListForm extends StatelessWidget {
                               color: state.violationBranch.pure ||
                                       state.violationBranch.invalid
                                   ? Colors.white
-                                  : Colors.black,
+                                  : Color(0xff828282),
                             ),
                             Text(
                               S.of(context).NEW_VIOLATION,
                               style: TextStyle(
+                                fontWeight: FontWeight.w600,
                                 color: state.violationBranch.pure ||
                                         state.violationBranch.invalid
                                     ? Colors.white
-                                    : Colors.black,
+                                    : Color(0xff828282),
                               ),
                             ),
                           ],
@@ -111,20 +119,6 @@ class ViolationListForm extends StatelessWidget {
                     ),
                   );
                 },
-                // child: Card(
-                //   elevation: 5,
-                //   color: Color(0xffF2F2F2),
-                //   child: Container(
-                //     height: size.height * 0.1,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Icon(Icons.add),
-                //         Text(S.of(context).NEW_VIOLATION),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ),
               SizedBox(
                 height: 24,
@@ -165,6 +159,7 @@ class _SubmitButton extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 1.5,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               onPressed: state.status.isValidated && state.violationBranch.valid
@@ -177,19 +172,6 @@ class _SubmitButton extends StatelessWidget {
                                   .token,
                             ),
                           );
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return SimpleDialog(
-                              title: const Text('Submitting...'),
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ],
-                            );
-                          });
                     }
                   : null,
               style: ElevatedButton.styleFrom(
@@ -234,10 +216,10 @@ class ViolationList extends StatelessWidget {
 List<Widget> buildViolationList(List<Violation> violations) {
   if (violations == null) return null;
 
-  List<ViolationCard> violationCards = List<ViolationCard>();
+  List<ViolationCreateCard> violationCards = List<ViolationCreateCard>();
 
   for (int i = 0; i < violations.length; i++) {
-    ViolationCard card = ViolationCard(
+    ViolationCreateCard card = ViolationCreateCard(
       position: i,
       violation: violations[i],
     );

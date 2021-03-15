@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
@@ -76,7 +77,7 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
               ));
         },
         value: _initValue,
-        hintText: 'Choose a branch',
+        hintText: S.of(context).CHOOSE_BRANCH,
         // labelText: 'Branch',
         items: _brancheNames,
 
@@ -174,8 +175,7 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
                 ),
               );
         },
-        value: 'wefwaef',
-        hintText: 'Choose a regulation',
+        hintText: S.of(context).CHOOSE_REGULATION,
         // labelText: 'Branch',
         items: _regulationNames,
         strict: false,

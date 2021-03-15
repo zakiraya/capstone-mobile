@@ -1,3 +1,5 @@
+import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
@@ -18,27 +20,38 @@ class _ViolationCreateScreenState extends State<ViolationCreateScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0,
-        leading: IconButton(
-          iconSize: 16.0,
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: theme.primaryColor,
+    return BlocBuilder<LocalizationBloc, String>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            elevation: 0,
+            leading: IconButton(
+              iconSize: 16.0,
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: theme.primaryColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Transform(
+              transform: Matrix4.translationValues(-37.0, 1, 0.0),
+              child: Text(
+                S.of(context).BACK,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: BlocProvider(
-        create: (context) => ViolationListBloc(
-          violationRepository: ViolationRepository(),
-        ),
-        child: ViolationListForm(theme: theme, size: size),
-      ),
+          body: BlocProvider(
+            create: (context) => ViolationListBloc(
+              violationRepository: ViolationRepository(),
+            ),
+            child: ViolationListForm(theme: theme, size: size),
+          ),
+        );
+      },
     );
   }
 }

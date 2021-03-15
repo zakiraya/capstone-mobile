@@ -7,10 +7,11 @@ import 'package:capstone_mobile/src/blocs/violation_filter/violation_filter_bloc
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
-class FilterScreen extends StatelessWidget {
-  const FilterScreen({Key key}) : super(key: key);
+class ViolationFilterScreen extends StatelessWidget {
+  const ViolationFilterScreen({Key key}) : super(key: key);
 
   static Route route({
     ViolationFilterBloc violationFilterBloc,
@@ -18,7 +19,7 @@ class FilterScreen extends StatelessWidget {
   }) {
     return MaterialPageRoute<void>(
       settings: RouteSettings(name: "/FilterScreen"),
-      builder: (_) => FilterScreen(),
+      builder: (_) => ViolationFilterScreen(),
     );
   }
 
@@ -33,12 +34,6 @@ class FilterScreen extends StatelessWidget {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            title: Text(
-              'Filter',
-              style: TextStyle(
-                color: theme.primaryColor,
-              ),
-            ),
             leading: IconButton(
               color: theme.primaryColor,
               icon: Icon(Icons.arrow_back_ios),
@@ -47,26 +42,33 @@ class FilterScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
+            title: Transform(
+              transform: Matrix4.translationValues(-37.0, 1, 0.0),
+              child: Text(
+                "back",
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(0.0),
             child: ListView(
               children: [
-                TimePicker(),
-                SizedBox(height: 16),
                 Container(
                   color: Colors.orange[400],
-                  height: 36,
+                  height: 40,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          S.of(context).VIOLATION_STATUS,
+                          S.of(context).FILTER,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
@@ -75,38 +77,48 @@ class FilterScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                StatusGrid(),
+                SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TimePicker(),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Container(
+                    child: Text(
+                      S.of(context).VIOLATION_STATUS,
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: StatusGrid(),
+                ),
                 BlocProvider.of<AuthenticationBloc>(context)
                             .state
                             .user
                             .roleName ==
                         Constant.ROLE_QC
-                    ? Column(
-                        children: [
-                          Container(
-                            color: Colors.orange[400],
-                            height: 36,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    S.of(context).BRANCH,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Text(
+                                S.of(context).BRANCH,
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                          ),
-                          BranchGrid()
-                        ],
+                            BranchGrid()
+                          ],
+                        ),
                       )
                     : Container(),
                 // Row(
@@ -170,7 +182,12 @@ class TimePicker extends StatelessWidget {
       children: [
         Container(
           width: 64,
-          child: Text('Month: '),
+          child: Text(
+            S.of(context).MONTH + ':',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
             builder: (context, state) {
@@ -183,7 +200,6 @@ class TimePicker extends StatelessWidget {
               locale: Locale(BlocProvider.of<LocalizationBloc>(context).state),
             ).then((value) {
               if (value != null) {
-                print(value);
                 BlocProvider.of<ViolationFilterBloc>(context)
                     .add(ViolationFilterMonthUpdated(
                   token:
@@ -209,11 +225,17 @@ class TimePicker extends StatelessWidget {
                         Container(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              state.filter.month != null
-                                  ? state.filter.month.month.toString()
-                                  : DateTime.now().month.toString(),
-                            ),
+                            child: Text(state.filter.month != null
+                                ? DateFormat.MMM(
+                                        BlocProvider.of<LocalizationBloc>(
+                                                context)
+                                            .state)
+                                    .format(state.filter.month)
+                                : DateFormat.MMM(
+                                        BlocProvider.of<LocalizationBloc>(
+                                                context)
+                                            .state)
+                                    .format(DateTime.now())),
                           ),
                         ),
                         Icon(Icons.arrow_drop_down),
@@ -255,7 +277,7 @@ class StatusGrid extends StatelessWidget {
                       token: BlocProvider.of<AuthenticationBloc>(context)
                           .state
                           .token,
-                      status: list[index],
+                      status: value ? list[index] : null,
                     ));
                   },
                 ),
@@ -281,45 +303,54 @@ class BranchGrid extends StatelessWidget {
           .branches;
       var size = MediaQuery.of(context).size;
 
-      return BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+      return BlocBuilder<BranchBloc, BranchState>(
         builder: (context, state) {
-          return GridView.count(
-            childAspectRatio: 4,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            children: List.generate(list?.length, (index) {
-              return Row(
-                children: [
-                  Checkbox(
-                    value: BlocProvider.of<ViolationFilterBloc>(context)
-                            .state
-                            .filter
-                            .branchId ==
-                        list[index].id,
-                    onChanged: (value) {
-                      BlocProvider.of<ViolationFilterBloc>(context)
-                          .add(ViolationFilterBranchIdUpdated(
-                        token: BlocProvider.of<AuthenticationBloc>(context)
-                            .state
-                            .token,
-                        branchId: list[index].id,
-                      ));
-                    },
-                  ),
-                  Container(
-                    height: 20,
-                    width: size.width * 0.3,
-                    // color: Colors.red,
-                    child: Text(
-                      list[index].name,
-                      overflow: TextOverflow.visible,
-                    ),
-                  ),
-                ],
-              );
-            }),
-          );
+          if (state is BranchLoadInProgress) {
+            return Container();
+          } else if (state is BranchLoadSuccess) {
+            return BlocBuilder<ViolationFilterBloc, ViolationFilterState>(
+              builder: (context, state) {
+                return GridView.count(
+                  childAspectRatio: 4,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  children: List.generate(list?.length, (index) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          value: BlocProvider.of<ViolationFilterBloc>(context)
+                                  .state
+                                  .filter
+                                  .branchId ==
+                              list[index].id,
+                          onChanged: (value) {
+                            BlocProvider.of<ViolationFilterBloc>(context)
+                                .add(ViolationFilterBranchIdUpdated(
+                              token:
+                                  BlocProvider.of<AuthenticationBloc>(context)
+                                      .state
+                                      .token,
+                              branchId: value ? list[index].id : null,
+                            ));
+                          },
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Text(
+                              list[index].name,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                );
+              },
+            );
+          }
+          return Container();
         },
       );
     }

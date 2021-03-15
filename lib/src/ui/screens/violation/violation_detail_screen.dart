@@ -1,6 +1,5 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
@@ -80,6 +79,13 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                         Navigator.pop(context);
                       },
                     ),
+                    title: Transform(
+                      transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                      child: Text(
+                        S.of(context).BACK,
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                    ),
                     actions: violation?.status?.toLowerCase() == 'opening' &&
                             BlocProvider.of<AuthenticationBloc>(context)
                                     .state
@@ -101,7 +107,11 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                       children: [
                         Container(
                           child: Text(
-                            '${violation?.regulationName}',
+                            S.of(context).VIOLATION +
+                                ' ' +
+                                S.of(context).OF +
+                                ' ' +
+                                '${widget.violation.regulationName}',
                             style: TextStyle(
                               color: theme.primaryColor,
                               fontSize: theme.textTheme.headline5.fontSize,

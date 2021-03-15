@@ -8,13 +8,20 @@ abstract class BranchEvent extends Equatable {
 }
 
 class BranchRequested extends BranchEvent {
-  final String token;
-
-  BranchRequested({@required this.token});
+  BranchRequested();
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [];
 
   @override
   String toString() => ' BranchRequested ';
+}
+
+class BranchAuthenticationStatusChanged extends BranchEvent {
+  const BranchAuthenticationStatusChanged({this.status});
+
+  final AuthenticationStatus status;
+
+  @override
+  List<Object> get props => [status];
 }

@@ -75,6 +75,26 @@ class S {
     );
   }
 
+  /// `Home`
+  String get HOME {
+    return Intl.message(
+      'Home',
+      name: 'HOME',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get SETTINGS {
+    return Intl.message(
+      'Settings',
+      name: 'SETTINGS',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Report`
   String get REPORT {
     return Intl.message(
@@ -140,6 +160,16 @@ class S {
     return Intl.message(
       'Submitted by',
       name: 'SUBMITTED_BY',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Month`
+  String get MONTH {
+    return Intl.message(
+      'Month',
+      name: 'MONTH',
       desc: '',
       args: [],
     );
@@ -250,6 +280,56 @@ class S {
     return Intl.message(
       'There is no',
       name: 'THERE_IS_NO',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort by`
+  String get SORT_BY {
+    return Intl.message(
+      'Sort by',
+      name: 'SORT_BY',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter`
+  String get FILTER {
+    return Intl.message(
+      'Filter',
+      name: 'FILTER',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `success`
+  String get SUCCESS {
+    return Intl.message(
+      'success',
+      name: 'SUCCESS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `fail`
+  String get FAIL {
+    return Intl.message(
+      'fail',
+      name: 'FAIL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `back`
+  String get BACK {
+    return Intl.message(
+      'back',
+      name: 'BACK',
       desc: '',
       args: [],
     );
@@ -545,6 +625,56 @@ class S {
     );
   }
 
+  /// `Change`
+  String get CHANGE {
+    return Intl.message(
+      'Change',
+      name: 'CHANGE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get YES {
+    return Intl.message(
+      'Yes',
+      name: 'YES',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get NO {
+    return Intl.message(
+      'No',
+      name: 'NO',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a branch`
+  String get CHOOSE_BRANCH {
+    return Intl.message(
+      'Choose a branch',
+      name: 'CHOOSE_BRANCH',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a regulation`
+  String get CHOOSE_REGULATION {
+    return Intl.message(
+      'Choose a regulation',
+      name: 'CHOOSE_REGULATION',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `CREATE NEW SUCCESSFULLY!`
   String get POPUP_CREATE_VIOLATION_SUCCESS {
     return Intl.message(
@@ -570,6 +700,76 @@ class S {
     return Intl.message(
       'PROCESSING REQUEST',
       name: 'POPUP_CREATE_VIOLATION_SUBMITTING',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current password`
+  String get CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD {
+    return Intl.message(
+      'Current password',
+      name: 'CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New password`
+  String get CHANGE_PASSWORD_SCREEN_NEW_PASSWORD {
+    return Intl.message(
+      'New password',
+      name: 'CHANGE_PASSWORD_SCREEN_NEW_PASSWORD',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm password`
+  String get CHANGE_PASSWORD_SCREEN_CONFIRM_PASSWORD {
+    return Intl.message(
+      'Confirm password',
+      name: 'CHANGE_PASSWORD_SCREEN_CONFIRM_PASSWORD',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password success`
+  String get CHANGE_PASSWORD_SCREEN_CHANGE_SUCCESS {
+    return Intl.message(
+      'Change password success',
+      name: 'CHANGE_PASSWORD_SCREEN_CHANGE_SUCCESS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current password is wrong`
+  String get CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR {
+    return Intl.message(
+      'Current password is wrong',
+      name: 'CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm password must be the same as new password`
+  String get CHANGE_PASSWORD_SCREEN_CONFIRM_ERROR {
+    return Intl.message(
+      'Confirm password must be the same as new password',
+      name: 'CHANGE_PASSWORD_SCREEN_CONFIRM_ERROR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `must not be empty`
+  String get CHANGE_PASSWORD_SCREEN_EMPTY {
+    return Intl.message(
+      'must not be empty',
+      name: 'CHANGE_PASSWORD_SCREEN_EMPTY',
       desc: '',
       args: [],
     );

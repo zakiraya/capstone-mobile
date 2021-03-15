@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
@@ -60,7 +61,13 @@ class ReportDetailScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
-
+                title: Transform(
+                  transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                  child: Text(
+                    S.of(context).BACK,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                ),
                 actions: report.status.toLowerCase() == 'opening'
                     ? [
                         Builder(builder: (context) {

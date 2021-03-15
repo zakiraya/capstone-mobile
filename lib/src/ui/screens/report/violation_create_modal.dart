@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
@@ -60,235 +61,261 @@ class _ModalBodyState extends State<ModalBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      clipBehavior: Clip.antiAlias,
-      // borderRadius: BorderRadius.circular(16.0),
-      child: SafeArea(
-        top: false,
-        child: BlocProvider(
-          create: (context) => ViolationCreateBloc(
-            violationBloc: BlocProvider.of<ViolationBloc>(context),
-            authenticationRepository:
-                RepositoryProvider.of<AuthenticationRepository>(context),
-            violationRepository: ViolationRepository(),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              height: widget.size.height * 0.8,
-              child: ListView(
-                // mainAxisSize: MainAxisSize.min,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // action button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                            widget.isEditing
-                                ? S.of(context).EDIT_VIOLATION
-                                : S.of(context).NEW_VIOLATION,
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 24.0,
-                            )),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  ),
-                  Divider(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Container(
-                    child: Text(
-                      S.of(context).DESCRIPTION,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+    return BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
+      return Material(
+        clipBehavior: Clip.antiAlias,
+        // borderRadius: BorderRadius.circular(16.0),
+        child: SafeArea(
+          top: false,
+          child: BlocProvider(
+            create: (context) => ViolationCreateBloc(
+              violationBloc: BlocProvider.of<ViolationBloc>(context),
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context),
+              violationRepository: ViolationRepository(),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                height: widget.size.height * 0.8,
+                child: ListView(
+                  children: [
+                    // action button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                              widget.isEditing
+                                  ? S.of(context).EDIT_VIOLATION
+                                  : S.of(context).NEW_VIOLATION,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w600,
+                              )),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
                     ),
-                  ),
-                  DropdownFieldRegulation(
-                      initValue: widget.isEditing == true
-                          ? Regulation(
-                              id: widget.violation.regulationId,
-                              name: widget.violation.regulationName,
-                            )
-                          : null),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  // regulation dropdown
-                  Container(
-                    child: Text(
-                      S.of(context).REGULATION,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Divider(
+                      color: Theme.of(context).primaryColor,
                     ),
-                  ),
-                  Container(
-                    child: _ViolationDescriptionInput(
-                      initValue: widget.isEditing == true
-                          ? widget.violation.description
-                          : null,
+                    Container(
+                      child: Text(S.of(context).REGULATION + ': ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                  ),
 
-                  // Container(
-                  //   child: RegulationDropdown(
-                  //     initValue: widget.isEditing == true
-                  //         ? Regulation(
-                  //             id: widget.violation.regulationId,
-                  //             name: widget.violation.regulationName,
-                  //           )
-                  //         : null,
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    child: Text(S.of(context).EVIDENCE,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  _image == null
-                      ? Row(
-                          children: [
-                            GestureDetector(
-                              onTap: getImage,
-                              child: Card(
-                                color: Colors.grey,
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.15,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.22,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        S.of(context).ADD_IMAGE,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  _image != null
-                      ? Stack(
-                          children: [
-                            Container(
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              width: MediaQuery.of(context).size.width * 0.22,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: _image == null
-                                      ? AssetImage('assets/avt.jpg')
-                                      : FileImage(_image),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _image = null;
-                                  });
-                                },
-                                child: Container(
-                                  height: 24,
-                                  width: 24,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.red),
-                                  ),
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Colors.red,
-                                    size: 16.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  Center(
-                    child: Builder(builder: (context) {
-                      return BlocBuilder<ViolationCreateBloc,
-                          ViolationCreateState>(
-                        buildWhen: (previous, current) =>
-                            previous.status != current.status,
-                        builder: (context, state) {
-                          var bloc =
-                              BlocProvider.of<ViolationCreateBloc>(context);
-                          return ElevatedButton(
-                            onPressed: bloc.state.status.isValid &&
-                                    _image != null
-                                ? () async {
-                                    var state = bloc.state;
-                                    Navigator.pop<List>(
-                                      context,
-                                      [
-                                        Violation(
-                                          description:
-                                              state.violationDescription.value,
-                                          regulationId: state
-                                              .violationRegulation.value.id,
-                                          regulationName: state
-                                              .violationRegulation.value.name,
-                                          imagePath: _image.path,
-                                          // branchId:
-                                          //     state.violationBranch.value.id,
-                                          // branchName:
-                                          //     state.violationBranch.value.name,
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    DropdownFieldRegulation(
+                        initValue: widget.isEditing == true
+                            ? Regulation(
+                                id: widget.violation.regulationId,
+                                name: widget.violation.regulationName,
+                              )
+                            : null),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    // regulation dropdown
+                    Container(
+                      child: Text(
+                        S.of(context).DESCRIPTION + ': ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Container(
+                      child: _ViolationDescriptionInput(
+                        initValue: widget.isEditing == true
+                            ? widget.violation.description
+                            : null,
+                      ),
+                    ),
+
+                    // Container(
+                    //   child: RegulationDropdown(
+                    //     initValue: widget.isEditing == true
+                    //         ? Regulation(
+                    //             id: widget.violation.regulationId,
+                    //             name: widget.violation.regulationName,
+                    //           )
+                    //         : null,
+                    //   ),
+                    // ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(S.of(context).EVIDENCE + ': ',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+
+                    _image == null
+                        ? Row(
+                            children: [
+                              GestureDetector(
+                                onTap: getImage,
+                                child: Card(
+                                  color: Colors.grey,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.15,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.22,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: Colors.white,
                                         ),
-                                        widget.position,
+                                        Text(
+                                          S.of(context).ADD_IMAGE,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ],
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                                '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}'),
-                            style: ElevatedButton.styleFrom(
-                              elevation: 5.0,
-                              primary: Theme.of(context).primaryColor,
-                              padding: EdgeInsets.symmetric(horizontal: 24),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  ),
-                ],
+                            ],
+                          )
+                        : Container(),
+                    _image != null
+                        ? Row(
+                            children: [
+                              Stack(children: [
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.16,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.235,
+                                  alignment: Alignment.bottomLeft,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.15,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.22,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: _image == null
+                                            ? AssetImage('assets/avt.jpg')
+                                            : FileImage(_image),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _image = null;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 24,
+                                      width: 24,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: Colors.red),
+                                      ),
+                                      child: Icon(
+                                        Icons.clear,
+                                        color: Colors.red,
+                                        size: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    Center(
+                      child: Builder(builder: (context) {
+                        return BlocBuilder<ViolationCreateBloc,
+                            ViolationCreateState>(
+                          buildWhen: (previous, current) =>
+                              previous.status != current.status,
+                          builder: (context, state) {
+                            var bloc =
+                                BlocProvider.of<ViolationCreateBloc>(context);
+                            return ElevatedButton(
+                              onPressed:
+                                  bloc.state.status.isValid && _image != null
+                                      ? () async {
+                                          var state = bloc.state;
+                                          Navigator.pop<List>(
+                                            context,
+                                            [
+                                              Violation(
+                                                description: state
+                                                    .violationDescription.value,
+                                                regulationId: state
+                                                    .violationRegulation
+                                                    .value
+                                                    .id,
+                                                regulationName: state
+                                                    .violationRegulation
+                                                    .value
+                                                    .name,
+                                                imagePath: _image.path,
+                                              ),
+                                              widget.position,
+                                            ],
+                                          );
+                                        }
+                                      : null,
+                              child: Text(
+                                '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                elevation: 5.0,
+                                primary: Theme.of(context).primaryColor,
+                                padding: EdgeInsets.symmetric(horizontal: 24),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

@@ -44,6 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         labelText: widget.label,
+        labelStyle: TextStyle(fontSize: 20),
         // contentPadding: EdgeInsets.only(bottom: 3),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         hintText: widget.placeholder ?? '',
