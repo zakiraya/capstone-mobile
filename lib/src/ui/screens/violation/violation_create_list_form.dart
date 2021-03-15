@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -8,7 +9,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/report/violation_card.dart';
 import 'package:capstone_mobile/src/ui/screens/report/violation_create_modal.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
@@ -216,10 +216,10 @@ class ViolationList extends StatelessWidget {
 List<Widget> buildViolationList(List<Violation> violations) {
   if (violations == null) return null;
 
-  List<ViolationCard> violationCards = List<ViolationCard>();
+  List<ViolationCreateCard> violationCards = List<ViolationCreateCard>();
 
   for (int i = 0; i < violations.length; i++) {
-    ViolationCard card = ViolationCard(
+    ViolationCreateCard card = ViolationCreateCard(
       position: i,
       violation: violations[i],
     );

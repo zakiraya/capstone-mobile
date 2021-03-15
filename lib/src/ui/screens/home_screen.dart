@@ -71,30 +71,44 @@ class HomeView extends StatelessWidget {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image(
-                  width: size.width * 0.07,
-                  image: AssetImage('assets/logo.png'),
-                ),
-                SizedBox(
-                  width: 8.0,
-                ),
-                Column(
-                  children: [
-                    Image(
-                      width: size.width * 0.2,
-                      image: AssetImage('assets/brand_name.png'),
+            title: activeTab == AppTab.home
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image(
+                        width: size.width * 0.07,
+                        image: AssetImage('assets/logo.png'),
+                      ),
+                      SizedBox(
+                        width: 8.0,
+                      ),
+                      Column(
+                        children: [
+                          Image(
+                            width: size.width * 0.2,
+                            image: AssetImage('assets/brand_name.png'),
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                : Transform(
+                    transform: Matrix4.translationValues(0.0, 0, 0.0),
+                    child: Text(
+                      activeTab == AppTab.reports
+                          ? S.of(context).HOME_REPORT_LIST
+                          : S.of(context).HOME_VIOLATION_LIST,
+                      style: TextStyle(
+                        color: theme.primaryColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
             actions: [
               Container(
                 width: 64,

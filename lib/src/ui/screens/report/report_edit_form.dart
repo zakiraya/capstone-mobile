@@ -1,6 +1,6 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
-import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +9,6 @@ import 'package:formz/formz.dart';
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 
@@ -65,7 +64,7 @@ class ReportEditForm extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+          padding: EdgeInsets.only(left: 16, right: 16),
           child: ListView(
             children: [
               Container(
@@ -240,7 +239,7 @@ class _ReportDescriptionInput extends StatelessWidget {
             fillColor: Colors.grey[200],
             hintText: description,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide.none,
             ),
           ),
@@ -253,6 +252,8 @@ class _ReportDescriptionInput extends StatelessWidget {
                 );
           },
           enabled: false,
+          maxLines: 5,
+          style: TextStyle(fontSize: 14),
         );
       },
     );
@@ -276,6 +277,7 @@ class _ReportQCNote extends StatelessWidget {
           previous.reportDescription != current.reportDescription,
       builder: (context, state) {
         return TextFormField(
+          style: TextStyle(fontSize: 14),
           initialValue: qcNote,
           key: const Key('editForm_reportQCNote_textField'),
           decoration: InputDecoration(
@@ -283,7 +285,7 @@ class _ReportQCNote extends StatelessWidget {
             fillColor: Colors.grey[200],
             hintText: qcNote,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide.none,
             ),
           ),

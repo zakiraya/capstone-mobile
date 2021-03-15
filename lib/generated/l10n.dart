@@ -325,6 +325,16 @@ class S {
     );
   }
 
+  /// `back`
+  String get BACK {
+    return Intl.message(
+      'back',
+      name: 'BACK',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Latest notification`
   String get HOME_LATEST_NOTIFICATION {
     return Intl.message(
@@ -640,6 +650,26 @@ class S {
     return Intl.message(
       'No',
       name: 'NO',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a branch`
+  String get CHOOSE_BRANCH {
+    return Intl.message(
+      'Choose a branch',
+      name: 'CHOOSE_BRANCH',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a regulation`
+  String get CHOOSE_REGULATION {
+    return Intl.message(
+      'Choose a regulation',
+      name: 'CHOOSE_REGULATION',
       desc: '',
       args: [],
     );

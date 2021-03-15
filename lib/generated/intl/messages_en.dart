@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Add image"),
+    "BACK" : MessageLookupByLibrary.simpleMessage("back"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("belongs to"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Branch"),
     "CHANGE" : MessageLookupByLibrary.simpleMessage("Change"),
@@ -33,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "CHANGE_PASSWORD_SCREEN_EMPTY" : MessageLookupByLibrary.simpleMessage("must not be empty"),
     "CHANGE_PASSWORD_SCREEN_NEW_PASSWORD" : MessageLookupByLibrary.simpleMessage("New password"),
     "CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR" : MessageLookupByLibrary.simpleMessage("Current password is wrong"),
+    "CHOOSE_BRANCH" : MessageLookupByLibrary.simpleMessage("Choose a branch"),
+    "CHOOSE_REGULATION" : MessageLookupByLibrary.simpleMessage("Choose a regulation"),
     "COMMENTS" : MessageLookupByLibrary.simpleMessage("Comments"),
     "CREATED_ON" : MessageLookupByLibrary.simpleMessage("Created on"),
     "DELETE" : MessageLookupByLibrary.simpleMessage("Delete"),

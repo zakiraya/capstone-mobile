@@ -36,12 +36,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   UserRepository(userApi: UserApi(httpClient: http.Client()))),
           child: Scaffold(
             appBar: AppBar(
-              centerTitle: true,
               elevation: 0.0,
               backgroundColor: theme.scaffoldBackgroundColor,
-              title: Text(
-                S.of(context).CHANGE_PASSWORD,
-                style: TextStyle(color: Colors.black),
+              title: Transform(
+                transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                child: Text(
+                  S.of(context).BACK,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
               ),
               leading: IconButton(
                 iconSize: 16.0,

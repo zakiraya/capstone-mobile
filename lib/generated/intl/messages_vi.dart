@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Thêm hình"),
+    "BACK" : MessageLookupByLibrary.simpleMessage("quay về"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("thuộc"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Chi nhánh"),
     "CHANGE" : MessageLookupByLibrary.simpleMessage("Thay đổi"),
@@ -33,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "CHANGE_PASSWORD_SCREEN_EMPTY" : MessageLookupByLibrary.simpleMessage("không được để trống"),
     "CHANGE_PASSWORD_SCREEN_NEW_PASSWORD" : MessageLookupByLibrary.simpleMessage("Mật khẩu mới"),
     "CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR" : MessageLookupByLibrary.simpleMessage("Mật khẩu sai"),
+    "CHOOSE_BRANCH" : MessageLookupByLibrary.simpleMessage("Chọn chi nhánh"),
+    "CHOOSE_REGULATION" : MessageLookupByLibrary.simpleMessage("Chọn quy định"),
     "COMMENTS" : MessageLookupByLibrary.simpleMessage("Đánh giá"),
     "CREATED_ON" : MessageLookupByLibrary.simpleMessage("Ngày tạo"),
     "DELETE" : MessageLookupByLibrary.simpleMessage("Xóa"),

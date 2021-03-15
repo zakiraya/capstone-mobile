@@ -1,18 +1,122 @@
+import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
+import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
-import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
-import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:capstone_mobile/generated/l10n.dart';
+
+class ViolationCard extends StatelessWidget {
+  ViolationCard({
+    Key key,
+    @required this.violation,
+  }) : super(key: key);
+
+  final Violation violation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(
+            context,
+            ViolationDetailScreen.route(
+              violation: violation,
+              id: violation?.id,
+            ),
+          );
+        },
+        child: ClipPath(
+          clipper: ShapeBorderClipper(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                    color: Constant.violationStatusColors[violation.status] ??
+                        Colors.green,
+                    width: 5),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${violation?.branchName ?? "branch name"}",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${violation?.status ?? "Status"}",
+                        style: TextStyle(
+                          color:
+                              Constant.violationStatusColors[violation.status],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    "${violation.regulationName ?? 'Regulation name'}",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(""),
+                      Text(
+                        S.of(context).CREATED_ON +
+                            ": ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(violation.createdAt) ?? "date time"}",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 enum ExtraAction { remove, edit }
 
-class ViolationCard extends StatelessWidget {
-  const ViolationCard({
+class ViolationCreateCard extends StatelessWidget {
+  const ViolationCreateCard({
     Key key,
     this.position,
     this.violation,

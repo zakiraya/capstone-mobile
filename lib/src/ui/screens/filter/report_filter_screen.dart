@@ -34,39 +34,23 @@ class ReportFilterScreen extends StatelessWidget {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: theme.scaffoldBackgroundColor,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image(
-                  width: size.width * 0.07,
-                  image: AssetImage('assets/logo.png'),
-                ),
-                SizedBox(
-                  width: 8.0,
-                ),
-                Column(
-                  children: [
-                    Image(
-                      width: size.width * 0.2,
-                      image: AssetImage('assets/brand_name.png'),
-                    ),
-                    SizedBox(
-                      height: 6.0,
-                    ),
-                  ],
-                ),
-              ],
+            title: Transform(
+              transform: Matrix4.translationValues(-37.0, 1, 0.0),
+              child: Text(
+                S.of(context).BACK,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
             ),
-
-            // IconButton(
-            //   color: theme.primaryColor,
-            //   icon: Icon(Icons.arrow_back_ios),
-            //   iconSize: 16.0,
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //   },
-            // ),
+            leading: IconButton(
+              iconSize: 16,
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: theme.primaryColor,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(0.0),

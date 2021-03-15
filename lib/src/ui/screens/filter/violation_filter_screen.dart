@@ -42,6 +42,13 @@ class ViolationFilterScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
+            title: Transform(
+              transform: Matrix4.translationValues(-37.0, 1, 0.0),
+              child: Text(
+                "back",
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(0.0),

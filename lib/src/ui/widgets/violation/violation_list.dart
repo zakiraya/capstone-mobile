@@ -1,8 +1,8 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
