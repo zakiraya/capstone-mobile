@@ -14,8 +14,9 @@ class LatesViolationList extends StatelessWidget {
     return FutureBuilder(
         future: _violationRepository.fetchViolations(
           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           limit: 2,
+          onDate: DateTime.now(),
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData &&

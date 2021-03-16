@@ -20,6 +20,7 @@ class ViolationRepository {
     int branchId,
     int regulationId,
     DateTime date,
+    DateTime onDate,
   }) async {
     return await _violationApi.getViolations(
       token: token,
@@ -30,6 +31,7 @@ class ViolationRepository {
       regulationId: regulationId,
       status: status,
       date: date,
+      onDate: onDate,
     );
   }
 

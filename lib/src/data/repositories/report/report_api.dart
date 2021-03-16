@@ -50,8 +50,6 @@ class ReportApi {
       url += '&Filter.ToDate=$to';
     }
 
-    print(url);
-
     final reportJson = await _baseApi.get(url, token, opts: opts);
 
     final reports = reportJson['data']['result'] as List;
