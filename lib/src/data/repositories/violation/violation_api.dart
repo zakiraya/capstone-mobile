@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import '../../../../Api/Exceptions.dart';
 import 'package:date_util/date_util.dart';
@@ -36,6 +37,7 @@ class ViolationApi {
     int branchId,
     int regulationId,
     DateTime date,
+    DateTime onDate,
   }) async {
     String url = violationUrl + '?Filter.IsDeleted=false';
     if (sort != null) {
@@ -67,6 +69,18 @@ class ViolationApi {
       url += '&Filter.FromDate=$from';
       url += '&Filter.ToDate=$to';
     }
+
+    if (onDate != null) {
+      var month = onDate.month;
+      var year = onDate.year;
+      var day = onDate.day;
+      var from = '$year-$month-$day';
+      var to = from + 'T23:59:59';
+      url += '&Filter.FromDate=$from';
+      url += '&Filter.ToDate=$to';
+    }
+
+    print(url);
 
     final violationJson = await _baseApi.get(url, token);
 

@@ -14,7 +14,7 @@ class LatestReportList extends StatelessWidget {
     return FutureBuilder(
         future: _reportRepository.fetchReports(
           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-          sort: 'desc id',
+          sort: 'desc createdAt',
           limit: 2,
         ),
         builder: (context, snapshot) {
@@ -50,6 +50,6 @@ Widget buildReportList(List<Report> reports) {
     reportCards.add(card);
   }
   return Column(
-    children: [...reportCards],
+    children: [...reportCards.reversed],
   );
 }
