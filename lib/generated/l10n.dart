@@ -325,10 +325,10 @@ class S {
     );
   }
 
-  /// `back`
+  /// `Back`
   String get BACK {
     return Intl.message(
-      'back',
+      'Back',
       name: 'BACK',
       desc: '',
       args: [],

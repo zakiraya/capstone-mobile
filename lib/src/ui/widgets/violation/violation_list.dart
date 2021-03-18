@@ -16,7 +16,7 @@ class LatesViolationList extends StatelessWidget {
           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
           sort: 'desc createdAt',
           limit: 2,
-          onDate: DateTime.now(),
+          // onDate: DateTime.now(),
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData &&
@@ -48,10 +48,49 @@ Widget buildViolationList(List<Violation> violations) {
   for (var vio in violations) {
     ViolationCard card = ViolationCard(
       violation: vio,
+      isFetchedById: true,
     );
     violationCards.add(card);
   }
   return Column(
     children: [...violationCards],
   );
+}
+
+class ViolationByReportList extends StatelessWidget {
+  final ViolationRepository _violationRepository = ViolationRepository();
+  final int reportId;
+
+  ViolationByReportList({Key key, this.reportId}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: _violationRepository.fetchViolations(
+          token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+          sort: 'desc createdAt',
+          reportId: reportId,
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data.length != 0) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: buildViolationList([
+                  ...snapshot.data,
+                ]),
+              );
+            }
+            return Container();
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: SkeletonLoading(
+              item: 2,
+            ));
+          }
+          return Center(
+            child: Text(snapshot.connectionState.toString()),
+          );
+        });
+  }
 }

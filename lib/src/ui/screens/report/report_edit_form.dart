@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,7 +135,7 @@ class ReportEditForm extends StatelessWidget {
                       child: Text(S.of(context).UPDATED_ON + ": ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(report.updatedAt ?? 'created on'),
+                    Text(report.updatedAt ?? 'updated on'),
                     SizedBox(
                       height: 16,
                     ),
@@ -181,10 +182,9 @@ class ReportEditForm extends StatelessWidget {
               SizedBox(
                 height: 4,
               ),
-              buildViolationList([
-                Violation(branchName: 'fsdf'),
-                Violation(branchName: 'fsdf'),
-              ]),
+              ViolationByReportList(
+                reportId: report.id,
+              ),
               SizedBox(
                 height: 32,
               ),

@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Add image"),
-    "BACK" : MessageLookupByLibrary.simpleMessage("back"),
+    "BACK" : MessageLookupByLibrary.simpleMessage("Back"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("belongs to"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Branch"),
     "CHANGE" : MessageLookupByLibrary.simpleMessage("Change"),

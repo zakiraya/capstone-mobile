@@ -21,12 +21,14 @@ class ViolationCreateEditForm extends StatefulWidget {
     @required this.size,
     @required this.isEditing,
     @required this.onSaveCallBack,
+    @required this.destinationScreen,
   }) : super(key: key);
 
   final Violation violation;
   final Size size;
   final bool isEditing;
   final Function onSaveCallBack;
+  final String destinationScreen;
 
   @override
   _ViolationCreateEditFormState createState() =>
@@ -73,9 +75,8 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
           ).then((value) {
             // Navigator.pop(context);
-            // Navigator.pop(context);
             Navigator.of(context)
-                .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
+                .popUntil(ModalRoute.withName('/${widget.destinationScreen}'));
           });
         }
         if (state.status.isSubmissionInProgress) {
@@ -415,9 +416,6 @@ class _ActionButton extends StatelessWidget {
                           ),
                         ),
                       );
-                      // widget.onSaveCallBack(
-
-                      // );
                     }
                   : null,
               child: Text(

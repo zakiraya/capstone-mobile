@@ -38,6 +38,8 @@ class ViolationApi {
     int regulationId,
     DateTime date,
     DateTime onDate,
+    int reportId,
+    int id,
   }) async {
     String url = violationUrl + '?Filter.IsDeleted=false';
     if (sort != null) {
@@ -57,6 +59,12 @@ class ViolationApi {
     }
     if (branchId != null) {
       url += '&Filter.BranchIds=$branchId';
+    }
+    if (reportId != null) {
+      url += '&Filter.ReportIds=$reportId';
+    }
+    if (id != null) {
+      url += '&Filter.Ids=$id';
     }
     if (date != null) {
       var dateUtility = DateUtil();
@@ -100,6 +108,8 @@ class ViolationApi {
     Map<String, String> opts,
   }) async {
     final url = violationUrl + '/' + violation.id.toString();
+    print('description');
+    print(violation.description);
     final body = <String, dynamic>{
       'name': violation.name,
       'imagePath': violation.imagePath,

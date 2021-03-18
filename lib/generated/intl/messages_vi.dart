@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Thêm hình"),
-    "BACK" : MessageLookupByLibrary.simpleMessage("quay về"),
+    "BACK" : MessageLookupByLibrary.simpleMessage("Quay về"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("thuộc"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Chi nhánh"),
     "CHANGE" : MessageLookupByLibrary.simpleMessage("Thay đổi"),
