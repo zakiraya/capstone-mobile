@@ -50,6 +50,6 @@ Widget buildReportList(List<Report> reports) {
     reportCards.add(card);
   }
   return Column(
-    children: [...reportCards.reversed],
+    children: [...reportCards],
   );
 }

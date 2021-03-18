@@ -41,8 +41,8 @@ class ViolationListForm extends StatelessWidget {
           });
         }
         if (state.status.isSubmissionInProgress) {
-          Navigator.pop(context);
           CoolAlert.show(
+            barrierDismissible: false,
             context: context,
             type: CoolAlertType.loading,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,

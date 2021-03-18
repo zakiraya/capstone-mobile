@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:capstone_mobile/Api/BaseApi.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_api.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class ViolationRepository {
@@ -35,6 +38,36 @@ class ViolationRepository {
     );
   }
 
+  Future<dynamic> uploadImage(List<Asset> assets, String token) async {
+    List<MapEntry<String, MultipartFile>> listMapEntries = List();
+    for (var asset in assets) {
+      ByteData byteData = await asset.getByteData(quality: 80);
+
+      if (byteData != null) {
+        List<int> imageData = byteData.buffer.asInt8List();
+        listMapEntries.add(new MapEntry(
+          'files',
+          MultipartFile.fromBytes(
+            imageData,
+            filename:
+                DateTime.now().toString().replaceAll(new RegExp(r"\s+"), "") +
+                    asset.name,
+          ),
+        ));
+      }
+    }
+
+    if (listMapEntries.isNotEmpty) {
+      FormData formData = FormData();
+      formData.files.addAll([...listMapEntries]);
+
+      BaseApi baseApi = BaseApi();
+      return baseApi.uploadImages('images/upload', formData, token);
+    }
+
+    return null;
+  }
+
   Future<String> createViolations({
     @required String token,
     @required List<Violation> violations,
@@ -47,33 +80,22 @@ class ViolationRepository {
       return 'list violations are empty';
     }
 
-    List<String> imagePaths =
-        violations.map((violation) => violation.imagePath).toList();
-
-    var uploadedImages;
-    try {
-      BaseApi baseApi = BaseApi();
-      uploadedImages = await baseApi.uploadImages(
-        'images/upload',
-        imagePaths,
-        token,
-      );
-      print(uploadedImages['data']);
-    } catch (e) {
-      print(e);
-      throw Exception('upload image fail');
-    }
-
     for (int i = 0; i < violations.length; i++) {
-      violations[i].imagePath = uploadedImages['data'][i]['uri'];
-    }
+      var uploadedImages = await uploadImage(violations[i].assets, token);
+      List<String> result = List();
 
+      for (var j = 0; j < uploadedImages['data'].length; j++) {
+        result.add(uploadedImages['data'][j]['uri']);
+      }
+
+      violations[i].imagePaths = result;
+    }
     var result = await _violationApi.createViolations(
       token: token,
       violations: violations,
     );
 
-    return result == 201 ? 'success' : 'fail';
+    return 'success';
   }
 
   Future<String> editViolation({
@@ -82,22 +104,22 @@ class ViolationRepository {
   }) async {
     var uploadedImage;
 
-    if (!violation.imagePath.contains('http')) {
-      BaseApi baseApi = BaseApi();
-      uploadedImage = await baseApi.uploadImage(
-        'images/upload',
-        violation.imagePath,
-        token,
-      );
-      violation.imagePath = uploadedImage['data'][0]['uri'];
+    if (violation.assets != null && violation.assets.isNotEmpty) {
+      uploadedImage = await uploadImage(violation.assets, token);
+
+      violation.imagePaths = violation.imagePaths +
+          List<String>.from(uploadedImage['data'].map((data) => data['uri']));
     }
+
+    print('violationrepo:');
+    print(violation.imagePaths.length.toString());
 
     var result = await _violationApi.editViolation(
       token: token,
       violation: violation,
     );
 
-    return result == 200 ? 'success' : 'fail';
+    return 'success';
   }
 
   Future<String> deleteViolation({

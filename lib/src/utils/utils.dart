@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class Utils {
   static String formatDate(DateTime date) {
@@ -27,6 +28,21 @@ class Utils {
         GallerySaver.saveImage(pickedFile.path).then((isSaved) {});
       }
     });
+  }
+
+  static Future<List<Asset>> loadImages(int quantity) async {
+    List<Asset> assets = <Asset>[];
+
+    try {
+      assets = await MultiImagePicker.pickImages(
+        maxImages: quantity,
+        enableCamera: true,
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return assets;
   }
 
   static String findBranchName(int id, BuildContext context) {

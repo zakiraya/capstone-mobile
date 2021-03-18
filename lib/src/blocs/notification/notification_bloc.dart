@@ -39,7 +39,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (event is NotificationRequested) {
       try {
         final notifications = await notificationRepository.fetchNotifications(
-          sort: 'desc id',
+          sort: 'desc createdAt',
           token: _authenticationRepository.token,
         );
 

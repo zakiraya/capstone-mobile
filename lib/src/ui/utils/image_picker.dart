@@ -1,8 +1,13 @@
 import 'dart:io';
 
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'dart:async';
+
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class ImgPicker extends StatefulWidget {
   static Route route() {
@@ -19,6 +24,8 @@ class _ImgPickerState extends State<ImgPicker> {
   String firstButtonText = 'Take photo';
   String secondButtonText = 'Record video';
   double textSize = 20;
+  List<Asset> resultList = List();
+  List<Asset> images = <Asset>[];
 
   final picker = ImagePicker();
 
@@ -48,45 +55,68 @@ class _ImgPickerState extends State<ImgPicker> {
     });
   }
 
+  Future<void> loadAssets() async {
+    List<Asset> resultList = <Asset>[];
+    String error = 'No Error Detected';
+
+    // try {
+    //   resultList = await MultiImagePicker.pickImages(
+    //     maxImages: 300,
+    //     enableCamera: true,
+    //     selectedAssets: images,
+    //     cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+    //     materialOptions: MaterialOptions(
+    //       actionBarColor: "#abcdef",
+    //       actionBarTitle: "Example App",
+    //       allViewTitle: "All Photos",
+    //       useDetailsView: false,
+    //       selectCircleStrokeColor: "#000000",
+    //     ),
+    //   );
+    // } on Exception catch (e) {
+    //   error = e.toString();
+    // }
+
+    resultList = await Utils.loadImages(5);
+
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: Container(
-                child: SizedBox.expand(
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    onPressed: _takePhoto,
-                    child: Text(firstButtonText,
-                        style:
-                            TextStyle(fontSize: textSize, color: Colors.white)),
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              child: Container(
-                  child: SizedBox.expand(
-                child: RaisedButton(
-                  color: Colors.white,
-                  onPressed: () {},
-                  child: Text(secondButtonText,
-                      style: TextStyle(
-                          fontSize: textSize, color: Colors.blueGrey)),
-                ),
-              )),
-              flex: 1,
-            )
-          ],
+            body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 100,
         ),
-      ),
-    ));
+        ElevatedButton(onPressed: loadAssets, child: Text('get image')),
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            // itemExtent: resultList.length,
+            itemCount: images.length,
+            itemBuilder: (context, index) {
+              Asset asset = images[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AssetThumb(
+                  asset: asset,
+                  width: 200,
+                  height: 200,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    )));
   }
 
   Widget _previewImage() {

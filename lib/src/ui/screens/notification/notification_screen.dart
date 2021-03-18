@@ -1,5 +1,4 @@
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:capstone_mobile/src/blocs/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -3,6 +3,7 @@ import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:formz/formz.dart';
 
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class ViolationCreateEditForm extends StatefulWidget {
   const ViolationCreateEditForm({
@@ -32,45 +34,46 @@ class ViolationCreateEditForm extends StatefulWidget {
 }
 
 class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
-  File _image;
-  bool isNetworkImage;
+  List<String> _imagePaths;
+  List<Asset> _assets = List();
   final picker = ImagePicker();
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  Future loadImages(int quantity) async {
+    var result = await Utils.loadImages(quantity);
+
+    if (!mounted) return;
 
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        isNetworkImage = false;
-      } else {
-        print('No image selected.');
-      }
+      _assets = result;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // _image = widget.violation != null ? File(widget.violation.imagePath) : null;
-    if (widget.violation != null) {
-      _image = File(widget.violation.imagePath);
-      isNetworkImage = widget.violation.imagePath.contains('http');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    _imagePaths = widget.violation.imagePaths;
+    List visibleImages = List();
+    _imagePaths.forEach((element) {
+      visibleImages.add(element);
+    });
+    _assets.forEach((element) {
+      visibleImages.add(element);
+    });
     return BlocListener<ViolationCreateBloc, ViolationCreateState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          // Navigator.pop(context);
           CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
           ).then((value) {
+            // Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.of(context)
                 .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
           });
@@ -189,65 +192,52 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
               SizedBox(
                 height: 16,
               ),
-              _image != null
-                  ? Stack(children: [
-                      Image(
-                        image: isNetworkImage == true
-                            ? NetworkImage(_image.path)
-                            : FileImage(_image),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _image = null;
-                            });
-                          },
-                          child: Container(
-                            height: 24,
-                            width: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.red),
-                            ),
-                            child: Icon(
-                              Icons.clear,
-                              color: Colors.red,
-                              size: 16.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ])
+              visibleImages.isNotEmpty
+                  ? buildGridView(visibleImages)
                   : Container(),
-              _image == null
+              SizedBox(height: 16),
+              // _assets.isNotEmpty ? buildAssetGridView(_assets) : Container(),
+              visibleImages.length < 5 || visibleImages.isEmpty
                   ? GestureDetector(
                       onTap: () {
-                        getImage();
+                        loadImages(5 - _imagePaths.length);
                       },
-                      child: Card(
-                        elevation: 5,
-                        color: Color(0xffF2F2F2),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add),
-                              Text('Add evidence'),
-                            ],
+                      child: Row(
+                        children: [
+                          Card(
+                            elevation: 5,
+                            color: Color(0xffF2F2F2),
+                            child: Container(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.175,
+                              width: MediaQuery.of(context).size.width * 0.275,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add),
+                                  Text(
+                                    S.of(context).VIOLATION_CREATE_MODAL_ADD +
+                                        ' ' +
+                                        S.of(context).EVIDENCE,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     )
                   : Container(),
               SizedBox(
-                height: 24.0,
+                height: 20.0,
               ),
-              _ActionButton(image: _image, widget: widget, theme: theme),
+              _ActionButton(
+                  assets: _assets,
+                  imagePaths: _imagePaths,
+                  widget: widget,
+                  theme: theme),
               SizedBox(
                 height: 24,
               )
@@ -257,20 +247,142 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
       ),
     );
   }
+
+  Widget buildGridView(List images) {
+    if (images != null)
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 1,
+        crossAxisCount: 3,
+        children: List.generate(images.length, (index) {
+          var image = images[index];
+          if (image is String) {
+            return Stack(
+              children: [
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Color(0xffF2F2F2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0), //(x,y)
+                            blurRadius: 6.0,
+                          ),
+                        ],
+                      ),
+                      child: Image.network(
+                        image,
+                        width: 100,
+                        height: 120,
+                      )),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 5,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (image is String) {
+                        setState(() {
+                          images.removeAt(index);
+                          _imagePaths.removeAt(index);
+                        });
+                        print('String');
+                        print(_imagePaths.length.toString());
+                        print(images.length.toString());
+                      }
+                    },
+                    child: Container(
+                      height: 24,
+                      width: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.red),
+                      ),
+                      child: Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                        size: 16.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return Stack(
+            children: [
+              Container(
+                alignment: Alignment.bottomLeft,
+                height: double.infinity,
+                width: double.infinity,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: AssetThumb(
+                    asset: image,
+                    width: 80,
+                    height: 120,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 8,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      images.removeAt(index);
+                      _assets.removeAt(images.length - _imagePaths.length - 1);
+                      print('asset');
+                      print((images.length - _imagePaths.length).toString());
+                    });
+                  },
+                  child: Container(
+                    height: 24,
+                    width: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.red),
+                    ),
+                    child: Icon(
+                      Icons.clear,
+                      color: Colors.red,
+                      size: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }),
+      );
+    else
+      return Container(color: Colors.white);
+  }
 }
 
 class _ActionButton extends StatelessWidget {
   const _ActionButton({
     Key key,
-    @required File image,
+    @required this.assets,
+    @required this.imagePaths,
     @required this.widget,
     @required this.theme,
-  })  : _image = image,
-        super(key: key);
+  }) : super(key: key);
 
-  final File _image;
   final widget;
   final ThemeData theme;
+  final List<Asset> assets;
+  final List<String> imagePaths;
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +396,10 @@ class _ActionButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * 0.3),
             child: ElevatedButton(
-              onPressed: state.status.isValid && _image != null
+              onPressed: state.status.isValid &&
+                      ((imagePaths.length + assets.length) > 0 &&
+                              (imagePaths.length + assets.length) <= 5) !=
+                          null
                   ? () {
                       bloc.add(
                         ViolationUpdated(
@@ -295,7 +410,8 @@ class _ActionButton extends StatelessWidget {
                                 bloc.state.violationRegulation.value.id,
                             regulationName:
                                 bloc.state.violationRegulation.value.name,
-                            imagePath: _image.path,
+                            imagePaths: imagePaths,
+                            assets: assets,
                           ),
                         ),
                       );
