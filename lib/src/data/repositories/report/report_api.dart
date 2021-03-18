@@ -63,8 +63,8 @@ class ReportApi {
   }) async {
     final url = reportUrl + '/' + report.id.toString();
     final body = <String, dynamic>{
-      'qcNote': report.qcNote,
-      'description': report.description,
+      'qcNote': report.qcNote.trim(),
+      'description': 'description',
       'status': report.status,
     };
 

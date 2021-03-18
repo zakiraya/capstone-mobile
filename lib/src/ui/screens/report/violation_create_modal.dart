@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
@@ -52,6 +50,9 @@ class _ModalBodyState extends State<ModalBody> {
   @override
   void initState() {
     super.initState();
+    if (widget.isEditing) {
+      _assets = widget.violation.assets;
+    }
   }
 
   @override
@@ -144,8 +145,10 @@ class _ModalBodyState extends State<ModalBody> {
                       height: 16,
                     ),
                     Container(
-                      child: Text(S.of(context).EVIDENCE + ': ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(
+                        S.of(context).EVIDENCE + ': ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
 
                     _assets == null

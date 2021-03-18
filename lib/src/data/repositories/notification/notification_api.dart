@@ -7,7 +7,7 @@ import 'package:capstone_mobile/src/data/models/notification/notification.dart';
 class NotificationApi {
   final http.Client httpClient;
   BaseApi _baseApi = BaseApi();
-  final notificationUrl = 'employee-notifications';
+  final notificationUrl = 'account-notifications';
 
   NotificationApi({@required this.httpClient});
 
@@ -29,12 +29,8 @@ class NotificationApi {
     if (limit != null) {
       url += '&Limit=$limit';
     }
-
+    print(url);
     final notificationJson = await _baseApi.get(url, token, opts: opts);
-
-    if (notificationJson['code'] != 200) {
-      throw FetchDataException(notificationJson['message']);
-    }
 
     final notifications = notificationJson['data']['result'] as List;
     return notifications

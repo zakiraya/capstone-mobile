@@ -108,12 +108,9 @@ class ViolationApi {
     Map<String, String> opts,
   }) async {
     final url = violationUrl + '/' + violation.id.toString();
-    print('description');
-    print(violation.description);
     final body = <String, dynamic>{
       'name': violation.name,
-      'imagePath': violation.imagePath,
-      'description': violation.description,
+      'description': violation.description.trim(),
       'branchId': violation.branchId,
       'regulationId': violation.regulationId,
       'status': violation.status,
@@ -138,7 +135,7 @@ class ViolationApi {
     @required String token,
     @required int id,
   }) async {
-    final url = violationUrl + '/' + id.toString();
+    final url = violationUrl;
 
     final result = await _baseApi.delete(url, token);
 

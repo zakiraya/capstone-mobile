@@ -349,7 +349,7 @@ class ActionPopupMenu extends StatelessWidget {
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Do you want to delete this violation?'),
+                  title: Text(S.of(context).POPUP_DELETE_VIOLATION),
                   actions: <Widget>[
                     TextButton(
                       child: Text(
@@ -375,7 +375,7 @@ class ActionPopupMenu extends StatelessWidget {
                       },
                     ),
                     TextButton(
-                      child: Text('Cancel'),
+                      child: Text(S.of(context).CANCEL),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

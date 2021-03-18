@@ -1,5 +1,4 @@
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:equatable/equatable.dart';
 
 class Report extends Equatable {
@@ -9,8 +8,8 @@ class Report extends Equatable {
   final String name;
   final String description;
   final String status;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final int createdBy;
   final List<Violation> violations;
   final String qcNote;
@@ -78,7 +77,7 @@ class Report extends Equatable {
       branchId: json['branch']['id'],
       branchName: json['branch']['name'],
       description: json['description'],
-      createdAt: Utils.formatDate(DateTime.parse(json['createdAt'])),
+      createdAt: DateTime.parse(json['createdAt']),
       status: json['status'],
       violations: json['violationCreate'],
       qcNote: json['qcNote'],

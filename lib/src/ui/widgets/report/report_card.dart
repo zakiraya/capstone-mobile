@@ -1,9 +1,12 @@
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class ReportCard extends StatelessWidget {
   const ReportCard({
@@ -89,7 +92,7 @@ class ReportCard extends StatelessWidget {
                       Text(
                         S.of(context).CREATED_ON +
                             ': '
-                                "${report?.createdAt ?? "date time"}",
+                                "${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(report?.createdAt) ?? "date time"}",
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[400],

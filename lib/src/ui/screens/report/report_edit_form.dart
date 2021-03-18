@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
@@ -12,6 +13,7 @@ import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:intl/intl.dart';
 
 class ReportEditForm extends StatelessWidget {
   const ReportEditForm({
@@ -127,15 +129,26 @@ class ReportEditForm extends StatelessWidget {
                       child: Text(S.of(context).CREATED_ON + ": ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(report.createdAt ?? 'created on'),
+                    Text(DateFormat.yMMMd(
+                                BlocProvider.of<LocalizationBloc>(context)
+                                    .state)
+                            .format(report.createdAt) ??
+                        'created on'),
                     SizedBox(
                       height: 16,
                     ),
-                    Container(
-                      child: Text(S.of(context).UPDATED_ON + ": ",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Text(report.updatedAt ?? 'updated on'),
+                    report?.updatedAt != null
+                        ? Container(
+                            child: Text(S.of(context).UPDATED_ON + ": ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        : Container(),
+                    report?.updatedAt != null
+                        ? Text(DateFormat.yMMMd(
+                                BlocProvider.of<LocalizationBloc>(context)
+                                    .state)
+                            .format(report?.updatedAt))
+                        : Container(),
                     SizedBox(
                       height: 16,
                     ),
@@ -194,18 +207,20 @@ class ReportEditForm extends StatelessWidget {
                           .roleName ==
                       Constant.ROLE_BM
                   ? Container()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _SaveButton(
-                          report: report,
-                        ),
-                        _SubmitButton(
-                          size: size,
-                          report: report,
-                        ),
-                      ],
-                    ),
+                  : report.status.toLowerCase() == 'opening'
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _SaveButton(
+                              report: report,
+                            ),
+                            _SubmitButton(
+                              size: size,
+                              report: report,
+                            ),
+                          ],
+                        )
+                      : Container(),
               SizedBox(
                 height: 32,
               ),
@@ -235,8 +250,8 @@ class _ReportDescriptionInput extends StatelessWidget {
           key: const Key('editForm_reportDescription_textField'),
           controller: descriptionTextFieldController,
           decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.grey[200],
+            // filled: true,
+            // fillColor: Colors.grey[200],
             hintText: description,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -252,7 +267,7 @@ class _ReportDescriptionInput extends StatelessWidget {
                 );
           },
           enabled: false,
-          maxLines: 5,
+          maxLines: null,
           style: TextStyle(fontSize: 14),
         );
       },

@@ -103,7 +103,7 @@ class Violation extends Equatable {
     violations.forEach((violation) {
       list.add(<String, dynamic>{
         'name': 'name',
-        'description': violation.description,
+        'description': violation.description.trim(),
         'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
         'branchId': violation.branchId,
