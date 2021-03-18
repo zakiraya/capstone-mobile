@@ -38,6 +38,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   ) async* {
     if (event is NotificationRequested) {
       try {
+        yield (NotificationLoadInProgress());
         final notifications = await notificationRepository.fetchNotifications(
           sort: 'desc createdAt',
           token: _authenticationRepository.token,

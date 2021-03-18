@@ -655,6 +655,16 @@ class S {
     );
   }
 
+  /// `Cancel`
+  String get CANCEL {
+    return Intl.message(
+      'Cancel',
+      name: 'CANCEL',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Choose a branch`
   String get CHOOSE_BRANCH {
     return Intl.message(
@@ -700,6 +710,16 @@ class S {
     return Intl.message(
       'PROCESSING REQUEST',
       name: 'POPUP_CREATE_VIOLATION_SUBMITTING',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete this violation?`
+  String get POPUP_DELETE_VIOLATION {
+    return Intl.message(
+      'Are you sure to delete this violation?',
+      name: 'POPUP_DELETE_VIOLATION',
       desc: '',
       args: [],
     );

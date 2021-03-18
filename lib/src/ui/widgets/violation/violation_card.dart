@@ -138,14 +138,14 @@ class ViolationCreateCard extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          showMaterialModalBottomSheet(
-            expand: false,
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => ViolationModalFit(
-              violation: violation,
-            ),
-          );
+          // showMaterialModalBottomSheet(
+          //   expand: false,
+          //   context: context,
+          //   backgroundColor: Colors.transparent,
+          //   builder: (context) => ViolationModalFit(
+          //     violation: violation,
+          //   ),
+          // );
         },
         child: ClipPath(
           clipper: ShapeBorderClipper(
