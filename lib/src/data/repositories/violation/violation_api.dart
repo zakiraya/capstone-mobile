@@ -80,8 +80,6 @@ class ViolationApi {
       url += '&Filter.ToDate=$to';
     }
 
-    print(url);
-
     final violationJson = await _baseApi.get(url, token);
 
     if (violationJson['code'] != 200) {
@@ -109,6 +107,11 @@ class ViolationApi {
       'branchId': violation.branchId,
       'regulationId': violation.regulationId,
       'status': violation.status,
+      'evidenceCreate': [
+        ...violation.imagePaths.map((imagePath) => {
+              "imagePath": imagePath,
+            })
+      ]
     };
 
     final result = await _baseApi.put(

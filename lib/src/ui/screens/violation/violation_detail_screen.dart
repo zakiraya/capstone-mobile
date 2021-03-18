@@ -45,18 +45,18 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
     var size = MediaQuery.of(context).size;
     return BlocListener<ViolationBloc, ViolationState>(
         listener: (context, state) {
-      if (state is ViolationLoadSuccess) {
-        Navigator.of(context)
-            .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
-      }
-      if (state is ViolationLoadFailure) {
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.error,
-          title: "Oops...",
-          text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
-        );
-      }
+      // if (state is ViolationLoadSuccess) {
+      //   Navigator.of(context)
+      //       .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
+      // }
+      // if (state is ViolationLoadFailure) {
+      //   CoolAlert.show(
+      //     context: context,
+      //     type: CoolAlertType.error,
+      //     title: "Oops...",
+      //     text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
+      //   );
+      // }
     }, child: BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
       return BlocBuilder<ViolationBloc, ViolationState>(
           builder: (context, state) {
@@ -196,10 +196,37 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                               SizedBox(
                                 height: 8,
                               ),
-                              Image(
-                                image: violation?.imagePath == null
-                                    ? AssetImage('assets/avt.jpg')
-                                    : NetworkImage(violation?.imagePath),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: violation.imagePaths.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          child: Text(' - ' +
+                                              S.of(context).EVIDENCE +
+                                              ' ${index + 1} ')),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Center(
+                                        child: Image(
+                                          width: 200,
+                                          height: 300,
+                                          image: NetworkImage(
+                                            violation.imagePaths[index],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -242,14 +269,8 @@ class ActionPopupMenu extends StatelessWidget {
               context,
               ViolationCreateEditScreen.route(
                   isEditing: true,
-                  violation: violation,
-                  onSaveCallBack: (Violation vio) {
-                    // BlocProvider.of<ViolationCreateBloc>(context).add(
-                    //   ViolationUpdated(
-                    //     violation: vio,
-                    //   ),
-                    // );
-                  }),
+                  violation: violation.copyWith(),
+                  onSaveCallBack: (Violation vio) {}),
             );
             break;
           case ExtraAction.remove:

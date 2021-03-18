@@ -35,7 +35,6 @@ class ViolationCreateEditScreen extends StatefulWidget {
         builder: (_) => ViolationCreateEditScreen(
               isEditing: isEditing,
               violation: violation,
-              position: position,
               onSaveCallBack: onSaveCallBack,
             ));
   }

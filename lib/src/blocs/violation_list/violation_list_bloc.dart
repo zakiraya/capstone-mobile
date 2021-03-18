@@ -117,8 +117,8 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
         status: FormzStatus.invalid,
       );
     } catch (e) {
-      print('violation_list_bloc: ');
-      print(e);
+      print('error at violation_list_bloc: ');
+      print(e.toString());
       yield state.copyWith(status: FormzStatus.submissionFailure);
     }
   }

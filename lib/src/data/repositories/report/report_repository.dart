@@ -26,6 +26,7 @@ class ReportRepository {
       limit: limit,
       branchId: branchId,
       date: date,
+      sort: sort,
     );
   }
 

@@ -1,5 +1,5 @@
-import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class Violation extends Equatable {
   final int id;
@@ -13,6 +13,8 @@ class Violation extends Equatable {
   final String regulationName;
   int branchId;
   final branchName;
+  List<String> imagePaths;
+  List<Asset> assets;
 
   Violation({
     this.id,
@@ -26,6 +28,8 @@ class Violation extends Equatable {
     this.regulationName,
     this.branchId,
     this.branchName,
+    this.imagePaths,
+    this.assets,
   });
 
   @override
@@ -41,6 +45,8 @@ class Violation extends Equatable {
         regulationName,
         branchId,
         branchName,
+        imagePaths,
+        assets,
       ];
 
   static Violation fromJson(dynamic json) {
@@ -54,7 +60,8 @@ class Violation extends Equatable {
       status: json['status'],
       regulationId: json['regulation']['id'],
       regulationName: json['regulation']['name'],
-      imagePath: json['imagePath'],
+      imagePaths:
+          List<String>.from(json['evidence'].map((e) => e['imagePath'])),
     );
   }
 
@@ -69,6 +76,8 @@ class Violation extends Equatable {
     int branchId,
     String branchName,
     String status,
+    List<String> imagePaths,
+    List<Asset> assets,
   }) {
     return Violation(
       branchId: branchId ?? this.branchId,
@@ -82,6 +91,8 @@ class Violation extends Equatable {
       regulationName: regulationName ?? this.regulationName,
       status: status ?? this.status,
       violationCode: this.violationCode,
+      imagePaths: imagePaths ?? this.imagePaths,
+      assets: assets ?? this.assets,
     );
   }
 
@@ -91,11 +102,14 @@ class Violation extends Equatable {
 
     violations.forEach((violation) {
       list.add(<String, dynamic>{
-        // 'name': 'name',
+        'name': 'name',
         'description': violation.description,
         'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
         'branchId': violation.branchId,
+        'evidenceCreate': [
+          ...violation.imagePaths.map((imagePath) => {"imagePath": imagePath})
+        ]
       });
     });
 

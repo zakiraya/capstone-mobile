@@ -9,12 +9,13 @@ import 'package:capstone_mobile/src/data/repositories/violation/violation_reposi
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
+import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:formz/formz.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class ModalBody extends StatefulWidget {
   const ModalBody({
@@ -37,26 +38,20 @@ class ModalBody extends StatefulWidget {
 }
 
 class _ModalBodyState extends State<ModalBody> {
-  File _image;
+  List<Asset> _assets;
 
-  final picker = ImagePicker();
+  Future loadiImages() async {
+    var result = await Utils.loadImages(5);
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
+    if (!mounted) return;
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
+      _assets = result;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _image = widget.violation != null ? File(widget.violation.imagePath) : null;
   }
 
   @override
@@ -145,17 +140,6 @@ class _ModalBodyState extends State<ModalBody> {
                             : null,
                       ),
                     ),
-
-                    // Container(
-                    //   child: RegulationDropdown(
-                    //     initValue: widget.isEditing == true
-                    //         ? Regulation(
-                    //             id: widget.violation.regulationId,
-                    //             name: widget.violation.regulationName,
-                    //           )
-                    //         : null,
-                    //   ),
-                    // ),
                     SizedBox(
                       height: 16,
                     ),
@@ -164,11 +148,11 @@ class _ModalBodyState extends State<ModalBody> {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
 
-                    _image == null
+                    _assets == null
                         ? Row(
                             children: [
                               GestureDetector(
-                                onTap: getImage,
+                                onTap: loadiImages,
                                 child: Card(
                                   color: Colors.grey,
                                   child: Container(
@@ -196,61 +180,7 @@ class _ModalBodyState extends State<ModalBody> {
                             ],
                           )
                         : Container(),
-                    _image != null
-                        ? Row(
-                            children: [
-                              Stack(children: [
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.16,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.235,
-                                  alignment: Alignment.bottomLeft,
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.15,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.22,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: _image == null
-                                            ? AssetImage('assets/avt.jpg')
-                                            : FileImage(_image),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _image = null;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 24,
-                                      width: 24,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(color: Colors.red),
-                                      ),
-                                      child: Icon(
-                                        Icons.clear,
-                                        color: Colors.red,
-                                        size: 16.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                            ],
-                          )
-                        : Container(),
+                    buildGridView(_assets),
                     SizedBox(
                       height: 24,
                     ),
@@ -265,7 +195,7 @@ class _ModalBodyState extends State<ModalBody> {
                                 BlocProvider.of<ViolationCreateBloc>(context);
                             return ElevatedButton(
                               onPressed:
-                                  bloc.state.status.isValid && _image != null
+                                  bloc.state.status.isValid && _assets != null
                                       ? () async {
                                           var state = bloc.state;
                                           Navigator.pop<List>(
@@ -282,7 +212,7 @@ class _ModalBodyState extends State<ModalBody> {
                                                     .violationRegulation
                                                     .value
                                                     .name,
-                                                imagePath: _image.path,
+                                                assets: _assets,
                                               ),
                                               widget.position,
                                             ],
@@ -316,6 +246,69 @@ class _ModalBodyState extends State<ModalBody> {
         ),
       );
     });
+  }
+
+  Widget buildGridView(images) {
+    if (images != null)
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisSpacing: 2,
+        crossAxisCount: 3,
+        children: List.generate(images.length, (index) {
+          Asset asset = images[index];
+          return Stack(
+            children: [
+              Container(
+                // color: Colors.red,
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: AssetThumb(
+                    asset: asset,
+                    width: 100,
+                    height: 200,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _assets.removeAt(index);
+                      if (_assets.isEmpty) {
+                        _assets = null;
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: 24,
+                    width: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.red),
+                    ),
+                    child: Icon(
+                      Icons.clear,
+                      color: Colors.red,
+                      size: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }),
+      );
+    else
+      return Container(color: Colors.white);
   }
 }
 
