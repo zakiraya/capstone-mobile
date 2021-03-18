@@ -4,6 +4,7 @@ import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dar
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_by_id_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,9 +17,11 @@ class ViolationCard extends StatelessWidget {
   ViolationCard({
     Key key,
     @required this.violation,
+    this.isFetchedById = false,
   }) : super(key: key);
 
   final Violation violation;
+  final bool isFetchedById;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +30,16 @@ class ViolationCard extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          Navigator.push(
-            context,
-            ViolationDetailScreen.route(
-              violation: violation,
-              id: violation?.id,
-            ),
-          );
+          isFetchedById
+              ? Navigator.push(
+                  context, ViolationDetailByIdScreen.route(id: violation.id))
+              : Navigator.push(
+                  context,
+                  ViolationDetailScreen.route(
+                    violation: violation,
+                    id: violation?.id,
+                  ),
+                );
         },
         child: ClipPath(
           clipper: ShapeBorderClipper(

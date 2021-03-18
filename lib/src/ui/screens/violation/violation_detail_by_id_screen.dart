@@ -1,8 +1,10 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
+import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,60 +14,47 @@ import 'package:intl/intl.dart';
 
 enum ExtraAction { remove, edit }
 
-class ViolationDetailScreen extends StatefulWidget {
-  final Violation violation;
+class ViolationDetailByIdScreen extends StatefulWidget {
   final int id;
 
-  const ViolationDetailScreen({
+  const ViolationDetailByIdScreen({
     Key key,
-    @required this.violation,
     @required this.id,
   }) : super(key: key);
 
   static Route route({
-    @required Violation violation,
     @required int id,
   }) {
     return MaterialPageRoute<void>(
-        settings: RouteSettings(name: "/ViolationDetailScreen"),
-        builder: (_) => ViolationDetailScreen(
-              violation: violation,
+        settings: RouteSettings(name: "/ViolationDetailByIdScreen"),
+        builder: (_) => ViolationDetailByIdScreen(
               id: id,
             ));
   }
 
   @override
-  _ViolationDetailScreenState createState() => _ViolationDetailScreenState();
+  _ViolationDetailByIdScreenState createState() =>
+      _ViolationDetailByIdScreenState();
 }
 
-class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
+class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
+  final ViolationRepository _violationRepository = ViolationRepository();
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
-    return BlocListener<ViolationBloc, ViolationState>(
-        listener: (context, state) {
-      // if (state is ViolationLoadSuccess) {
-      //   Navigator.of(context)
-      //       .popUntil(ModalRoute.withName(state.screen ?? '/Home'));
-      // }
-      // if (state is ViolationLoadFailure) {
-      //   CoolAlert.show(
-      //     context: context,
-      //     type: CoolAlertType.error,
-      //     title: "Oops...",
-      //     text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
-      //   );
-      // }
-    }, child: BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
-      return BlocBuilder<ViolationBloc, ViolationState>(
-          builder: (context, state) {
-        if (state is ViolationLoadSuccess) {
-          Violation violation = state.violations.firstWhere(
-              (violation) => violation.id == widget.id,
-              orElse: () => null);
-          return violation != null
-              ? Scaffold(
+    return BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
+      return FutureBuilder(
+          future: _violationRepository.fetchViolations(
+            token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+            id: widget.id,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              if (snapshot.data.length != 0) {
+                Violation violation = snapshot.data[0];
+                return Scaffold(
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: theme.scaffoldBackgroundColor,
@@ -111,7 +100,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                                 ' ' +
                                 S.of(context).OF +
                                 ' ' +
-                                '${widget.violation.regulationName}',
+                                '${violation.regulationName}',
                             style: TextStyle(
                               color: theme.primaryColor,
                               fontSize: theme.textTheme.headline5.fontSize,
@@ -234,12 +223,92 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                       ],
                     ),
                   ),
-                )
-              : Scaffold();
-        }
-        return Container(child: Text('Violation list'));
-      });
-    }));
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Scaffold(
+                appBar: AppBar(
+                  elevation: 0,
+                  backgroundColor: theme.scaffoldBackgroundColor,
+                  leading: IconButton(
+                    iconSize: 16,
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  title: Transform(
+                    transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                    child: Text(
+                      S.of(context).BACK,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ),
+                ),
+                body: Center(
+                  child: Text(S.of(context).LOAD_FAIL),
+                ),
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                appBar: AppBar(
+                  elevation: 0,
+                  backgroundColor: theme.scaffoldBackgroundColor,
+                  leading: IconButton(
+                    iconSize: 16,
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  title: Transform(
+                    transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                    child: Text(
+                      S.of(context).BACK,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ),
+                ),
+                body: Center(
+                    child: SkeletonLoading(
+                  item: 2,
+                )),
+              );
+            }
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: theme.scaffoldBackgroundColor,
+                leading: IconButton(
+                  iconSize: 16,
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: theme.primaryColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: Transform(
+                  transform: Matrix4.translationValues(-37.0, 1, 0.0),
+                  child: Text(
+                    S.of(context).BACK,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                ),
+              ),
+              body: Center(
+                child: Text(snapshot.connectionState.toString()),
+              ),
+            );
+          });
+    });
   }
 }
 
@@ -253,7 +322,7 @@ class ActionPopupMenu extends StatelessWidget {
 
   final ThemeData theme;
   final Violation violation;
-  final ViolationDetailScreen widget;
+  final ViolationDetailByIdScreen widget;
 
   @override
   Widget build(BuildContext context) {
@@ -269,8 +338,8 @@ class ActionPopupMenu extends StatelessWidget {
               context,
               ViolationCreateEditScreen.route(
                   isEditing: true,
-                  destinationScreen: 'ViolationDetailScreen',
                   violation: violation.copyWith(),
+                  destinationScreen: 'Home',
                   onSaveCallBack: (Violation vio) {}),
             );
             break;
@@ -295,7 +364,7 @@ class ActionPopupMenu extends StatelessWidget {
                           token: BlocProvider.of<AuthenticationBloc>(context)
                               .state
                               .token,
-                          id: widget.violation.id,
+                          id: violation.id,
                         ));
                         CoolAlert.show(
                           barrierDismissible: false,

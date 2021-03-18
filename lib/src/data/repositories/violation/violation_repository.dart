@@ -24,6 +24,8 @@ class ViolationRepository {
     int regulationId,
     DateTime date,
     DateTime onDate,
+    int reportId,
+    int id,
   }) async {
     return await _violationApi.getViolations(
       token: token,
@@ -35,6 +37,8 @@ class ViolationRepository {
       status: status,
       date: date,
       onDate: onDate,
+      reportId: reportId,
+      id: id,
     );
   }
 
@@ -110,9 +114,6 @@ class ViolationRepository {
       violation.imagePaths = violation.imagePaths +
           List<String>.from(uploadedImage['data'].map((data) => data['uri']));
     }
-
-    print('violationrepo:');
-    print(violation.imagePaths.length.toString());
 
     var result = await _violationApi.editViolation(
       token: token,
