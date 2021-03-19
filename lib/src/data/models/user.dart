@@ -15,6 +15,8 @@ class User extends Equatable {
     this.status,
     this.email,
     this.id,
+    this.roleId,
+    this.accountId,
   });
 
   final String id;
@@ -30,6 +32,8 @@ class User extends Equatable {
   final String roleName;
   final int branchId;
   final int branchManagerId;
+  final int roleId;
+  final int accountId;
 
   @override
   List<Object> get props => [id, email, firstName];
@@ -41,6 +45,7 @@ class User extends Equatable {
   static User fromJson(dynamic json) {
     final userInfo = json['data'];
     return User(
+      accountId: userInfo['account']['id'],
       email: userInfo['email'],
       code: userInfo['code'],
       firstName: userInfo['firstName'],
@@ -48,8 +53,11 @@ class User extends Equatable {
       address: userInfo['address'],
       imagePath: userInfo['imagePath'],
       roleName: userInfo['account']['role']['name'],
+      roleId: userInfo['account']['role']['id'] as int,
       branchName:
           userInfo['branch'] != null ? userInfo['branch']['name'] : null,
+      branchId:
+          userInfo['branch'] != null ? userInfo['branch']['id'] as int : null,
     );
   }
 }

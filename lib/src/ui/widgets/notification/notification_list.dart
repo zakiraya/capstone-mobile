@@ -188,37 +188,37 @@ class LatestNotificationList extends StatelessWidget {
                 onTap: () {},
               ),
             ),
-            Container(
-              color:
-                  notifications[0].isRead ? Colors.grey[50] : Colors.blue[50],
-              child: ListTile(
-                leading: Image.asset(
-                  "assets/report.png",
-                  height: 28,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
-                      children: [
-                        TextSpan(
-                            text: ' ${state.notifications[1].description} '),
-                        TextSpan(
-                            text: '',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            )),
-                      ]),
-                ),
-                subtitle: Text(
-                  ' ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(notifications[1].createdAt)} ',
-                  style: TextStyle(fontSize: 12),
-                ),
+            // Container(
+            //   color:
+            //       notifications[0].isRead ? Colors.grey[50] : Colors.blue[50],
+            //   child: ListTile(
+            //     leading: Image.asset(
+            //       "assets/report.png",
+            //       height: 28,
+            //     ),
+            //     title: RichText(
+            //       text: TextSpan(
+            //           style: TextStyle(fontSize: 16.0, color: Colors.black),
+            //           children: [
+            //             // TextSpan(
+            //             //     text: ' ${state.notifications[1].description} '),
+            //             TextSpan(
+            //                 text: '',
+            //                 style: TextStyle(
+            //                   color: Colors.blue,
+            //                   decoration: TextDecoration.underline,
+            //                 )),
+            //           ]),
+            //     ),
+            //     subtitle: Text(
+            //       ' ${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(notifications[1].createdAt)} ',
+            //       style: TextStyle(fontSize: 12),
+            //     ),
 
-                // isThreeLine: true,
-                onTap: () {},
-              ),
-            ),
+            //     // isThreeLine: true,
+            //     onTap: () {},
+            //   ),
+            // ),
           ]);
         }
         return Center(

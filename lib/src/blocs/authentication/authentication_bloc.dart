@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -38,6 +38,7 @@ class AuthenticationBloc
     if (event is AuthenticationStatusChanged) {
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
+      FirebaseNotification.unsubscribeFromTopic();
       _authenticationRepository.logOut();
     }
   }

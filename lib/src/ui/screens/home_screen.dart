@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report_filter/report_filter_bloc.dart';
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/widgets/home/home_tab.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,10 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeView extends StatelessWidget {
+  final FirebaseNotification firebaseNotification = FirebaseNotification();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  NavigatorState get _navigator => _navigatorKey.currentState;
+
   HomeView({
     Key key,
   }) : super(key: key);
@@ -67,6 +72,20 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = BlocProvider.of<AuthenticationBloc>(context).state.user;
+
+    if (user.roleName == Constant.ROLE_BM) {
+      print('user.roleName + user.branchId.toString()');
+      FirebaseNotification.topic =
+          user.roleName.replaceAll(new RegExp(r"\s+"), "") +
+              user.branchId.toString();
+    } else {
+      FirebaseNotification.topic = "all";
+    }
+    FirebaseNotification.configFirebaseMessaging(
+      _navigator,
+    );
+
     var theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
     return BlocBuilder<TabBloc, AppTab>(

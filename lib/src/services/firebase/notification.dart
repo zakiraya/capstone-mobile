@@ -5,35 +5,47 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class FirebaseNotification {
-  FirebaseNotification() {
-    firebaseMessaging = FirebaseMessaging();
-    messages = [];
-  }
+  // FirebaseNotification() {
+  //   firebaseMessaging = FirebaseMessaging();
+  //   messages = [];
+  // }
 
   static Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) {
     print('on background $message');
     return null;
   }
 
-  FirebaseMessaging firebaseMessaging;
-  List<Message> messages;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static List<Message> messages = [];
+  static String topic = '';
 
-  Future configFirebaseMessaging(NavigatorState navigator) async {
-    firebaseMessaging.subscribeToTopic('test');
+  static void unsubscribeFromTopic() {
+    if (topic.isNotEmpty) {
+      print("unsubscribeFromTopic");
+      print(topic);
+      firebaseMessaging.unsubscribeFromTopic(topic);
+    }
+  }
 
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('onMessage: $message');
-      },
-      onBackgroundMessage: myBackgroundMessageHandler,
-      onLaunch: (Map<String, dynamic> message) async {
-        print('onLaunch: $message');
-        navigator.push(LoginScreen.route());
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('onResume: $message');
-      },
-    );
+  static Future configFirebaseMessaging(NavigatorState navigator) async {
+    if (topic.isNotEmpty) {
+      print("subscribeToTopic");
+      print(topic);
+      firebaseMessaging.subscribeToTopic(topic);
+      firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print('onMessage: $message');
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onLaunch: (Map<String, dynamic> message) async {
+          print('onLaunch: $message');
+          navigator.push(LoginScreen.route());
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print('onResume: $message');
+        },
+      );
+    }
   }
 
   @override

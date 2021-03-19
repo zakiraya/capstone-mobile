@@ -62,7 +62,7 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
-  final FirebaseNotification firebaseNotification = FirebaseNotification();
+  // final FirebaseNotification firebaseNotification = FirebaseNotification();
   final _navigatorKey = GlobalKey<NavigatorState>();
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
@@ -71,7 +71,7 @@ class _AppViewState extends State<AppView> {
   @override
   void initState() {
     super.initState();
-    firebaseNotification.configFirebaseMessaging(_navigator);
+    // firebaseNotification.configFirebaseMessaging(_navigator, 'violation3');
   }
 
   @override
