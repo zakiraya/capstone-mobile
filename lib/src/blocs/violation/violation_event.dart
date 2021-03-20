@@ -36,10 +36,12 @@ class FilterChanged extends ViolationEvent {
 }
 
 class ViolationUpdate extends ViolationEvent {
-  const ViolationUpdate();
+  const ViolationUpdate({this.violation});
+
+  final Violation violation;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [violation];
 }
 
 class ViolationDelete extends ViolationEvent {

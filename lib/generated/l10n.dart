@@ -605,6 +605,26 @@ class S {
     );
   }
 
+  /// `Excuse`
+  String get EXCUSE {
+    return Intl.message(
+      'Excuse',
+      name: 'EXCUSE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get CONFIRM {
+    return Intl.message(
+      'Confirm',
+      name: 'CONFIRM',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete`
   String get DELETE {
     return Intl.message(

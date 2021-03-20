@@ -17,3 +17,8 @@ class Constant {
     'Submitted': Colors.grey,
   };
 }
+
+class ViolationStatusConstant {
+  static const CONFIRMED = 'Confirmed';
+  static const EXCUSED = 'Excused';
+}

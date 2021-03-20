@@ -176,6 +176,11 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
     final currentState = state;
     try {
       if (currentState is ViolationLoadSuccess) {
+        await violationRepository.editViolation(
+          token: _authenticationRepository.token,
+          violation: event.violation,
+        );
+
         final List<Violation> updatedViolations =
             await violationRepository.fetchViolations(
           token: _authenticationRepository.token,

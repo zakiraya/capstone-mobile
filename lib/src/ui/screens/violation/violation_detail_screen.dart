@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
@@ -10,7 +11,7 @@ import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:intl/intl.dart';
 
-enum ExtraAction { remove, edit }
+enum ExtraAction { remove, edit, confirm, excuse }
 
 class ViolationDetailScreen extends StatefulWidget {
   final Violation violation;
@@ -56,7 +57,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
       //     title: "Oops...",
       //     text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
       //   );
-      // }
+      // }`
     }, child: BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
       return BlocBuilder<ViolationBloc, ViolationState>(
           builder: (context, state) {
@@ -86,19 +87,26 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                         style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ),
-                    actions: violation?.status?.toLowerCase() == 'opening' &&
-                            BlocProvider.of<AuthenticationBloc>(context)
+                    actions: violation?.status?.toLowerCase() == 'opening'
+                        ? BlocProvider.of<AuthenticationBloc>(context)
                                     .state
                                     .user
                                     .roleName ==
                                 Constant.ROLE_QC
-                        ? [
-                            ActionPopupMenu(
-                              theme: theme,
-                              violation: violation,
-                              widget: widget,
-                            ),
-                          ]
+                            ? [
+                                ActionPopupMenu(
+                                  theme: theme,
+                                  violation: violation,
+                                  widget: widget,
+                                ),
+                              ]
+                            : [
+                                ActionPopupMenuForBM(
+                                  theme: theme,
+                                  violation: violation,
+                                  widget: widget,
+                                ),
+                              ]
                         : null,
                   ),
                   body: Padding(
@@ -297,16 +305,20 @@ class ActionPopupMenu extends StatelessWidget {
                               .token,
                           id: widget.violation.id,
                         ));
-                        CoolAlert.show(
-                          barrierDismissible: false,
-                          context: context,
-                          type: CoolAlertType.loading,
-                          text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
-                        );
+                        Navigator.of(context).pop();
+                        // CoolAlert.show(
+                        //   barrierDismissible: false,
+                        //   context: context,
+                        //   type: CoolAlertType.loading,
+                        //   text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+                        // );
                       },
                     ),
                     TextButton(
-                      child: Text(S.of(context).CANCEL),
+                      child: Text(
+                        S.of(context).CANCEL,
+                        style: TextStyle(color: Colors.black),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -332,16 +344,126 @@ class ActionPopupMenu extends StatelessWidget {
   }
 }
 
-class ImageZoomScreen extends StatelessWidget {
+class ActionPopupMenuForBM extends StatelessWidget {
+  const ActionPopupMenuForBM({
+    Key key,
+    @required this.theme,
+    @required this.violation,
+    @required this.widget,
+  }) : super(key: key);
+
+  final ThemeData theme;
+  final Violation violation;
+  final ViolationDetailScreen widget;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Hero(
-        tag: 'dash',
-        child: Image(
-          image: AssetImage('assets/avt.jpg'),
-        ),
+    return PopupMenuButton(
+      icon: Icon(
+        Icons.more_horiz,
+        color: theme.primaryColor,
       ),
+      onSelected: (action) {
+        switch (action) {
+          case ExtraAction.excuse:
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(S.of(context).POPUP_DELETE_VIOLATION),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        S.of(context).EXCUSE,
+                        style: TextStyle(
+                          color: Colors.orange[300],
+                        ),
+                      ),
+                      onPressed: () {
+                        BlocProvider.of<ViolationBloc>(context)
+                            .add(ViolationUpdate(
+                          violation: violation.copyWith(
+                            status: ViolationStatusConstant.EXCUSED,
+                          ),
+                        ));
+                        Navigator.of(context).pop();
+                        // CoolAlert.show(
+                        //   barrierDismissible: false,
+                        //   context: context,
+                        //   type: CoolAlertType.loading,
+                        //   text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+                        // );
+                      },
+                    ),
+                    TextButton(
+                      child: Text(S.of(context).CANCEL),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+          case ExtraAction.confirm:
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(S.of(context).POPUP_DELETE_VIOLATION),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        S.of(context).CONFIRM,
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                      ),
+                      onPressed: () {
+                        BlocProvider.of<ViolationBloc>(context)
+                            .add(ViolationUpdate(
+                          violation: violation.copyWith(
+                            status: ViolationStatusConstant.CONFIRMED,
+                          ),
+                        ));
+                        Navigator.of(context).pop();
+                        // CoolAlert.show(
+                        //   barrierDismissible: false,
+                        //   context: context,
+                        //   type: CoolAlertType.loading,
+                        //   text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+                        // );
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        S.of(context).CANCEL,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
+        PopupMenuItem<ExtraAction>(
+          value: ExtraAction.excuse,
+          child: Text(S.of(context).EXCUSE),
+        ),
+        PopupMenuItem<ExtraAction>(
+          value: ExtraAction.confirm,
+          child: Text(S.of(context).CONFIRM),
+        ),
+      ],
     );
   }
 }
