@@ -1,4 +1,3 @@
-import '../../../../Api/Exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:capstone_mobile/Api/BaseApi.dart';
@@ -29,12 +28,25 @@ class NotificationApi {
     if (limit != null) {
       url += '&Limit=$limit';
     }
-    print(url);
+
     final notificationJson = await _baseApi.get(url, token, opts: opts);
 
     final notifications = notificationJson['data']['result'] as List;
     return notifications
         .map((notification) => Notification.fromJson(notification))
         .toList();
+  }
+
+  Future<void> readNotificatin({
+    @required String token,
+    @required int id,
+    Map<String, String> opst,
+  }) async {
+    String url = notificationUrl + '/$id';
+
+    Map<String, dynamic> body = {
+      "isRead": true,
+    };
+    await _baseApi.put(url, body, token, opts: opst);
   }
 }

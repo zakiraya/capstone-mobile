@@ -23,6 +23,26 @@ class Notification extends Equatable {
     this.createdAt,
   });
 
+  Notification copyWith({
+    int id,
+    String status,
+    String name,
+    String type,
+    String description,
+    DateTime createdAt,
+    bool isRead,
+  }) {
+    return Notification(
+      name: name ?? this.name,
+      id: id ?? this.id,
+      status: status ?? this.status,
+      type: type ?? this.type,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      isRead: isRead ?? this.isRead,
+    );
+  }
+
   static Notification fromJson(dynamic json) {
     return Notification(
       isRead: json['isRead'],

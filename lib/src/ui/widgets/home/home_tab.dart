@@ -62,10 +62,6 @@ class HomeTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
-                  height: 15,
-                  thickness: 2,
-                ),
               ],
             ),
           ),
