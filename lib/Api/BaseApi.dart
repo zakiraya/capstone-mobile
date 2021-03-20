@@ -97,47 +97,6 @@ class BaseApi {
     return responseJson.data;
   }
 
-  // Future<dynamic> uploadImages(
-  //   String url,
-  //   List<String> imagePaths,
-  //   String token, {
-  //   Map<String, String> opts,
-  // }) async {
-  //   var responseJson;
-  //   try {
-  //     List<MapEntry<String, MultipartFile>> listMapEntries =
-  //         imagePaths.map((imagePath) {
-  //       String filename = imagePath.split('/').last;
-
-  //       return MapEntry(
-  //         'files',
-  //         MultipartFile.fromFileSync(
-  //           imagePath,
-  //           filename: filename,
-  //         ),
-  //       );
-  //     }).toList();
-
-  //     FormData formData = FormData();
-  //     formData.files.addAll([
-  //       ...listMapEntries,
-  //     ]);
-  //     Dio dio = Dio();
-  //     responseJson = await dio.post('$_baseUrl$url',
-  //         data: formData,
-  //         options: Options(headers: {
-  //           "Authorization": 'Bearer $token',
-  //         }));
-  //     dio.interceptors.add(LogInterceptor(responseBody: true));
-
-  //     print(responseJson.data);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-
-  //   return responseJson.data;
-  // }
-
   Future<dynamic> uploadImages(
     String url,
     FormData formData,

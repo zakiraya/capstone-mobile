@@ -305,7 +305,9 @@ class ActionPopupMenu extends StatelessWidget {
                               .token,
                           id: widget.violation.id,
                         ));
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .popUntil(ModalRoute.withName('/Home'));
                         // CoolAlert.show(
                         //   barrierDismissible: false,
                         //   context: context,
