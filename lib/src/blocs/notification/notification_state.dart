@@ -20,8 +20,12 @@ class NotificationLoadSuccess extends NotificationState {
     List<Notification> notifications,
   }) {
     return NotificationLoadSuccess(
-        notifications: notifications ?? this.notifications);
+      notifications: notifications ?? this.notifications,
+    );
   }
+
+  @override
+  List<Object> get props => [notifications];
 
   @override
   String toString() =>

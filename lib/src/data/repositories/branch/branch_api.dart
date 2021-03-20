@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 class BranchApi {
   final http.Client httpClient;
   BaseApi _baseApi = BaseApi();
+  final branchUrl = 'branches';
 
   BranchApi({@required this.httpClient});
 
@@ -13,8 +14,18 @@ class BranchApi {
     @required String token,
     Map<String, String> opts,
   }) async {
-    final branchUrl = 'branches?Filter.IsDeleted=false';
-    final userJson = await _baseApi.get(branchUrl, token, opts: opts);
+    final url = '$branchUrl?Filter.IsDeleted=false';
+    final userJson = await _baseApi.get(url, token, opts: opts);
+    final branches = userJson['data']['result'] as List;
+    return branches.map((branch) => Branch.fromJson(branch)).toList();
+  }
+
+  Future<List<Branch>> getBranchesForQC({
+    @required String token,
+    Map<String, String> opts,
+  }) async {
+    final url = '$branchUrl/monthly-branches';
+    final userJson = await _baseApi.get(url, token, opts: opts);
     final branches = userJson['data']['result'] as List;
     return branches.map((branch) => Branch.fromJson(branch)).toList();
   }

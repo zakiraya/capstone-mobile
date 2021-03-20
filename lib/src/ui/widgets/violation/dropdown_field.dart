@@ -25,7 +25,7 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
   final myController = TextEditingController();
 
   Future<String> getBranches() async {
-    var branches = await _branchRepository.fetchBranches(
+    var branches = await _branchRepository.fetchBranchesForQC(
       BlocProvider.of<AuthenticationBloc>(context).state.token,
     );
 
@@ -78,9 +78,7 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
         },
         value: _initValue,
         hintText: S.of(context).CHOOSE_BRANCH,
-        // labelText: 'Branch',
         items: _brancheNames,
-
         strict: false,
         required: true,
       ),

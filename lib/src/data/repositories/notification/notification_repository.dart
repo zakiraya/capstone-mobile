@@ -20,4 +20,11 @@ class NotificationRepository {
       sort: sort,
     );
   }
+
+  Future<void> readNotification({
+    @required String token,
+    @required int id,
+  }) async {
+    return await _notificationApi.readNotificatin(token: token, id: id);
+  }
 }

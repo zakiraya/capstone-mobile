@@ -42,9 +42,12 @@ class _ModalBodyState extends State<ModalBody> {
     var result = await Utils.loadImages(5);
 
     if (!mounted) return;
-    setState(() {
-      _assets = result;
-    });
+
+    if (result.length > null) {
+      setState(() {
+        _assets = result;
+      });
+    }
   }
 
   @override
@@ -150,7 +153,6 @@ class _ModalBodyState extends State<ModalBody> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-
                     _assets == null
                         ? Row(
                             children: [

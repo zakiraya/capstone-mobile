@@ -54,6 +54,24 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       } else if (event.status == AuthenticationStatus.authenticated) {
         add(NotificationRequested());
       }
+    } else if (event is NotificationIsRead) {
+      yield* _mapNotificationIsReadToState(event);
+    }
+  }
+
+  Stream<NotificationState> _mapNotificationIsReadToState(
+      NotificationIsRead event) async* {
+    final currentState = state;
+    if (currentState is NotificationLoadSuccess) {
+      notificationRepository.readNotification(
+          token: _authenticationRepository.token, id: event.id);
+      List<Notification> result = List<Notification>.from((currentState)
+          .notifications
+          .map((notification) => notification.id != event.id
+              ? notification
+              : notification.copyWith(isRead: true)));
+
+      yield NotificationLoadSuccess(notifications: result);
     }
   }
 }

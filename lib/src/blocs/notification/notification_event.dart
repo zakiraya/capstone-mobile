@@ -24,3 +24,12 @@ class NotificationAuthenticationStatusChanged extends NotificationEvent {
   @override
   List<Object> get props => [status];
 }
+
+class NotificationIsRead extends NotificationEvent {
+  const NotificationIsRead({this.id});
+
+  final int id;
+
+  @override
+  List<Object> get props => [id];
+}

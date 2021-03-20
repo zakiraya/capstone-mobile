@@ -45,9 +45,11 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
 
     if (!mounted) return;
 
-    setState(() {
-      _assets = result;
-    });
+    if (result.length > 0) {
+      setState(() {
+        _assets = result;
+      });
+    }
   }
 
   @override
@@ -206,8 +208,8 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                       child: Row(
                         children: [
                           Card(
-                            elevation: 5,
-                            color: Color(0xffF2F2F2),
+                            elevation: 0,
+                            color: Colors.grey[200],
                             child: Container(
                               height:
                                   MediaQuery.of(context).size.height * 0.175,
