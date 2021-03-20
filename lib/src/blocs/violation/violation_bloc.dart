@@ -214,7 +214,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
           sort: 'desc createdAt',
           limit: currentState.violations.length,
         );
-        yield (state as ViolationLoadSuccess).copyWith(
+        yield currentState.copyWith(
           violations: updatedViolations,
           screen: '/Home',
         );

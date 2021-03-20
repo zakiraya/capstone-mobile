@@ -36,16 +36,16 @@ class ModalBody extends StatefulWidget {
 }
 
 class _ModalBodyState extends State<ModalBody> {
-  List<Asset> _assets;
+  List<Asset> _assets = List();
 
   Future loadiImages() async {
-    var result = await Utils.loadImages(5);
+    var result = await Utils.loadImages(5 - _assets.length);
 
     if (!mounted) return;
 
-    if (result.length > null) {
+    if (result.length > 0) {
       setState(() {
-        _assets = result;
+        _assets = _assets + result;
       });
     }
   }
@@ -153,7 +153,8 @@ class _ModalBodyState extends State<ModalBody> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    _assets == null
+                    buildGridView(_assets),
+                    _assets.length < 5
                         ? Row(
                             children: [
                               GestureDetector(
@@ -185,7 +186,6 @@ class _ModalBodyState extends State<ModalBody> {
                             ],
                           )
                         : Container(),
-                    buildGridView(_assets),
                     SizedBox(
                       height: 24,
                     ),
@@ -199,31 +199,26 @@ class _ModalBodyState extends State<ModalBody> {
                             var bloc =
                                 BlocProvider.of<ViolationCreateBloc>(context);
                             return ElevatedButton(
-                              onPressed:
-                                  bloc.state.status.isValid && _assets != null
-                                      ? () async {
-                                          var state = bloc.state;
-                                          Navigator.pop<List>(
-                                            context,
-                                            [
-                                              Violation(
-                                                description: state
-                                                    .violationDescription.value,
-                                                regulationId: state
-                                                    .violationRegulation
-                                                    .value
-                                                    .id,
-                                                regulationName: state
-                                                    .violationRegulation
-                                                    .value
-                                                    .name,
-                                                assets: _assets,
-                                              ),
-                                              widget.position,
-                                            ],
-                                          );
-                                        }
-                                      : null,
+                              onPressed: bloc.state.status.isValid
+                                  ? () async {
+                                      var state = bloc.state;
+                                      Navigator.pop<List>(
+                                        context,
+                                        [
+                                          Violation(
+                                            description: state
+                                                .violationDescription.value,
+                                            regulationId: state
+                                                .violationRegulation.value.id,
+                                            regulationName: state
+                                                .violationRegulation.value.name,
+                                            assets: _assets,
+                                          ),
+                                          widget.position,
+                                        ],
+                                      );
+                                    }
+                                  : null,
                               child: Text(
                                 '${widget.isEditing == true ? S.of(context).EDIT : S.of(context).VIOLATION_CREATE_MODAL_ADD}',
                                 style: TextStyle(
@@ -287,9 +282,6 @@ class _ModalBodyState extends State<ModalBody> {
                   onTap: () {
                     setState(() {
                       _assets.removeAt(index);
-                      if (_assets.isEmpty) {
-                        _assets = null;
-                      }
                     });
                   },
                   child: Container(
@@ -313,7 +305,7 @@ class _ModalBodyState extends State<ModalBody> {
         }),
       );
     else
-      return Container(color: Colors.white);
+      return Container();
   }
 }
 

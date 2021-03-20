@@ -115,7 +115,7 @@ class ViolationApi {
       'regulationId': violation.regulationId,
       'status': violation.status,
       'evidenceCreate': [
-        ...violation.imagePaths.map((imagePath) => {
+        ...violation.imagePaths?.map((imagePath) => {
               "imagePath": imagePath,
             })
       ]
@@ -135,7 +135,7 @@ class ViolationApi {
     @required String token,
     @required int id,
   }) async {
-    final url = violationUrl;
+    final url = violationUrl + '?ids=$id';
 
     final result = await _baseApi.delete(url, token);
 

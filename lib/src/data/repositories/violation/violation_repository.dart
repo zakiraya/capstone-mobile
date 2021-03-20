@@ -84,15 +84,29 @@ class ViolationRepository {
       return 'list violations are empty';
     }
 
-    for (int i = 0; i < violations.length; i++) {
-      var uploadedImages = await uploadImage(violations[i].assets, token);
-      List<String> result = List();
+    try {
+      for (int i = 0; i < violations.length; i++) {
+        List<String> result = List();
 
-      for (var j = 0; j < uploadedImages['data'].length; j++) {
-        result.add(uploadedImages['data'][j]['uri']);
+        if (violations[i].assets != null && violations[i].assets.isNotEmpty) {
+          print('hereeeeeeeeeee');
+          print('violation $i');
+          var uploadedImages = await uploadImage(violations[i].assets, token);
+
+          if (uploadedImages != null) {
+            for (var j = 0; j < uploadedImages['data'].length; j++) {
+              result.add(uploadedImages['data'][j]['uri']);
+            }
+          }
+        }
+
+        violations[i].imagePaths = result;
+        print(violations[i].imagePaths);
       }
-
-      violations[i].imagePaths = result;
+    } catch (e) {
+      print('api');
+      print(e.toString());
+      print('api');
     }
     var result = await _violationApi.createViolations(
       token: token,
