@@ -56,8 +56,8 @@ dependencies:
   intl: ^0.16.1
   date_util: ^0.1.4
   multi_image_picker: ^4.6.5
+  flutter_local_notifications: ^1.4.4+2
 
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter

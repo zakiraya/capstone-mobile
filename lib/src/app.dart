@@ -9,6 +9,7 @@ import 'package:capstone_mobile/src/data/repositories/notification/notification_
 import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
+import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,6 @@ import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dar
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
-import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 
