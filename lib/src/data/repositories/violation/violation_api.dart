@@ -114,6 +114,7 @@ class ViolationApi {
       'branchId': violation.branchId,
       'regulationId': violation.regulationId,
       'status': violation.status,
+      'excuse': violation.excuse,
       'evidenceCreate': [
         ...violation.imagePaths?.map((imagePath) => {
               "imagePath": imagePath,

@@ -33,7 +33,12 @@ class HomeTab extends StatelessWidget {
           // height: size.height * 0.1,
           color: Colors.grey[100],
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
+            padding: const EdgeInsets.only(
+              top: 8.0,
+              right: 16.0,
+              left: 16.0,
+              bottom: 8.0,
+            ),
             child: Column(
               children: [
                 Row(

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';

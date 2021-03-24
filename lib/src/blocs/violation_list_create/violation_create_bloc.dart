@@ -35,6 +35,8 @@ class ViolationCreateBloc
       yield _mapViolationDescriptionToState(event, state);
     } else if (event is ViolationRegulationChanged) {
       yield _mapViolationRegulationChangetoState(event, state);
+    } else if (event is ViolationExcuseChanged) {
+      yield* _mapViolationExcuseToState(event);
     }
     //  else if (event is ViolationBranchChanged) {
     //   yield _mapViolationBranchChangetoState(event, state);
@@ -93,6 +95,26 @@ class ViolationCreateBloc
         print(e);
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
+    }
+  }
+
+  Stream<ViolationCreateState> _mapViolationExcuseToState(
+    ViolationExcuseChanged event,
+  ) async* {
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      await violationRepository.editViolation(
+        token: authenticationRepository.token,
+        violation: event.violation,
+      );
+
+      violationBloc.add(ViolationRequested(isRefresh: true));
+      yield state.copyWith(
+        status: FormzStatus.submissionSuccess,
+      );
+    } catch (e) {
+      print(e);
+      yield state.copyWith(status: FormzStatus.submissionFailure);
     }
   }
 }
