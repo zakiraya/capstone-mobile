@@ -1,10 +1,9 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/src/ui/screens/violation/excusion_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
@@ -368,46 +367,42 @@ class ActionPopupMenuForBM extends StatelessWidget {
       onSelected: (action) {
         switch (action) {
           case ExtraAction.excuse:
-            showDialog<void>(
-              context: context,
-              barrierDismissible: false, // user must tap button!
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(S.of(context).POPUP_DELETE_VIOLATION),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text(
-                        S.of(context).EXCUSE,
-                        style: TextStyle(
-                          color: Colors.orange[300],
-                        ),
-                      ),
-                      onPressed: () {
-                        BlocProvider.of<ViolationBloc>(context)
-                            .add(ViolationUpdate(
-                          violation: violation.copyWith(
-                            status: ViolationStatusConstant.EXCUSED,
-                          ),
-                        ));
-                        Navigator.of(context).pop();
-                        // CoolAlert.show(
-                        //   barrierDismissible: false,
-                        //   context: context,
-                        //   type: CoolAlertType.loading,
-                        //   text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
-                        // );
-                      },
-                    ),
-                    TextButton(
-                      child: Text(S.of(context).CANCEL),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
+            Navigator.push(context, ExcuseScreen.route(violation: violation));
+
+            // showDialog<void>(
+            //   context: context,
+            //   barrierDismissible: false, // user must tap button!
+            //   builder: (BuildContext context) {
+            //     return AlertDialog(
+            //       title: Text(S.of(context).POPUP_DELETE_VIOLATION),
+            //       actions: <Widget>[
+            //         TextButton(
+            //           child: Text(
+            //             S.of(context).EXCUSE,
+            //             style: TextStyle(
+            //               color: Colors.orange[300],
+            //             ),
+            //           ),
+            //           onPressed: () {
+            //             // BlocProvider.of<ViolationBloc>(context)
+            //             //     .add(ViolationUpdate(
+            //             //   violation: violation.copyWith(
+            //             //     status: ViolationStatusConstant.EXCUSED,
+            //             //   ),
+            //             // ));
+            //             // Navigator.of(context).pop();
+            //           },
+            //         ),
+            //         TextButton(
+            //           child: Text(S.of(context).CANCEL),
+            //           onPressed: () {
+            //             Navigator.of(context).pop();
+            //           },
+            //         ),
+            //       ],
+            //     );
+            //   },
+            // );
             break;
           case ExtraAction.confirm:
             showDialog<void>(

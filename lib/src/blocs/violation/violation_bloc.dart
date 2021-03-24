@@ -90,7 +90,7 @@ class ViolationBloc extends Bloc<ViolationEvent, ViolationState> {
               await violationRepository.fetchViolations(
             token: _authenticationRepository.token,
             sort: 'desc createdAt',
-            page: 0,
+            limit: currentState.violations.length,
             branchId: currentState.activeFilter?.branchId,
             regulationId: currentState.activeFilter?.regulationId,
             status: currentState.activeFilter?.status,

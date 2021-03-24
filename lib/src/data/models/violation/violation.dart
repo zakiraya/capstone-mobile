@@ -15,6 +15,7 @@ class Violation extends Equatable {
   final branchName;
   List<String> imagePaths;
   List<Asset> assets;
+  final String excuse;
 
   Violation({
     this.id,
@@ -30,6 +31,7 @@ class Violation extends Equatable {
     this.branchName,
     this.imagePaths,
     this.assets,
+    this.excuse,
   });
 
   @override
@@ -47,6 +49,7 @@ class Violation extends Equatable {
         branchName,
         imagePaths,
         assets,
+        excuse,
       ];
 
   static Violation fromJson(dynamic json) {
@@ -60,6 +63,7 @@ class Violation extends Equatable {
       status: json['status'],
       regulationId: json['regulation']['id'],
       regulationName: json['regulation']['name'],
+      excuse: json['excuse'],
       imagePaths:
           List<String>.from(json['evidence'].map((e) => e['imagePath'])),
     );
@@ -78,6 +82,7 @@ class Violation extends Equatable {
     String status,
     List<String> imagePaths,
     List<Asset> assets,
+    String excuse,
   }) {
     return Violation(
       branchId: branchId ?? this.branchId,
@@ -93,6 +98,7 @@ class Violation extends Equatable {
       violationCode: this.violationCode,
       imagePaths: imagePaths ?? this.imagePaths,
       assets: assets ?? this.assets,
+      excuse: excuse ?? this.excuse,
     );
   }
 
@@ -107,6 +113,7 @@ class Violation extends Equatable {
         'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
         'branchId': violation.branchId,
+        'excuse': violation.excuse,
         'evidenceCreate': [
           ...violation.imagePaths.map((imagePath) => {"imagePath": imagePath})
         ]
