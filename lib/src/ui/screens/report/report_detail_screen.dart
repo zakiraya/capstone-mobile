@@ -1,10 +1,12 @@
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
+import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/report/report_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +70,12 @@ class ReportDetailScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
-                actions: report.status.toLowerCase() == 'opening'
+                actions: report.status.toLowerCase() == 'opening' &&
+                        BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .user
+                                .roleName ==
+                            Constant.ROLE_QC
                     ? [
                         Builder(builder: (context) {
                           return IconButton(

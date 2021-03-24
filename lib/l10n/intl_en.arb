@@ -66,15 +66,18 @@
     "CANCEL": "Cancel",
     "CHOOSE_BRANCH": "Choose a branch",
     "CHOOSE_REGULATION": "Choose a regulation",
-    "POPUP_CREATE_VIOLATION_SUCCESS": "CREATE NEW SUCCESSFULLY!",
-    "POPUP_CREATE_VIOLATION_FAIL": "CREATE NEW FAIL!",
-    "POPUP_CREATE_VIOLATION_SUBMITTING": "PROCESSING REQUEST",
+    "POPUP_CREATE_VIOLATION_SUCCESS": "create new successfully!",
+    "POPUP_CREATE_VIOLATION_FAIL": "create new fail!",
+    "POPUP_CREATE_VIOLATION_SUBMITTING": "Processing request.",
     "POPUP_DELETE_VIOLATION": "Are you sure to delete this violation?",
+    "POPUP_UPDATE_SUCCESS": "update successfully",
+    "POPUP_UPDATE_FAIL": "update fail!",
     "CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD": "Current password",
     "CHANGE_PASSWORD_SCREEN_NEW_PASSWORD": "New password",
     "CHANGE_PASSWORD_SCREEN_CONFIRM_PASSWORD": "Confirm password",
     "CHANGE_PASSWORD_SCREEN_CHANGE_SUCCESS": "Change password success",
     "CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR": "Current password is wrong",
     "CHANGE_PASSWORD_SCREEN_CONFIRM_ERROR": "Confirm password must be the same as new password",
-    "CHANGE_PASSWORD_SCREEN_EMPTY": "must not be empty"
+    "CHANGE_PASSWORD_SCREEN_EMPTY": "must not be empty",
+    "THERE_ARE_NO_EVIDENCE": "There are no images for this violation"
 }

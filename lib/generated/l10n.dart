@@ -705,30 +705,30 @@ class S {
     );
   }
 
-  /// `CREATE NEW SUCCESSFULLY!`
+  /// `create new successfully!`
   String get POPUP_CREATE_VIOLATION_SUCCESS {
     return Intl.message(
-      'CREATE NEW SUCCESSFULLY!',
+      'create new successfully!',
       name: 'POPUP_CREATE_VIOLATION_SUCCESS',
       desc: '',
       args: [],
     );
   }
 
-  /// `CREATE NEW FAIL!`
+  /// `create new fail!`
   String get POPUP_CREATE_VIOLATION_FAIL {
     return Intl.message(
-      'CREATE NEW FAIL!',
+      'create new fail!',
       name: 'POPUP_CREATE_VIOLATION_FAIL',
       desc: '',
       args: [],
     );
   }
 
-  /// `PROCESSING REQUEST`
+  /// `Processing request.`
   String get POPUP_CREATE_VIOLATION_SUBMITTING {
     return Intl.message(
-      'PROCESSING REQUEST',
+      'Processing request.',
       name: 'POPUP_CREATE_VIOLATION_SUBMITTING',
       desc: '',
       args: [],
@@ -740,6 +740,26 @@ class S {
     return Intl.message(
       'Are you sure to delete this violation?',
       name: 'POPUP_DELETE_VIOLATION',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `update successfully`
+  String get POPUP_UPDATE_SUCCESS {
+    return Intl.message(
+      'update successfully',
+      name: 'POPUP_UPDATE_SUCCESS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `update fail!`
+  String get POPUP_UPDATE_FAIL {
+    return Intl.message(
+      'update fail!',
+      name: 'POPUP_UPDATE_FAIL',
       desc: '',
       args: [],
     );
@@ -810,6 +830,16 @@ class S {
     return Intl.message(
       'must not be empty',
       name: 'CHANGE_PASSWORD_SCREEN_EMPTY',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no images for this violation`
+  String get THERE_ARE_NO_EVIDENCE {
+    return Intl.message(
+      'There are no images for this violation',
+      name: 'THERE_ARE_NO_EVIDENCE',
       desc: '',
       args: [],
     );

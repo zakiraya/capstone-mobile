@@ -16,30 +16,30 @@ class ViolationCreateEditScreen extends StatefulWidget {
     this.isEditing = false,
     this.violation,
     this.position,
-    @required this.destinationScreen,
-    @required this.onSaveCallBack,
+    // @required this.destinationScreen,
+    @required this.successCallBack,
   }) : super(key: key);
 
   final bool isEditing;
   final Violation violation;
   final int position;
-  final Function onSaveCallBack;
-  final String destinationScreen;
+  final Function successCallBack;
+  // final String destinationScreen;
 
   static Route route({
     bool isEditing,
     Violation violation,
     int position,
-    @required String destinationScreen,
-    @required Function onSaveCallBack,
+    // @required String destinationScreen,
+    @required Function successCallBack,
   }) {
     return MaterialPageRoute<void>(
         settings: RouteSettings(name: "/ViolationCreateEditScreen"),
         builder: (_) => ViolationCreateEditScreen(
               isEditing: isEditing,
               violation: violation,
-              destinationScreen: destinationScreen,
-              onSaveCallBack: onSaveCallBack,
+              // destinationScreen: destinationScreen,
+              successCallBack: successCallBack,
             ));
   }
 
@@ -87,8 +87,8 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
             child: ViolationCreateEditForm(
               violation: widget.violation,
               size: size,
-              onSaveCallBack: widget.onSaveCallBack,
-              destinationScreen: widget.destinationScreen,
+              successCallBack: widget.successCallBack,
+              // destinationScreen: widget.destinationScreen,
               isEditing: widget.isEditing,
             ),
           ),

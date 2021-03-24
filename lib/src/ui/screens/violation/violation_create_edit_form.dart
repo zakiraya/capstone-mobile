@@ -19,15 +19,15 @@ class ViolationCreateEditForm extends StatefulWidget {
     @required this.violation,
     @required this.size,
     @required this.isEditing,
-    @required this.onSaveCallBack,
-    @required this.destinationScreen,
+    @required this.successCallBack,
+    // @required this.destinationScreen,
   }) : super(key: key);
 
   final Violation violation;
   final Size size;
   final bool isEditing;
-  final Function onSaveCallBack;
-  final String destinationScreen;
+  final Function successCallBack;
+  // final String destinationScreen;
 
   @override
   _ViolationCreateEditFormState createState() =>
@@ -73,11 +73,14 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
           CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
+            text: S.of(context).VIOLATION +
+                ' ' +
+                S.of(context).POPUP_UPDATE_SUCCESS,
           ).then((value) {
             // Navigator.pop(context);
-            Navigator.of(context)
-                .popUntil(ModalRoute.withName('/${widget.destinationScreen}'));
+            widget.successCallBack(context);
+            // Navigator.of(context)
+            //     .popUntil(ModalRoute.withName('/${widget.destinationScreen}'));
           });
         }
         if (state.status.isSubmissionInProgress) {
@@ -93,7 +96,8 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
             context: context,
             type: CoolAlertType.error,
             title: "Oops...",
-            text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
+            text:
+                S.of(context).VIOLATION + ' ' + S.of(context).POPUP_UPDATE_FAIL,
           ).then((value) => Navigator.pop(context));
         }
       },
@@ -120,7 +124,8 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                   overflow: TextOverflow.visible,
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: theme.textTheme.headline5.fontSize,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -141,12 +146,13 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                 ],
               ),
               Divider(
-                color: Theme.of(context).primaryColor,
-              ),
+                  color:
+                      Constant.violationStatusColors[widget.violation?.status]),
+
               // regulation dropdown
               Container(
                 child: Text(
-                  '- ' + S.of(context).REGULATION + ':',
+                  S.of(context).REGULATION + ':',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -167,7 +173,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
               ),
               Container(
                 child: Text(
-                  '- ' + S.of(context).DESCRIPTION + ':',
+                  S.of(context).DESCRIPTION + ':',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -188,7 +194,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                 height: 16,
               ),
               Container(
-                child: Text('- ' + S.of(context).EVIDENCE + ':',
+                child: Text(S.of(context).EVIDENCE + ':',
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               SizedBox(
@@ -198,7 +204,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                   ? buildGridView(visibleImages)
                   : Container(),
               SizedBox(height: 16),
-              // _assets.isNotEmpty ? buildAssetGridView(_assets) : Container(),
               visibleImages.length < 5 || visibleImages.isEmpty
                   ? GestureDetector(
                       onTap: () {

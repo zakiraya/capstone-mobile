@@ -76,6 +76,7 @@ class ReportEditForm extends StatelessWidget {
                   style: TextStyle(
                     color: theme.primaryColor,
                     fontSize: theme.textTheme.headline5.fontSize,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -161,10 +162,19 @@ class ReportEditForm extends StatelessWidget {
                     SizedBox(
                       height: 4,
                     ),
-                    _ReportDescriptionInput(
-                      descriptionTextFieldController:
-                          descriptionTextFieldController,
-                      description: report.description,
+                    // _ReportDescriptionInput(
+                    //   descriptionTextFieldController:
+                    //       descriptionTextFieldController,
+                    //   description: report.description,
+                    // ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: double.infinity,
+                        minHeight: 24,
+                      ),
+                      child: Container(
+                        child: Text(report?.description ?? ''),
+                      ),
                     ),
                     SizedBox(
                       height: 16,
@@ -178,10 +188,24 @@ class ReportEditForm extends StatelessWidget {
                     SizedBox(
                       height: 4,
                     ),
-                    _ReportQCNote(
-                      qcNote: report.qcNote,
-                      isEditing: isEditing,
-                    ),
+                    BlocProvider.of<AuthenticationBloc>(context)
+                                .state
+                                .user
+                                .roleName ==
+                            Constant.ROLE_QC
+                        ? _ReportQCNote(
+                            qcNote: report.qcNote,
+                            isEditing: isEditing,
+                          )
+                        : ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: double.infinity,
+                              minHeight: 24,
+                            ),
+                            child: Container(
+                              child: Text(report?.qcNote ?? ''),
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -297,7 +321,13 @@ class _ReportQCNote extends StatelessWidget {
           key: const Key('editForm_reportQCNote_textField'),
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.grey[200],
+            fillColor: BlocProvider.of<AuthenticationBloc>(context)
+                        .state
+                        .user
+                        .roleName ==
+                    Constant.ROLE_QC
+                ? Colors.grey[200]
+                : Theme.of(context).scaffoldBackgroundColor,
             hintText: qcNote,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -317,7 +347,13 @@ class _ReportQCNote extends StatelessWidget {
                   .user
                   .roleName !=
               Constant.ROLE_BM,
-          maxLines: 5,
+          maxLines: BlocProvider.of<AuthenticationBloc>(context)
+                      .state
+                      .user
+                      .roleName ==
+                  Constant.ROLE_QC
+              ? 5
+              : null,
         );
       },
     );

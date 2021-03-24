@@ -9,8 +9,8 @@ import 'package:capstone_mobile/src/data/repositories/notification/notification_
 import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
-import 'package:capstone_mobile/src/services/firebase/notification.dart';
 import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/onboard_welcome/onboard_welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,7 +62,6 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
-  // final FirebaseNotification firebaseNotification = FirebaseNotification();
   final _navigatorKey = GlobalKey<NavigatorState>();
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
@@ -71,7 +70,6 @@ class _AppViewState extends State<AppView> {
   @override
   void initState() {
     super.initState();
-    // firebaseNotification.configFirebaseMessaging(_navigator, 'violation3');
   }
 
   @override
@@ -190,6 +188,12 @@ class _AppViewState extends State<AppView> {
                             (route) => false,
                           );
                           break;
+                          // case AuthenticationStatus.unknown:
+                          //   _navigator.pushAndRemoveUntil<void>(
+                          //     OnboardWelcomeScreen.route(),
+                          //     (route) => false,
+                          //   );
+                          break;
                         default:
                           break;
                       }
@@ -197,7 +201,8 @@ class _AppViewState extends State<AppView> {
                     child: child,
                   );
                 },
-                onGenerateRoute: (_) => SplashScreen.route(),
+                // onGenerateRoute: (_) => SplashScreen.route(),
+                onGenerateRoute: (_) => OnboardWelcomeScreen.route(),
               ),
             );
           }

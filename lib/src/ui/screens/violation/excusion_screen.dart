@@ -12,12 +12,23 @@ import 'package:formz/formz.dart';
 
 class ExcuseScreen extends StatelessWidget {
   final Violation violation;
+  final Function successCallBack;
 
-  const ExcuseScreen({Key key, @required this.violation}) : super(key: key);
-  static Route route({@required Violation violation}) => MaterialPageRoute(
-      builder: (_) => ExcuseScreen(
-            violation: violation,
-          ));
+  const ExcuseScreen({
+    Key key,
+    @required this.violation,
+    @required this.successCallBack,
+  }) : super(key: key);
+
+  static Route route({
+    @required Violation violation,
+    @required Function successCallBack,
+  }) =>
+      MaterialPageRoute(
+          builder: (_) => ExcuseScreen(
+                successCallBack: successCallBack,
+                violation: violation,
+              ));
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -54,6 +65,7 @@ class ExcuseScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: ExcuseForm(
               violation: violation,
+              successCallBack: successCallBack,
             ),
           ),
         ));
@@ -62,8 +74,13 @@ class ExcuseScreen extends StatelessWidget {
 
 class ExcuseForm extends StatefulWidget {
   final Violation violation;
+  final Function successCallBack;
 
-  const ExcuseForm({Key key, @required this.violation}) : super(key: key);
+  const ExcuseForm({
+    Key key,
+    @required this.violation,
+    @required this.successCallBack,
+  }) : super(key: key);
 
   @override
   _ExcuseFormState createState() => _ExcuseFormState();
@@ -85,9 +102,10 @@ class _ExcuseFormState extends State<ExcuseForm> {
             type: CoolAlertType.success,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
           ).then((value) {
+            widget.successCallBack(context);
             // Navigator.pop(context);
-            Navigator.of(context)
-                .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
+            // Navigator.of(context)
+            //     .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
           });
         }
         if (state.status.isSubmissionInProgress) {
@@ -165,10 +183,7 @@ class _ExcuseFormState extends State<ExcuseForm> {
                                     excuse: excusion.trim(),
                                   ),
                                 ));
-                                // Navigator.of(context).pop();
-                                // Navigator.of(context).popUntil(
-                                //     ModalRoute.withName(
-                                //         '/ViolationDetailScreen'));
+                                Navigator.of(context).pop();
                               },
                             ),
                             TextButton(

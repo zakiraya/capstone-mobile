@@ -1,11 +1,9 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
-import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_create_edit_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
-import 'package:cool_alert/cool_alert.dart';
+import 'package:capstone_mobile/src/ui/widgets/violation/action_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
@@ -26,7 +24,8 @@ class ViolationDetailByIdScreen extends StatefulWidget {
     @required int id,
   }) {
     return MaterialPageRoute<void>(
-        settings: RouteSettings(name: "/ViolationDetailByIdScreen"),
+        settings:
+            RouteSettings(name: "/ViolationDetailByIdScreen", arguments: int),
         builder: (_) => ViolationDetailByIdScreen(
               id: id,
             ));
@@ -42,7 +41,6 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var size = MediaQuery.of(context).size;
     return BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
       return FutureBuilder(
           future: _violationRepository.fetchViolations(
@@ -75,19 +73,34 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                         style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ),
-                    actions: violation?.status?.toLowerCase() == 'opening' &&
-                            BlocProvider.of<AuthenticationBloc>(context)
+                    actions: violation?.status?.toLowerCase() == 'opening'
+                        ? BlocProvider.of<AuthenticationBloc>(context)
                                     .state
                                     .user
                                     .roleName ==
                                 Constant.ROLE_QC
-                        ? [
-                            ActionPopupMenu(
-                              theme: theme,
-                              violation: violation,
-                              widget: widget,
-                            ),
-                          ]
+                            ? [
+                                ActionPopupMenu(
+                                  theme: theme,
+                                  violation: violation,
+                                  widget: widget,
+                                  successCallBack: (context) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context, violation.id);
+                                  },
+                                ),
+                              ]
+                            : [
+                                ActionPopupMenuForBM(
+                                  theme: theme,
+                                  violation: violation,
+                                  widget: widget,
+                                  successCallBack: (context) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context, violation.id);
+                                  },
+                                ),
+                              ]
                         : null,
                   ),
                   body: Padding(
@@ -100,10 +113,11 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                 ' ' +
                                 S.of(context).OF +
                                 ' ' +
-                                '${violation.regulationName}',
+                                '${violation?.regulationName}',
                             style: TextStyle(
                               color: theme.primaryColor,
-                              fontSize: theme.textTheme.headline5.fontSize,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -125,8 +139,8 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                           ],
                         ),
                         Divider(
-                          color: Colors.black,
-                        ),
+                            color: Constant
+                                .violationStatusColors[violation?.status]),
                         SizedBox(
                           height: 16,
                         ),
@@ -140,7 +154,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Text(violation?.branchName ?? 'empty'),
+                              Text(violation?.branchName ?? ''),
                               SizedBox(
                                 height: 16,
                               ),
@@ -156,7 +170,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                                     context)
                                                 .state)
                                         .format(violation?.createdAt) ??
-                                    'empty',
+                                    '',
                               ),
                               SizedBox(
                                 height: 16,
@@ -171,8 +185,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                   minWidth: double.infinity,
                                 ),
                                 child: Container(
-                                    child: Text(
-                                        violation?.description ?? 'empty')),
+                                    child: Text(violation?.description ?? '')),
                               ),
                               SizedBox(
                                 height: 16,
@@ -203,8 +216,6 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                       ),
                                       Center(
                                         child: Image(
-                                          width: 200,
-                                          height: 300,
                                           image: NetworkImage(
                                             violation.imagePaths[index],
                                           ),
@@ -304,7 +315,9 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                 ),
               ),
               body: Center(
-                child: Text(snapshot.connectionState.toString()),
+                child: Text(
+                  snapshot.connectionState.toString(),
+                ),
               ),
             );
           });
@@ -312,94 +325,94 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
   }
 }
 
-class ActionPopupMenu extends StatelessWidget {
-  const ActionPopupMenu({
-    Key key,
-    @required this.theme,
-    @required this.violation,
-    @required this.widget,
-  }) : super(key: key);
+// class ActionPopupMenu extends StatelessWidget {
+//   const ActionPopupMenu({
+//     Key key,
+//     @required this.theme,
+//     @required this.violation,
+//     @required this.widget,
+//   }) : super(key: key);
 
-  final ThemeData theme;
-  final Violation violation;
-  final ViolationDetailByIdScreen widget;
+//   final ThemeData theme;
+//   final Violation violation;
+//   final ViolationDetailByIdScreen widget;
 
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: Icon(
-        Icons.more_horiz,
-        color: theme.primaryColor,
-      ),
-      onSelected: (action) {
-        switch (action) {
-          case ExtraAction.edit:
-            Navigator.push(
-              context,
-              ViolationCreateEditScreen.route(
-                  isEditing: true,
-                  violation: violation.copyWith(),
-                  destinationScreen: 'Home',
-                  onSaveCallBack: (Violation vio) {}),
-            );
-            break;
-          case ExtraAction.remove:
-            showDialog<void>(
-              context: context,
-              barrierDismissible: false, // user must tap button!
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(S.of(context).POPUP_DELETE_VIOLATION),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text(
-                        S.of(context).DELETE,
-                        style: TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                      onPressed: () {
-                        BlocProvider.of<ViolationBloc>(context)
-                            .add(ViolationDelete(
-                          token: BlocProvider.of<AuthenticationBloc>(context)
-                              .state
-                              .token,
-                          id: violation.id,
-                        ));
-                        CoolAlert.show(
-                          barrierDismissible: false,
-                          context: context,
-                          type: CoolAlertType.loading,
-                          text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
-                        );
-                      },
-                    ),
-                    TextButton(
-                      child: Text(S.of(context).CANCEL),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-            break;
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-        PopupMenuItem<ExtraAction>(
-          value: ExtraAction.edit,
-          child: Text(S.of(context).EDIT),
-        ),
-        PopupMenuItem<ExtraAction>(
-          value: ExtraAction.remove,
-          child: Text(S.of(context).DELETE),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return PopupMenuButton(
+//       icon: Icon(
+//         Icons.more_horiz,
+//         color: theme.primaryColor,
+//       ),
+//       onSelected: (action) {
+//         switch (action) {
+//           case ExtraAction.edit:
+//             Navigator.push(
+//               context,
+//               ViolationCreateEditScreen.route(
+//                   isEditing: true,
+//                   violation: violation.copyWith(),
+//                   destinationScreen: 'Home',
+//                   onSaveCallBack: (Violation vio) {}),
+//             );
+//             break;
+//           case ExtraAction.remove:
+//             showDialog<void>(
+//               context: context,
+//               barrierDismissible: false, // user must tap button!
+//               builder: (BuildContext context) {
+//                 return AlertDialog(
+//                   title: Text(S.of(context).POPUP_DELETE_VIOLATION),
+//                   actions: <Widget>[
+//                     TextButton(
+//                       child: Text(
+//                         S.of(context).DELETE,
+//                         style: TextStyle(
+//                           color: Colors.red,
+//                         ),
+//                       ),
+//                       onPressed: () {
+//                         BlocProvider.of<ViolationBloc>(context)
+//                             .add(ViolationDelete(
+//                           token: BlocProvider.of<AuthenticationBloc>(context)
+//                               .state
+//                               .token,
+//                           id: violation.id,
+//                         ));
+//                         CoolAlert.show(
+//                           barrierDismissible: false,
+//                           context: context,
+//                           type: CoolAlertType.loading,
+//                           text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
+//                         );
+//                       },
+//                     ),
+//                     TextButton(
+//                       child: Text(S.of(context).CANCEL),
+//                       onPressed: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                     ),
+//                   ],
+//                 );
+//               },
+//             );
+//             break;
+//         }
+//       },
+//       itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
+//         PopupMenuItem<ExtraAction>(
+//           value: ExtraAction.edit,
+//           child: Text(S.of(context).EDIT),
+//         ),
+//         PopupMenuItem<ExtraAction>(
+//           value: ExtraAction.remove,
+//           child: Text(S.of(context).DELETE),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class ImageZoomScreen extends StatelessWidget {
   @override

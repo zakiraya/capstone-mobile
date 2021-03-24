@@ -198,8 +198,9 @@ class LatestNotificationList extends StatelessWidget {
             itemCount: notifications.length > 1 ? 2 : 1,
             itemBuilder: (context, index) {
               return Container(
-                color:
-                    notifications[0].isRead ? Colors.grey[50] : Colors.blue[50],
+                color: notifications[index].isRead
+                    ? Colors.grey[50]
+                    : Colors.blue[50],
                 child: ListTile(
                   leading: Image.asset(
                     "assets/report.png",
@@ -240,7 +241,12 @@ class LatestNotificationList extends StatelessWidget {
                   ),
 
                   // isThreeLine: true,
-                  onTap: () {},
+                  onTap: () {
+                    if (!notifications[index].isRead) {
+                      BlocProvider.of<NotificationBloc>(context)
+                          .add(NotificationIsRead(id: notifications[index].id));
+                    }
+                  },
                 ),
               );
             },

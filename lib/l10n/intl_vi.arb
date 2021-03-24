@@ -66,15 +66,18 @@
     "BACK": "Quay về",
     "CHOOSE_BRANCH": "Chọn chi nhánh",
     "CHOOSE_REGULATION": "Chọn quy định",
-    "POPUP_CREATE_VIOLATION_SUCCESS": "TẠO MỚI THÀNH CÔNG!",
-    "POPUP_CREATE_VIOLATION_FAIL": "ĐÃ XẢY RA LỖI!",
-    "POPUP_CREATE_VIOLATION_SUBMITTING": "ĐANG XỬ LÍ YÊU CẦU",
+    "POPUP_CREATE_VIOLATION_SUCCESS": "Tạo mới thành công!",
+    "POPUP_CREATE_VIOLATION_FAIL": "Xảy ra lỗi!",
+    "POPUP_CREATE_VIOLATION_SUBMITTING": "Đang xử lý yêu cầu.",
     "POPUP_DELETE_VIOLATION": "Bạn có chắc chắn xóa vi phạm này?",
+    "POPUP_UPDATE_SUCCESS": "sửa đổi thành công!",
+    "POPUP_UPDATE_FAIL": "sửa đổi thất bại!",
     "CHANGE_PASSWORD_SCREEN_CURRENT_PASSWORD": "Mật khẩu hiện tại",
     "CHANGE_PASSWORD_SCREEN_NEW_PASSWORD": "Mật khẩu mới",
     "CHANGE_PASSWORD_SCREEN_CONFIRM_PASSWORD": "Xác nhận mật khẩu mới",
     "CHANGE_PASSWORD_SCREEN_CHANGE_SUCCESS": "Thay đổi thành công",
     "CHANGE_PASSWORD_SCREEN_PASSWORD_ERROR": "Mật khẩu sai",
     "CHANGE_PASSWORD_SCREEN_CONFIRM_ERROR": "Mật khẩu xác nhận phải giống với mật khẩu mới",
-    "CHANGE_PASSWORD_SCREEN_EMPTY": "không được để trống"
+    "CHANGE_PASSWORD_SCREEN_EMPTY": "không được để trống",
+    "THERE_ARE_NO_EVIDENCE": "Không có hình ảnh cho vi phạm này"
 }

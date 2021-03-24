@@ -19,7 +19,6 @@ import 'package:capstone_mobile/src/ui/screens/violation/violation_screen.dart';
 import 'package:capstone_mobile/src/ui/widgets/tab_selector.dart';
 import 'package:capstone_mobile/src/utils/utils.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {

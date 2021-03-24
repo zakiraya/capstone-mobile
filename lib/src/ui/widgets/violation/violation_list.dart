@@ -15,6 +15,7 @@ class LatesViolationList extends StatelessWidget {
         future: _violationRepository.fetchViolations(
           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
           sort: 'desc createdAt',
+          status: 'Opening',
           limit: 2,
           // onDate: DateTime.now(),
         ),

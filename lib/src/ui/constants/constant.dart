@@ -13,7 +13,7 @@ class Constant {
 
   static final reportStatusColors = {
     'Opening': Colors.blue,
-    // 'Pending': Colors.orange,
+    'Done': Color(0xff2329D6),
     'Submitted': Colors.grey,
   };
 }
