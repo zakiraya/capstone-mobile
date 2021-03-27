@@ -1,8 +1,10 @@
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/report_by_demand/report_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/blocs/tab/tab_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/data/models/tab.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/notification/notification_screen.dart';
 import 'package:capstone_mobile/src/ui/widgets/notification/notification_list.dart';
@@ -111,7 +113,14 @@ class HomeTab extends StatelessWidget {
             ),
           ),
         ),
-        LatestReportList(),
+        BlocProvider(
+          create: (context) => ReportByDemandBloc(
+              reportRepository: ReportRepository(),
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context))
+            ..add(ReportByDemandRequested()),
+          child: LatestReportList(),
+        ),
         SizedBox(
           height: 16,
         ),

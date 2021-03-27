@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,11 +24,13 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     @required this.branchRepository,
     @required this.reportRepository,
     @required this.authenticationRepository,
+    @required this.reportBloc,
   }) : super(ReportCreateState());
 
   final ReportRepository reportRepository;
   final BranchRepository branchRepository;
   final AuthenticationRepository authenticationRepository;
+  final ReportBloc reportBloc;
 
   @override
   Stream<ReportCreateState> mapEventToState(
@@ -41,8 +44,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
       yield _mapReportBranchChangetoState(event, state);
     } else if (event is ReportViolationsChanged) {
       yield _mapReportViolationListChangeToState(event, state);
-    } else if (event is ReportCreateSubmitted) {
-      yield* _mapReportCreateSubmittedToState(event, state);
     } else if (event is ReportEditing) {
       yield _mapReportEditToState(event, state);
     } else if (event is ReportEdited) {
@@ -77,7 +78,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     ReportCreateState state,
   ) {
     final reportDescription = ReportDescription.dirty(event.reportDescription);
-    print(state.reportDescription.value);
     return state.copyWith(
       reportDescription: reportDescription,
       isEditing: event.isEditing,
@@ -112,30 +112,6 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
     );
   }
 
-  Stream<ReportCreateState> _mapReportCreateSubmittedToState(
-      ReportCreateSubmitted event, ReportCreateState state) async* {
-    if (state.status.isValidated || event.isDraft) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
-      try {
-        var result = await reportRepository.createReport(
-            token: authenticationRepository.token,
-            report: Report(
-              name: reportNameGenerate(
-                  state.reportBranch.value, DateTime.now(), 1),
-              branchId: state.reportBranch.value,
-              description: state.reportDescription.value,
-              violations: state.reportListViolation.value,
-              createdBy: 11,
-            ),
-            isDraft: event.isDraft);
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
-      } catch (e) {
-        print(e);
-        yield state.copyWith(status: FormzStatus.submissionFailure);
-      }
-    }
-  }
-
   Stream<ReportCreateState> _mapReportEditSubmittedToState(
     ReportEdited event,
     ReportCreateState state,
@@ -147,6 +123,9 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
           report: event.report.copyWith(
             qcNote: state.reportDescription.value,
           ));
+
+      reportBloc.add(ReportRequested(isRefresh: true));
+
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     } catch (e) {
       print(e);
@@ -171,22 +150,4 @@ class ReportCreateBloc extends Bloc<ReportCreateEvent, ReportCreateState> {
       ),
     );
   }
-}
-
-String reportNameGenerate(int branchId, DateTime createdDate, int employeeId) {
-  return branchId.toString() +
-      '-' +
-      createdDate.day.toString().padLeft(2, '0') +
-      createdDate.month.toString().padLeft(2, '0') +
-      createdDate.year.toString() +
-      '-' +
-      employeeId.toString();
-}
-
-String formatDate(DateTime date) {
-  return date.day.toString().padLeft(2, '0') +
-      '-' +
-      date.month.toString().padLeft(2, '0') +
-      '-' +
-      date.year.toString();
 }

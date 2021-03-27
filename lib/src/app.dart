@@ -21,7 +21,6 @@ import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/user/user_repository.dart';
 import 'package:capstone_mobile/src/ui/screens/login_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/splash_screen.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -75,7 +74,6 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     var blue = Color(0xff322ED9);
-    var purple = Color(0xffAA1EFF);
     var themeData = ThemeData(
       primaryColor: blue,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

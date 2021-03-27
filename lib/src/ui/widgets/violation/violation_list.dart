@@ -1,51 +1,10 @@
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// class LatesViolationList extends StatelessWidget {
-//   final ViolationRepository _violationRepository = ViolationRepository();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder(
-//         future: _violationRepository.fetchViolations(
-//           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-//           sort: 'desc createdAt',
-//           // status: 'Opening',
-//           id: 92,
-//           // limit: 2,
-//           // onDate: DateTime.now(),
-//         ),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData &&
-//               snapshot.connectionState == ConnectionState.done) {
-//             if (snapshot.data.length != 0) {
-//               return Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: buildViolationList([
-//                   ...snapshot.data,
-//                 ]),
-//               );
-//             }
-//             return Container();
-//           } else if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(
-//                 child: SkeletonLoading(
-//               item: 2,
-//             ));
-//           }
-//           return Center(
-//             child: Text(snapshot.connectionState.toString()),
-//           );
-//         });
-//   }
-// }
 
 class LatestViolationList extends StatelessWidget {
   @override
@@ -104,8 +63,10 @@ class LatestViolationList extends StatelessWidget {
 
 class ViolationByReportList extends StatelessWidget {
   final int reportId;
+  final String screen;
 
-  const ViolationByReportList({Key key, this.reportId}) : super(key: key);
+  const ViolationByReportList({Key key, this.reportId, this.screen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +114,7 @@ class ViolationByReportList extends StatelessWidget {
         return buildViolationList(
           violations,
           bloc: BlocProvider.of<ViolationByDemandBloc>(context),
-          screen: 'ReportDetailScreen',
+          screen: screen,
         );
       }
       return Container();
@@ -183,41 +144,3 @@ Widget buildViolationList(
     ),
   );
 }
-
-// class ViolationByReportList extends StatelessWidget {
-//   final ViolationRepository _violationRepository = ViolationRepository();
-//   final int reportId;
-
-//   ViolationByReportList({Key key, this.reportId}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder(
-//         future: _violationRepository.fetchViolations(
-//           token: BlocProvider.of<AuthenticationBloc>(context).state.token,
-//           sort: 'desc createdAt',
-//           reportId: reportId,
-//         ),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData &&
-//               snapshot.connectionState == ConnectionState.done) {
-//             if (snapshot.data.length != 0) {
-//               return Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: buildViolationList([
-//                   ...snapshot.data,
-//                 ]),
-//               );
-//             }
-//             return Container();
-//           } else if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(
-//                 child: SkeletonLoading(
-//               item: 2,
-//             ));
-//           }
-//           return Center(
-//             child: Text(snapshot.connectionState.toString()),
-//           );
-//         });
-//   }
-// }

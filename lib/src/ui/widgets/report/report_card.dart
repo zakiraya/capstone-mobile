@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
+import 'package:capstone_mobile/src/blocs/report_by_demand/report_by_demand_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:capstone_mobile/src/data/models/report/report.dart';
@@ -12,9 +13,11 @@ class ReportCard extends StatelessWidget {
   const ReportCard({
     Key key,
     @required this.report,
+    this.reportByDemandBloc,
   }) : super(key: key);
 
   final Report report;
+  final ReportByDemandBloc reportByDemandBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +26,20 @@ class ReportCard extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          Navigator.push(
-            context,
-            ReportDetailScreen.route(
-              report: report,
-              // isEditable: report.status.toLowerCase() == 'draft' ? true : false,
-            ),
-          );
+          reportByDemandBloc == null
+              ? Navigator.push(
+                  context,
+                  ReportDetailScreen.route(
+                    id: report.id,
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  ReportDetailByDemandScreen.route(
+                    id: report.id,
+                    reportByDemandBloc: reportByDemandBloc,
+                  ),
+                );
         },
         child: ClipPath(
           clipper: ShapeBorderClipper(
@@ -90,9 +100,11 @@ class ReportCard extends StatelessWidget {
                     children: [
                       Text(""),
                       Text(
-                        S.of(context).CREATED_ON +
-                            ': '
-                                "${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(report?.createdAt) ?? "date time"}",
+                        report?.createdAt != null
+                            ? S.of(context).CREATED_ON +
+                                ': '
+                                    "${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(report?.createdAt)}"
+                            : '',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[400],
