@@ -1,7 +1,10 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
+import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
+import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/action_popup_menu.dart';
 import 'package:flutter/material.dart';
@@ -14,20 +17,28 @@ enum ExtraAction { remove, edit }
 
 class ViolationDetailByIdScreen extends StatefulWidget {
   final int id;
+  final ViolationByDemandBloc bloc;
+  final String fromScreen;
 
   const ViolationDetailByIdScreen({
     Key key,
     @required this.id,
+    this.bloc,
+    this.fromScreen,
   }) : super(key: key);
 
   static Route route({
     @required int id,
+    ViolationByDemandBloc bloc,
+    String fromScreen,
   }) {
     return MaterialPageRoute<void>(
         settings:
             RouteSettings(name: "/ViolationDetailByIdScreen", arguments: int),
         builder: (_) => ViolationDetailByIdScreen(
               id: id,
+              bloc: bloc,
+              fromScreen: fromScreen,
             ));
   }
 
@@ -38,8 +49,13 @@ class ViolationDetailByIdScreen extends StatefulWidget {
 
 class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
   final ViolationRepository _violationRepository = ViolationRepository();
+  Violation violation;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.bloc != null) {
+      print(widget.bloc);
+    }
     var theme = Theme.of(context);
     return BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
       return FutureBuilder(
@@ -51,7 +67,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
               if (snapshot.data.length != 0) {
-                Violation violation = snapshot.data[0];
+                violation = snapshot.data[0];
                 return Scaffold(
                   appBar: AppBar(
                     elevation: 0,
@@ -84,9 +100,21 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                   theme: theme,
                                   violation: violation,
                                   widget: widget,
+                                  bloc: widget.bloc,
                                   successCallBack: (context) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context, violation.id);
+                                    Navigator.pushAndRemoveUntil<void>(
+                                        context,
+                                        ViolationDetailByIdScreen.route(
+                                            id: violation.id),
+                                        ModalRoute.withName(
+                                          '/${widget.fromScreen}',
+                                        ));
+                                  },
+                                  deleteCallBack: (context) {
+                                    Navigator.popUntil(
+                                        context,
+                                        ModalRoute.withName(
+                                            '/${widget.fromScreen}'));
                                   },
                                 ),
                               ]
@@ -95,9 +123,22 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                   theme: theme,
                                   violation: violation,
                                   widget: widget,
+                                  bloc: widget.bloc,
                                   successCallBack: (context) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context, violation.id);
+                                    Navigator.pushAndRemoveUntil<void>(
+                                        context,
+                                        ViolationDetailByIdScreen.route(
+                                            id: violation.id),
+                                        ModalRoute.withName(
+                                            '/${widget.fromScreen}'));
+                                  },
+                                  confirmCallBack: (context) {
+                                    Navigator.pushAndRemoveUntil<void>(
+                                        context,
+                                        ViolationDetailByIdScreen.route(
+                                            id: violation.id),
+                                        ModalRoute.withName(
+                                            '/${widget.fromScreen}'));
                                   },
                                 ),
                               ]
@@ -191,6 +232,23 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                 height: 16,
                               ),
                               Container(
+                                child: Text(S.of(context).EXCUSE + ':',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: double.infinity,
+                                ),
+                                child: Container(
+                                  child: Text(violation?.excuse ??
+                                      'There is no excusion yet.'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Container(
                                 child: Text(S.of(context).EVIDENCE + ':',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
@@ -198,36 +256,42 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                               SizedBox(
                                 height: 8,
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: violation.imagePaths.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          child: Text(' - ' +
-                                              S.of(context).EVIDENCE +
-                                              ' ${index + 1} ')),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Center(
-                                        child: Image(
-                                          image: NetworkImage(
-                                            violation.imagePaths[index],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
+                              violation.imagePaths == null ||
+                                      violation.imagePaths.length <= 0
+                                  ? Container(
+                                      child: Text(
+                                          S.of(context).THERE_ARE_NO_EVIDENCE),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: violation.imagePaths.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                child: Text(' - ' +
+                                                    S.of(context).EVIDENCE +
+                                                    ' ${index + 1} ')),
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+                                            Center(
+                                              child: Image(
+                                                image: NetworkImage(
+                                                  violation.imagePaths[index],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
                             ],
                           ),
                         ),
@@ -316,7 +380,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
               ),
               body: Center(
                 child: Text(
-                  snapshot.connectionState.toString(),
+                  'This violation is no longer existed!',
                 ),
               ),
             );
@@ -324,95 +388,6 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
     });
   }
 }
-
-// class ActionPopupMenu extends StatelessWidget {
-//   const ActionPopupMenu({
-//     Key key,
-//     @required this.theme,
-//     @required this.violation,
-//     @required this.widget,
-//   }) : super(key: key);
-
-//   final ThemeData theme;
-//   final Violation violation;
-//   final ViolationDetailByIdScreen widget;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return PopupMenuButton(
-//       icon: Icon(
-//         Icons.more_horiz,
-//         color: theme.primaryColor,
-//       ),
-//       onSelected: (action) {
-//         switch (action) {
-//           case ExtraAction.edit:
-//             Navigator.push(
-//               context,
-//               ViolationCreateEditScreen.route(
-//                   isEditing: true,
-//                   violation: violation.copyWith(),
-//                   destinationScreen: 'Home',
-//                   onSaveCallBack: (Violation vio) {}),
-//             );
-//             break;
-//           case ExtraAction.remove:
-//             showDialog<void>(
-//               context: context,
-//               barrierDismissible: false, // user must tap button!
-//               builder: (BuildContext context) {
-//                 return AlertDialog(
-//                   title: Text(S.of(context).POPUP_DELETE_VIOLATION),
-//                   actions: <Widget>[
-//                     TextButton(
-//                       child: Text(
-//                         S.of(context).DELETE,
-//                         style: TextStyle(
-//                           color: Colors.red,
-//                         ),
-//                       ),
-//                       onPressed: () {
-//                         BlocProvider.of<ViolationBloc>(context)
-//                             .add(ViolationDelete(
-//                           token: BlocProvider.of<AuthenticationBloc>(context)
-//                               .state
-//                               .token,
-//                           id: violation.id,
-//                         ));
-//                         CoolAlert.show(
-//                           barrierDismissible: false,
-//                           context: context,
-//                           type: CoolAlertType.loading,
-//                           text: S.of(context).POPUP_CREATE_VIOLATION_SUBMITTING,
-//                         );
-//                       },
-//                     ),
-//                     TextButton(
-//                       child: Text(S.of(context).CANCEL),
-//                       onPressed: () {
-//                         Navigator.of(context).pop();
-//                       },
-//                     ),
-//                   ],
-//                 );
-//               },
-//             );
-//             break;
-//         }
-//       },
-//       itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-//         PopupMenuItem<ExtraAction>(
-//           value: ExtraAction.edit,
-//           child: Text(S.of(context).EDIT),
-//         ),
-//         PopupMenuItem<ExtraAction>(
-//           value: ExtraAction.remove,
-//           child: Text(S.of(context).DELETE),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class ImageZoomScreen extends StatelessWidget {
   @override

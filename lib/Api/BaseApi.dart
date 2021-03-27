@@ -6,7 +6,8 @@ import 'package:dio/dio.dart';
 import 'Exceptions.dart';
 
 class BaseApi {
-  final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
+  // final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
+  final String _baseUrl = "https://mavca-api.azurewebsites.net/v1/";
 
   Map<String, String> generateHeader(
     String token, [
@@ -180,7 +181,7 @@ class BaseApi {
       case 500:
       default:
         throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+            'Error occured while Communication with Server with StatusCode : ${response.statusCode}, ${response.body} ');
     }
   }
 }

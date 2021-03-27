@@ -1,4 +1,5 @@
 import 'package:capstone_mobile/generated/l10n.dart';
+import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/dropdown_field.dart';
@@ -20,6 +21,7 @@ class ViolationCreateEditForm extends StatefulWidget {
     @required this.size,
     @required this.isEditing,
     @required this.successCallBack,
+    this.bloc,
     // @required this.destinationScreen,
   }) : super(key: key);
 
@@ -27,6 +29,7 @@ class ViolationCreateEditForm extends StatefulWidget {
   final Size size;
   final bool isEditing;
   final Function successCallBack;
+  final bloc;
   // final String destinationScreen;
 
   @override
@@ -78,7 +81,24 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                 S.of(context).POPUP_UPDATE_SUCCESS,
           ).then((value) {
             // Navigator.pop(context);
-            widget.successCallBack(context);
+            if (widget.bloc != null) {
+              var bloc = BlocProvider.of<ViolationCreateBloc>(context);
+              widget.bloc.add(ViolationByDemandUpdated(
+                violation: widget.violation.copyWith(
+                  name: widget.violation.name,
+                  description: bloc.state.violationDescription.value,
+                  regulationId: bloc.state.violationRegulation.value.id,
+                  regulationName: bloc.state.violationRegulation.value.name,
+                  imagePaths: _imagePaths,
+                  assets: _assets,
+                ),
+              ));
+            }
+
+            widget.successCallBack(
+              context,
+              // widget.bloc,
+            );
             // Navigator.of(context)
             //     .popUntil(ModalRoute.withName('/${widget.destinationScreen}'));
           });

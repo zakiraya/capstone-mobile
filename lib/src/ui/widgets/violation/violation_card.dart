@@ -6,22 +6,24 @@ import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_create_list_form.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_by_id_screen.dart';
 import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
-import 'package:capstone_mobile/src/ui/utils/modal_fit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ViolationCard extends StatelessWidget {
   ViolationCard({
     Key key,
     @required this.violation,
     this.isFetchedById = false,
+    this.bloc,
+    this.fromScreen,
   }) : super(key: key);
 
   final Violation violation;
   final bool isFetchedById;
+  final bloc;
+  final String fromScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,13 @@ class ViolationCard extends StatelessWidget {
         onTap: () {
           isFetchedById
               ? Navigator.push(
-                  context, ViolationDetailByIdScreen.route(id: violation.id))
+                  context,
+                  ViolationDetailByIdScreen.route(
+                    id: violation.id,
+                    bloc: bloc,
+                    fromScreen: fromScreen,
+                  ),
+                )
               : Navigator.push(
                   context,
                   ViolationDetailScreen.route(
@@ -67,6 +75,13 @@ class ViolationCard extends StatelessWidget {
                     children: [
                       Text(
                         "${violation?.branchName ?? "branch name"}",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${violation?.id ?? "id"}",
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontWeight: FontWeight.w600,

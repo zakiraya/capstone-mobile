@@ -36,7 +36,6 @@ class Report extends Equatable {
       list.add(<String, dynamic>{
         'name': violation.name,
         'description': violation.description,
-        'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
         'branchId': violation.branchId,
       });
@@ -63,7 +62,6 @@ class Report extends Equatable {
         name: violation['name'],
         description: violation['description'],
         status: violation['status'],
-        imagePath: violation['violation'],
         createdAt: violation['createdDate'],
         branchId: violation['branchId'],
       ));
