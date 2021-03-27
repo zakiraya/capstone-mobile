@@ -15,10 +15,18 @@ class Constant {
     'Opening': Colors.blue,
     'Done': Color(0xff2329D6),
     'Submitted': Colors.grey,
+    'Time To Submit': Colors.yellow,
   };
 }
 
 class ViolationStatusConstant {
   static const CONFIRMED = 'Confirmed';
   static const EXCUSED = 'Excused';
+}
+
+class ReportStatusConstant {
+  static const OPENING = 'Opening';
+  static const TIMETOSUBMIT = 'Time To Submit';
+  static const DONE = 'Done';
+  static const SUBMITED = 'Submitted';
 }

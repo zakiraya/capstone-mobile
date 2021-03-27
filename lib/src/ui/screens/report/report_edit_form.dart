@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
+import 'package:capstone_mobile/src/blocs/report_by_demand/report_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
@@ -20,15 +21,13 @@ class ReportEditForm extends StatelessWidget {
   const ReportEditForm({
     Key key,
     @required this.report,
-    @required this.descriptionTextFieldController,
     @required this.isEditing,
-    @required this.size,
+    this.reportByDemandBloc,
   }) : super(key: key);
 
   final Report report;
-  final TextEditingController descriptionTextFieldController;
   final bool isEditing;
-  final Size size;
+  final ReportByDemandBloc reportByDemandBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +46,11 @@ class ReportEditForm extends StatelessWidget {
                   isRefresh: true,
                 ),
               );
+              // if (reportByDemandBloc != null) {
+              //   reportByDemandBloc.add(ReportByDemandUpdated(
+              //     report:
+              //   ));
+              // }
             });
           }
           if (state.status.isSubmissionInProgress) {
@@ -131,11 +135,12 @@ class ReportEditForm extends StatelessWidget {
                       child: Text(S.of(context).CREATED_ON + ": ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(DateFormat.yMMMd(
+                    Text(report?.updatedAt != null
+                        ? DateFormat.yMMMd(
                                 BlocProvider.of<LocalizationBloc>(context)
                                     .state)
-                            .format(report.createdAt) ??
-                        'created on'),
+                            .format(report.createdAt)
+                        : 'created on'),
                     SizedBox(
                       height: 16,
                     ),
@@ -163,11 +168,6 @@ class ReportEditForm extends StatelessWidget {
                     SizedBox(
                       height: 4,
                     ),
-                    // _ReportDescriptionInput(
-                    //   descriptionTextFieldController:
-                    //       descriptionTextFieldController,
-                    //   description: report.description,
-                    // ),
                     ConstrainedBox(
                       constraints: BoxConstraints(
                         minWidth: double.infinity,
@@ -228,6 +228,9 @@ class ReportEditForm extends StatelessWidget {
                 )..add(ViolationRequestedByReportId(reportId: report.id)),
                 child: ViolationByReportList(
                   reportId: report.id,
+                  screen: reportByDemandBloc != null
+                      ? 'ReportDetailByDemandScreen'
+                      : 'ReportDetailScreen',
                 ),
               ),
               SizedBox(
@@ -239,16 +242,20 @@ class ReportEditForm extends StatelessWidget {
                           .roleName ==
                       Constant.ROLE_BM
                   ? Container()
-                  : report.status.toLowerCase() == 'opening'
+                  : report.status.toLowerCase() ==
+                              ReportStatusConstant.OPENING.toLowerCase() ||
+                          report.status.toLowerCase() ==
+                              ReportStatusConstant.TIMETOSUBMIT.toLowerCase()
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _SaveButton(
                               report: report,
+                              reportByDemandBloc: reportByDemandBloc,
                             ),
                             _SubmitButton(
-                              size: size,
                               report: report,
+                              reportByDemandBloc: reportByDemandBloc,
                             ),
                           ],
                         )
@@ -372,16 +379,17 @@ class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key key,
     @required this.report,
-    @required this.size,
+    this.reportByDemandBloc,
   }) : super(key: key);
 
-  final Size size;
   final Report report;
+  final ReportByDemandBloc reportByDemandBloc;
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return BlocBuilder<ReportCreateBloc, ReportCreateState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      // buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return Container(
           width: size.width * 0.4,
@@ -394,7 +402,24 @@ class _SubmitButton extends StatelessWidget {
                 letterSpacing: 1.5,
               ),
             ),
-            onPressed: null,
+            onPressed: report.status == ReportStatusConstant.TIMETOSUBMIT
+                ? () {
+                    context.read<ReportCreateBloc>().add(
+                          ReportEdited(
+                            report: report.copyWith(
+                              status: ReportStatusConstant.SUBMITED,
+                            ),
+                          ),
+                        );
+                    if (reportByDemandBloc != null) {
+                      reportByDemandBloc.add(ReportByDemandUpdated(
+                        report: report.copyWith(
+                          status: ReportStatusConstant.SUBMITED,
+                        ),
+                      ));
+                    }
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.red,
               primary: Theme.of(context).primaryColor,
@@ -413,9 +438,11 @@ class _SaveButton extends StatelessWidget {
   const _SaveButton({
     Key key,
     this.report,
+    this.reportByDemandBloc,
   }) : super(key: key);
 
   final Report report;
+  final ReportByDemandBloc reportByDemandBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -441,6 +468,16 @@ class _SaveButton extends StatelessWidget {
                             report: report,
                           ),
                         );
+                    if (reportByDemandBloc != null) {
+                      reportByDemandBloc.add(ReportByDemandUpdated(
+                        report: report.copyWith(
+                          qcNote: BlocProvider.of<ReportCreateBloc>(context)
+                              .state
+                              .reportDescription
+                              .value,
+                        ),
+                      ));
+                    }
                   }
                 : null,
             style: ElevatedButton.styleFrom(

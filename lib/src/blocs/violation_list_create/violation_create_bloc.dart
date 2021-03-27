@@ -39,11 +39,7 @@ class ViolationCreateBloc
       yield* _mapViolationExcuseToState(event);
     } else if (event is ViolationDeleted) {
       yield* _mapViolationDeleteToState(event);
-    }
-    //  else if (event is ViolationBranchChanged) {
-    //   yield _mapViolationBranchChangetoState(event, state);
-    // }
-    else if (event is ViolationUpdated) {
+    } else if (event is ViolationUpdated) {
       yield* _mapViolationCreateAddedToState(event, state);
     }
   }

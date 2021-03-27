@@ -3,8 +3,6 @@ import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_deman
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
-import 'package:capstone_mobile/src/ui/screens/home_screen.dart';
-import 'package:capstone_mobile/src/ui/screens/report/report_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/action_popup_menu.dart';
 import 'package:flutter/material.dart';
@@ -95,29 +93,35 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                     .user
                                     .roleName ==
                                 Constant.ROLE_QC
-                            ? [
-                                ActionPopupMenu(
-                                  theme: theme,
-                                  violation: violation,
-                                  widget: widget,
-                                  bloc: widget.bloc,
-                                  successCallBack: (context) {
-                                    Navigator.pushAndRemoveUntil<void>(
-                                        context,
-                                        ViolationDetailByIdScreen.route(
-                                            id: violation.id),
-                                        ModalRoute.withName(
-                                          '/${widget.fromScreen}',
-                                        ));
-                                  },
-                                  deleteCallBack: (context) {
-                                    Navigator.popUntil(
-                                        context,
-                                        ModalRoute.withName(
-                                            '/${widget.fromScreen}'));
-                                  },
-                                ),
-                              ]
+                            ? BlocProvider.of<AuthenticationBloc>(context)
+                                        .state
+                                        .user
+                                        .id ==
+                                    violation.createdBy
+                                ? [
+                                    ActionPopupMenu(
+                                      theme: theme,
+                                      violation: violation,
+                                      widget: widget,
+                                      bloc: widget.bloc,
+                                      successCallBack: (context) {
+                                        Navigator.pushAndRemoveUntil<void>(
+                                            context,
+                                            ViolationDetailByIdScreen.route(
+                                                id: violation.id),
+                                            ModalRoute.withName(
+                                              '/${widget.fromScreen}',
+                                            ));
+                                      },
+                                      deleteCallBack: (context) {
+                                        Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                '/${widget.fromScreen}'));
+                                      },
+                                    ),
+                                  ]
+                                : null
                             : [
                                 ActionPopupMenuForBM(
                                   theme: theme,
