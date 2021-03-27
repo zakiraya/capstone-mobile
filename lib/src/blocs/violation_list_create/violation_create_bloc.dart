@@ -37,6 +37,8 @@ class ViolationCreateBloc
       yield _mapViolationRegulationChangetoState(event, state);
     } else if (event is ViolationExcuseChanged) {
       yield* _mapViolationExcuseToState(event);
+    } else if (event is ViolationDeleted) {
+      yield* _mapViolationDeleteToState(event);
     }
     //  else if (event is ViolationBranchChanged) {
     //   yield _mapViolationBranchChangetoState(event, state);
@@ -108,6 +110,25 @@ class ViolationCreateBloc
         violation: event.violation,
       );
 
+      violationBloc.add(ViolationRequested(isRefresh: true));
+      yield state.copyWith(
+        status: FormzStatus.submissionSuccess,
+      );
+    } catch (e) {
+      print(e);
+      yield state.copyWith(status: FormzStatus.submissionFailure);
+    }
+  }
+
+  Stream<ViolationCreateState> _mapViolationDeleteToState(
+    ViolationDeleted event,
+  ) async* {
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      await violationRepository.deleteViolation(
+        token: authenticationRepository.token,
+        id: event.id,
+      );
       violationBloc.add(ViolationRequested(isRefresh: true));
       yield state.copyWith(
         status: FormzStatus.submissionSuccess,

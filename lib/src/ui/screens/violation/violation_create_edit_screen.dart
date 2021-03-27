@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
@@ -18,29 +19,36 @@ class ViolationCreateEditScreen extends StatefulWidget {
     this.position,
     // @required this.destinationScreen,
     @required this.successCallBack,
+    this.bloc,
   }) : super(key: key);
 
   final bool isEditing;
   final Violation violation;
   final int position;
   final Function successCallBack;
+  final ViolationByDemandBloc bloc;
   // final String destinationScreen;
 
   static Route route({
     bool isEditing,
     Violation violation,
     int position,
+    ViolationByDemandBloc bloc,
     // @required String destinationScreen,
     @required Function successCallBack,
   }) {
+    if (bloc != null) {
+      print(bloc);
+    }
     return MaterialPageRoute<void>(
-        settings: RouteSettings(name: "/ViolationCreateEditScreen"),
-        builder: (_) => ViolationCreateEditScreen(
-              isEditing: isEditing,
-              violation: violation,
-              // destinationScreen: destinationScreen,
-              successCallBack: successCallBack,
-            ));
+      settings: RouteSettings(name: "/ViolationCreateEditScreen"),
+      builder: (_) => ViolationCreateEditScreen(
+        isEditing: isEditing,
+        violation: violation,
+        successCallBack: successCallBack,
+        bloc: bloc,
+      ),
+    );
   }
 
   @override
@@ -90,6 +98,7 @@ class _ViolationCreateEditScreenState extends State<ViolationCreateEditScreen> {
               successCallBack: widget.successCallBack,
               // destinationScreen: widget.destinationScreen,
               isEditing: widget.isEditing,
+              bloc: widget.bloc,
             ),
           ),
         );

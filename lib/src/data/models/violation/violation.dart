@@ -7,7 +7,6 @@ class Violation extends Equatable {
   final String status;
   final String violationCode;
   final DateTime createdAt;
-  String imagePath;
   final String description;
   final int regulationId;
   final String regulationName;
@@ -16,6 +15,7 @@ class Violation extends Equatable {
   List<String> imagePaths;
   List<Asset> assets;
   final String excuse;
+  final int reportId;
 
   Violation({
     this.id,
@@ -23,7 +23,6 @@ class Violation extends Equatable {
     this.status,
     this.violationCode,
     this.createdAt,
-    this.imagePath,
     this.description,
     this.regulationId,
     this.regulationName,
@@ -32,6 +31,7 @@ class Violation extends Equatable {
     this.imagePaths,
     this.assets,
     this.excuse,
+    this.reportId,
   });
 
   @override
@@ -41,7 +41,6 @@ class Violation extends Equatable {
         status,
         violationCode,
         createdAt,
-        imagePath,
         description,
         regulationId,
         regulationName,
@@ -64,6 +63,7 @@ class Violation extends Equatable {
       regulationId: json['regulation']['id'],
       regulationName: json['regulation']['name'],
       excuse: json['excuse'],
+      reportId: json['report']['id'] as int,
       imagePaths:
           List<String>.from(json['evidence'].map((e) => e['imagePath'])),
     );
@@ -73,7 +73,6 @@ class Violation extends Equatable {
     DateTime createdAt,
     int id,
     String name,
-    String imagePath,
     String description,
     int regulationId,
     String regulationName,
@@ -90,7 +89,6 @@ class Violation extends Equatable {
       createdAt: this.createdAt,
       description: description ?? this.description,
       id: this.id,
-      imagePath: imagePath ?? this.imagePath,
       name: name ?? this.name,
       regulationId: regulationId ?? this.regulationId,
       regulationName: regulationName ?? this.regulationName,
@@ -99,6 +97,7 @@ class Violation extends Equatable {
       imagePaths: imagePaths ?? this.imagePaths,
       assets: assets ?? this.assets,
       excuse: excuse ?? this.excuse,
+      reportId: this.reportId,
     );
   }
 
@@ -108,9 +107,9 @@ class Violation extends Equatable {
 
     violations.forEach((violation) {
       list.add(<String, dynamic>{
+        'reportId': violation.reportId,
         'name': 'name',
         'description': violation.description.trim(),
-        'imagePath': violation.imagePath,
         'regulationId': violation.regulationId,
         'branchId': violation.branchId,
         'excuse': violation.excuse,

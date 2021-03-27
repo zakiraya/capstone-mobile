@@ -18,6 +18,9 @@ class ReportDetailScreen extends StatelessWidget {
 
   static Route route({@required Report report}) {
     return MaterialPageRoute<void>(
+        settings: RouteSettings(
+          name: "/ReportDetailScreen",
+        ),
         builder: (_) => ReportDetailScreen(
               report: report,
             ));

@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
+import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
@@ -13,21 +14,25 @@ import 'package:formz/formz.dart';
 class ExcuseScreen extends StatelessWidget {
   final Violation violation;
   final Function successCallBack;
+  final ViolationByDemandBloc bloc;
 
   const ExcuseScreen({
     Key key,
     @required this.violation,
     @required this.successCallBack,
+    this.bloc,
   }) : super(key: key);
 
   static Route route({
     @required Violation violation,
     @required Function successCallBack,
+    ViolationByDemandBloc bloc,
   }) =>
       MaterialPageRoute(
           builder: (_) => ExcuseScreen(
                 successCallBack: successCallBack,
                 violation: violation,
+                bloc: bloc,
               ));
   @override
   Widget build(BuildContext context) {
@@ -66,6 +71,7 @@ class ExcuseScreen extends StatelessWidget {
             child: ExcuseForm(
               violation: violation,
               successCallBack: successCallBack,
+              violationByDemandBloc: bloc,
             ),
           ),
         ));
@@ -75,11 +81,13 @@ class ExcuseScreen extends StatelessWidget {
 class ExcuseForm extends StatefulWidget {
   final Violation violation;
   final Function successCallBack;
+  final ViolationByDemandBloc violationByDemandBloc;
 
   const ExcuseForm({
     Key key,
     @required this.violation,
     @required this.successCallBack,
+    this.violationByDemandBloc,
   }) : super(key: key);
 
   @override
@@ -91,8 +99,6 @@ class _ExcuseFormState extends State<ExcuseForm> {
 
   @override
   Widget build(BuildContext context) {
-    print('violationId: ');
-    print(widget.violation.id);
     var theme = Theme.of(context);
     return BlocListener<ViolationCreateBloc, ViolationCreateState>(
       listener: (context, state) {
@@ -102,10 +108,15 @@ class _ExcuseFormState extends State<ExcuseForm> {
             type: CoolAlertType.success,
             text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
           ).then((value) {
+            if (widget.violationByDemandBloc != null) {
+              print('asfadf');
+              widget.violationByDemandBloc.add(ViolationByDemandUpdated(
+                  violation: widget.violation.copyWith(
+                status: ViolationStatusConstant.EXCUSED,
+                excuse: excusion.trim(),
+              )));
+            }
             widget.successCallBack(context);
-            // Navigator.pop(context);
-            // Navigator.of(context)
-            //     .popUntil(ModalRoute.withName('/ViolationDetailScreen'));
           });
         }
         if (state.status.isSubmissionInProgress) {
@@ -162,7 +173,6 @@ class _ExcuseFormState extends State<ExcuseForm> {
           ElevatedButton(
             onPressed: excusion.trim().isNotEmpty
                 ? () {
-                    print(excusion);
                     var bloc = BlocProvider.of<ViolationCreateBloc>(context);
                     showDialog<void>(
                       context: context,

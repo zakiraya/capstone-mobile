@@ -34,6 +34,15 @@ class ViolationExcuseChanged extends ViolationCreateEvent {
   List<Object> get props => [violation];
 }
 
+class ViolationDeleted extends ViolationCreateEvent {
+  const ViolationDeleted({@required this.id});
+
+  final int id;
+
+  @override
+  List<Object> get props => [id];
+}
+
 // class ViolationBranchChanged extends ViolationCreateEvent {
 //   const ViolationBranchChanged({@required this.branch});
 

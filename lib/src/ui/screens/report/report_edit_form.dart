@@ -1,7 +1,9 @@
 import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 import 'package:capstone_mobile/src/blocs/report/report_bloc.dart';
-import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
+import 'package:capstone_mobile/src/blocs/violation_by_demand/violation_by_demand_bloc.dart';
+import 'package:capstone_mobile/src/data/repositories/authentication/authentication_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_list.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,6 @@ import 'package:formz/formz.dart';
 
 import 'package:capstone_mobile/src/blocs/report_create/report_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/report/report.dart';
-import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:intl/intl.dart';
@@ -39,7 +40,7 @@ class ReportEditForm extends StatelessWidget {
             CoolAlert.show(
               context: context,
               type: CoolAlertType.success,
-              text: S.of(context).POPUP_CREATE_VIOLATION_SUCCESS,
+              text: S.of(context).SUCCESS,
             ).then((value) {
               BlocProvider.of<ReportBloc>(context).add(
                 ReportRequested(
@@ -62,7 +63,7 @@ class ReportEditForm extends StatelessWidget {
               context: context,
               type: CoolAlertType.error,
               title: "Oops...",
-              text: S.of(context).POPUP_CREATE_VIOLATION_FAIL,
+              text: S.of(context).FAIL,
             );
           }
         },
@@ -219,8 +220,15 @@ class ReportEditForm extends StatelessWidget {
               SizedBox(
                 height: 4,
               ),
-              ViolationByReportList(
-                reportId: report.id,
+              BlocProvider(
+                create: (context) => ViolationByDemandBloc(
+                  authenticationRepository:
+                      RepositoryProvider.of<AuthenticationRepository>(context),
+                  violationRepository: ViolationRepository(),
+                )..add(ViolationRequestedByReportId(reportId: report.id)),
+                child: ViolationByReportList(
+                  reportId: report.id,
+                ),
               ),
               SizedBox(
                 height: 32,
@@ -447,17 +455,4 @@ class _SaveButton extends StatelessWidget {
       },
     );
   }
-}
-
-Widget buildViolationList(List<Violation> violations) {
-  List<ViolationCard> violationCards = List<ViolationCard>();
-  for (var vio in violations) {
-    ViolationCard card = ViolationCard(
-      violation: vio,
-    );
-    violationCards.add(card);
-  }
-  return Column(
-    children: [...violationCards],
-  );
 }
