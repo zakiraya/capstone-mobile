@@ -239,8 +239,7 @@ class LatestNotificationList extends StatelessWidget {
                     ' ${notifications[index].description} ',
                     style: TextStyle(fontSize: 12),
                   ),
-
-                  // isThreeLine: true,
+                  isThreeLine: true,
                   onTap: () {
                     if (!notifications[index].isRead) {
                       BlocProvider.of<NotificationBloc>(context)

@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
 import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation_branch.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation_report.dart';
 
 part 'violation_list_state.dart';
 part 'violation_list_event.dart';
@@ -31,6 +32,8 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
       yield _mapViolationUpdateToState(event, state);
     } else if (event is ViolationListSubmitted) {
       yield* _mapViolationListSubmittedToState(event, state);
+    } else if (event is ViolationReportChanged) {
+      yield _mapViolationReportChangetoState(event, state);
     }
   }
 
@@ -38,9 +41,21 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
     ViolationBranchChanged event,
     ViolationListState state,
   ) {
+    // print(event.branch.name);
     final branch = ViolationBranch.dirty(event.branch);
     return state.copyWith(
       violationBranch: branch,
+    );
+  }
+
+  ViolationListState _mapViolationReportChangetoState(
+    ViolationReportChanged event,
+    ViolationListState state,
+  ) {
+    print(event.reportId ?? 'bac');
+    final report = ViolationReport.dirty(event.reportId);
+    return state.copyWith(
+      violationReport: report,
     );
   }
 
@@ -101,13 +116,16 @@ class ViolationListBloc extends Bloc<ViolationListEvent, ViolationListState> {
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      state.violations.forEach((violation) {
-        violation.branchId = state.violationBranch.value.id;
-      });
-
+      var violations = state.violations.map((violation) {
+        return violation.copyWith(
+          branchId: state.violationBranch.value.id,
+          reportId: state.violationReport.value,
+        );
+      }).toList();
+      print(violations.length.toString());
       var result = await violationRepository.createViolations(
         token: event.token,
-        violations: state.violations,
+        violations: violations,
       );
       yield state.copyWith(
         status: FormzStatus.submissionSuccess,

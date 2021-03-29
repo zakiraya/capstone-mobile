@@ -3,9 +3,12 @@ import 'package:capstone_mobile/src/blocs/authentication/authentication_bloc.dar
 import 'package:capstone_mobile/src/blocs/violation_list_create/violation_create_bloc.dart';
 import 'package:capstone_mobile/src/data/models/branch/branch.dart';
 import 'package:capstone_mobile/src/data/models/regulation/regulation.dart';
+import 'package:capstone_mobile/src/data/models/report/report.dart';
+import 'package:capstone_mobile/src/data/models/violation/violation_report.dart';
 import 'package:capstone_mobile/src/data/repositories/branch/branch_repository.dart';
 import 'package:capstone_mobile/src/blocs/violation_list/violation_list_bloc.dart';
 import 'package:capstone_mobile/src/data/repositories/regulation/regulation_repository.dart';
+import 'package:capstone_mobile/src/data/repositories/report/report_repository.dart';
 import 'package:capstone_mobile/src/ui/utils/my_dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,6 +84,93 @@ class _DropdownFieldBranchState extends State<DropdownFieldBranch> {
         items: _brancheNames,
         strict: false,
         required: true,
+        errorText: S.of(context).THIS_FIELD_CANNOT_BE_EMPTY,
+      ),
+    );
+  }
+}
+
+class DropdownFieldReport extends StatefulWidget {
+  @override
+  _DropdownFieldReportState createState() => _DropdownFieldReportState();
+}
+
+class _DropdownFieldReportState extends State<DropdownFieldReport> {
+  String id;
+
+  ReportRepository _branchRepository = ReportRepository();
+  List<Report> _reports = List();
+  List<String> _reportNames = List();
+  String _initValue;
+  final myController = TextEditingController();
+
+  Future<String> getReports() async {
+    try {
+      var reports = await _branchRepository.fetchReports(
+        token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+      );
+
+      if (this.mounted) {
+        setState(() {
+          _reports = reports;
+          _reportNames = _reports.map((report) => report.name).toList();
+        });
+      }
+    } catch (e) {}
+
+    return 'success';
+  }
+
+  _printLatestValue() {
+    if (myController.text.isEmpty) {
+      context.read<ViolationListBloc>().add(ViolationReportChanged(
+            reportId: 0,
+          ));
+      context.read<ViolationListBloc>().add(ViolationBranchChanged(
+            branch: null,
+          ));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getReports();
+    myController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: DropDownField(
+        controller: myController,
+        onValueChanged: (value) {
+          context.read<ViolationListBloc>().add(ViolationBranchChanged(
+                branch: Branch(
+                    id: _reports
+                        .firstWhere((element) => element.name == value)
+                        .branchId,
+                    name: _reports
+                        .firstWhere((element) => element.name == value)
+                        .branchName),
+              ));
+          context.read<ViolationListBloc>().add(ViolationReportChanged(
+              reportId:
+                  _reports.firstWhere((element) => element.name == value).id));
+        },
+        value: _initValue,
+        hintText:
+            S.of(context).CHOOSE + ' ' + S.of(context).REPORT.toLowerCase(),
+        items: _reportNames,
+        strict: false,
+        required: true,
+        errorText: S.of(context).THIS_FIELD_CANNOT_BE_EMPTY,
       ),
     );
   }
@@ -178,6 +268,7 @@ class _DropdownFieldRegulationState extends State<DropdownFieldRegulation> {
         items: _regulationNames,
         strict: false,
         required: true,
+        errorText: S.of(context).THIS_FIELD_CANNOT_BE_EMPTY,
       ),
     );
   }

@@ -70,7 +70,8 @@ class ViolationListForm extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ListView(
             children: [
-              DropdownFieldBranch(),
+              // DropdownFieldBranch(),
+              DropdownFieldReport(),
               SizedBox(
                 height: 16,
               ),
@@ -78,8 +79,8 @@ class ViolationListForm extends StatelessWidget {
               BlocBuilder<ViolationListBloc, ViolationListState>(
                 builder: (context, state) {
                   return GestureDetector(
-                    onTap: state.violationBranch.pure ||
-                            state.violationBranch.invalid
+                    onTap: state.violationReport.pure ||
+                            state.violationReport.invalid
                         ? null
                         : () {
                             showModalOne(
@@ -97,8 +98,8 @@ class ViolationListForm extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.add,
-                              color: state.violationBranch.pure ||
-                                      state.violationBranch.invalid
+                              color: state.violationReport.pure ||
+                                      state.violationReport.invalid
                                   ? Colors.white
                                   : Color(0xff828282),
                             ),
@@ -106,8 +107,8 @@ class ViolationListForm extends StatelessWidget {
                               S.of(context).NEW_VIOLATION,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                color: state.violationBranch.pure ||
-                                        state.violationBranch.invalid
+                                color: state.violationReport.pure ||
+                                        state.violationReport.invalid
                                     ? Colors.white
                                     : Color(0xff828282),
                               ),
@@ -145,7 +146,7 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<ViolationListBloc, ViolationListState>(
       buildWhen: (previous, current) =>
           previous.status != current.status ||
-          previous.violationBranch != current.violationBranch,
+          previous.violationReport != current.violationReport,
       builder: (context, state) {
         return Container(
           child: Padding(
@@ -161,7 +162,7 @@ class _SubmitButton extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              onPressed: state.status.isValidated && state.violationBranch.valid
+              onPressed: state.status.isValidated && state.violationReport.valid
                   ? () {
                       context.read<ViolationListBloc>().add(
                             ViolationListSubmitted(

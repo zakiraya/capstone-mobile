@@ -95,6 +95,16 @@ class S {
     );
   }
 
+  /// `List`
+  String get List {
+    return Intl.message(
+      'List',
+      name: 'List',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Report`
   String get REPORT {
     return Intl.message(
@@ -205,10 +215,10 @@ class S {
     );
   }
 
-  /// `Comments`
+  /// `QC's note`
   String get COMMENTS {
     return Intl.message(
-      'Comments',
+      'QC\'s note',
       name: 'COMMENTS',
       desc: '',
       args: [],
@@ -355,20 +365,20 @@ class S {
     );
   }
 
-  /// `Report list`
+  /// `Latest reports`
   String get HOME_REPORT_LIST {
     return Intl.message(
-      'Report list',
+      'Latest reports',
       name: 'HOME_REPORT_LIST',
       desc: '',
       args: [],
     );
   }
 
-  /// `Violation list`
+  /// `Violations in day`
   String get HOME_VIOLATION_LIST {
     return Intl.message(
-      'Violation list',
+      'Violations in day',
       name: 'HOME_VIOLATION_LIST',
       desc: '',
       args: [],
@@ -685,6 +695,16 @@ class S {
     );
   }
 
+  /// `Choose`
+  String get CHOOSE {
+    return Intl.message(
+      'Choose',
+      name: 'CHOOSE',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Choose a branch`
   String get CHOOSE_BRANCH {
     return Intl.message(
@@ -840,6 +860,26 @@ class S {
     return Intl.message(
       'There are no images for this violation',
       name: 'THERE_ARE_NO_EVIDENCE',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field cannot be empty`
+  String get THIS_FIELD_CANNOT_BE_EMPTY {
+    return Intl.message(
+      'This field cannot be empty',
+      name: 'THIS_FIELD_CANNOT_BE_EMPTY',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no QC's note yet.`
+  String get THERE_NOT_QCNOTE_YET {
+    return Intl.message(
+      'There is no QC\'s note yet.',
+      name: 'THERE_NOT_QCNOTE_YET',
       desc: '',
       args: [],
     );

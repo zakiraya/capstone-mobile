@@ -133,8 +133,7 @@ class _AppViewState extends State<AppView> {
                       authenticationRepository:
                           RepositoryProvider.of<AuthenticationRepository>(
                               context),
-                      notificationRepository: NotificationRepository())
-                    ..add(NotificationRequested()),
+                      notificationRepository: NotificationRepository()),
                 ),
                 BlocProvider(
                     lazy: false,

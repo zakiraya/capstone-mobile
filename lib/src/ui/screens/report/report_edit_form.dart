@@ -204,7 +204,8 @@ class ReportEditForm extends StatelessWidget {
                               minHeight: 24,
                             ),
                             child: Container(
-                              child: Text(report?.qcNote ?? ''),
+                              child: Text(report?.qcNote ??
+                                  S.of(context).THERE_NOT_QCNOTE_YET),
                             ),
                           ),
                   ],
@@ -266,51 +267,6 @@ class ReportEditForm extends StatelessWidget {
             ],
           ),
         ));
-  }
-}
-
-class _ReportDescriptionInput extends StatelessWidget {
-  const _ReportDescriptionInput({
-    Key key,
-    @required this.descriptionTextFieldController,
-    @required this.description,
-  }) : super(key: key);
-
-  final TextEditingController descriptionTextFieldController;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ReportCreateBloc, ReportCreateState>(
-      buildWhen: (previous, current) =>
-          previous.reportDescription != current.reportDescription,
-      builder: (context, state) {
-        return TextField(
-          key: const Key('editForm_reportDescription_textField'),
-          controller: descriptionTextFieldController,
-          decoration: InputDecoration(
-            // filled: true,
-            // fillColor: Colors.grey[200],
-            hintText: description,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide.none,
-            ),
-          ),
-          onChanged: (description) {
-            context.read<ReportCreateBloc>().add(
-                  ReportDescriptionChanged(
-                    reportDescription: description,
-                    isEditing: true,
-                  ),
-                );
-          },
-          enabled: false,
-          maxLines: null,
-          style: TextStyle(fontSize: 14),
-        );
-      },
-    );
   }
 }
 

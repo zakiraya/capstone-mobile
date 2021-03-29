@@ -73,14 +73,16 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var user = BlocProvider.of<AuthenticationBloc>(context).state.user;
+    FirebaseNotification.topics.add(user.accountId.toString());
 
     if (user.roleName == Constant.ROLE_BM) {
       print('user.roleName + user.branchId.toString()');
-      FirebaseNotification.topic =
+      FirebaseNotification.topics.add(
           user.roleName.replaceAll(new RegExp(r"\s+"), "") +
-              user.branchId.toString();
+              user.branchId.toString());
     } else {
-      FirebaseNotification.topic = "all";
+      FirebaseNotification.topics
+          .add(user.roleName.replaceAll(new RegExp(r"\s+"), ""));
     }
     FirebaseNotification.configFirebaseMessaging(
       _navigator,
@@ -123,9 +125,13 @@ class HomeView extends StatelessWidget {
                     transform: Matrix4.translationValues(0.0, 0, 0.0),
                     child: Text(
                       activeTab == AppTab.reports
-                          ? S.of(context).HOME_REPORT_LIST
+                          ? S.of(context).List +
+                              ' ' +
+                              S.of(context).REPORT.toLowerCase()
                           : activeTab == AppTab.violations
-                              ? S.of(context).HOME_VIOLATION_LIST
+                              ? S.of(context).List +
+                                  ' ' +
+                                  S.of(context).VIOLATION.toLowerCase()
                               : '',
                       style: TextStyle(
                         color: theme.primaryColor,

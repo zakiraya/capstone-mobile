@@ -16,6 +16,15 @@ class ViolationBranchChanged extends ViolationListEvent {
   List<Object> get props => [branch];
 }
 
+class ViolationReportChanged extends ViolationListEvent {
+  const ViolationReportChanged({@required this.reportId});
+
+  final int reportId;
+
+  @override
+  List<Object> get props => [reportId];
+}
+
 class ViolationListChanged extends ViolationListEvent {
   const ViolationListChanged({@required this.violation});
 

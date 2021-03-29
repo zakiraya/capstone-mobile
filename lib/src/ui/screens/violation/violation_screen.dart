@@ -1,18 +1,13 @@
-import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
-import 'package:capstone_mobile/src/ui/constants/constant.dart';
 import 'package:capstone_mobile/src/ui/screens/filter/violation_filter_screen.dart';
 import 'package:capstone_mobile/src/ui/widgets/violation/violation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:capstone_mobile/src/blocs/blocs.dart';
 import 'package:capstone_mobile/src/blocs/violation/violation_bloc.dart';
 import 'package:capstone_mobile/src/data/models/violation/violation.dart';
-import 'package:capstone_mobile/src/ui/screens/violation/violation_detail_screen.dart';
 import 'package:capstone_mobile/src/ui/utils/skeleton_loading.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:capstone_mobile/src/ui/utils/bottom_loader.dart';
-import 'package:intl/intl.dart';
 
 class ViolationTab extends StatelessWidget {
   @override
@@ -127,8 +122,22 @@ class __ViolationListState extends State<_ViolationList> {
 
       if (state is ViolationLoadSuccess) {
         if (state.violations.isEmpty) {
-          return Center(
-            child: Text(S.of(context).VIOLATION_SCREEN_NO_VIOLATIONS),
+          return Column(
+            children: [
+              Center(
+                child: Text(S.of(context).VIOLATION_SCREEN_NO_VIOLATIONS),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _violationBloc.add(ViolationRequested(isRefresh: true));
+                },
+                child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey[200],
+                  onPrimary: Colors.black,
+                ),
+              ),
+            ],
           );
         }
 

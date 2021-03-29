@@ -1,5 +1,6 @@
 library dropdownfield;
 
+import 'package:capstone_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,6 +20,7 @@ class DropDownField extends FormField<String> {
   final ValueChanged<dynamic> onValueChanged;
   final bool strict;
   final int itemsVisibleInDropdown;
+  final String errorText;
 
   final TextEditingController controller;
 
@@ -42,7 +44,8 @@ class DropDownField extends FormField<String> {
       this.onValueChanged,
       this.itemsVisibleInDropdown: 3,
       this.enabled: true,
-      this.strict: true})
+      this.strict: true,
+      this.errorText: 'This field can not be empty!'})
       : super(
           key: key,
           autovalidate: false,
@@ -99,7 +102,7 @@ class DropDownField extends FormField<String> {
                           validator: (String newValue) {
                             if (required) {
                               if (newValue == null || newValue.isEmpty)
-                                return 'This field cannot be empty!';
+                                return errorText;
                             }
 
                             //Items null check added since there could be an initial brief period of time

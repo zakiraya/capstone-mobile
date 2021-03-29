@@ -10,7 +10,7 @@ class Violation extends Equatable {
   final String description;
   final int regulationId;
   final String regulationName;
-  int branchId;
+  final int branchId;
   final branchName;
   List<String> imagePaths;
   List<Asset> assets;
@@ -86,6 +86,7 @@ class Violation extends Equatable {
     List<String> imagePaths,
     List<Asset> assets,
     String excuse,
+    int reportId,
   }) {
     return Violation(
       branchId: branchId ?? this.branchId,
@@ -101,7 +102,7 @@ class Violation extends Equatable {
       imagePaths: imagePaths ?? this.imagePaths,
       assets: assets ?? this.assets,
       excuse: excuse ?? this.excuse,
-      reportId: this.reportId,
+      reportId: reportId ?? this.reportId,
       createdBy: this.createdBy,
     );
   }

@@ -153,39 +153,33 @@ class _ModalBodyState extends State<ModalBody> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    buildGridView(_assets),
                     _assets.length < 5
-                        ? Row(
-                            children: [
-                              GestureDetector(
-                                onTap: loadiImages,
-                                child: Card(
-                                  color: Colors.grey,
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.15,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.22,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          S.of(context).ADD_IMAGE,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
+                        ? GestureDetector(
+                            onTap: loadiImages,
+                            child: Card(
+                              color: Colors.grey,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                // width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: Colors.white,
                                     ),
-                                  ),
+                                    Text(
+                                      S.of(context).ADD_IMAGE,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           )
                         : Container(),
+                    buildGridView(_assets),
                     SizedBox(
                       height: 24,
                     ),
@@ -249,7 +243,7 @@ class _ModalBodyState extends State<ModalBody> {
   }
 
   Widget buildGridView(images) {
-    if (images != null)
+    if (images.length > 0)
       return GridView.count(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,

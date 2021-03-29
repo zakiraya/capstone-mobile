@@ -45,7 +45,7 @@ class ReportsTab extends StatelessWidget {
                             color: Color(0xff828282),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -92,8 +92,23 @@ class ReportList extends StatelessWidget {
           );
         } else if (state is ReportLoadSuccess) {
           if (state.reports.isEmpty) {
-            return Center(
-              child: Text(S.of(context).REPORT_SCREEN_NO_REPORTS),
+            return Column(
+              children: [
+                Center(
+                  child: Text(S.of(context).REPORT_SCREEN_NO_REPORTS),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<ReportBloc>(context)
+                        .add(ReportRequested(isRefresh: true));
+                  },
+                  child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey[200],
+                    onPrimary: Colors.black,
+                  ),
+                ),
+              ],
             );
           }
           List<Report> reports = state.reports;

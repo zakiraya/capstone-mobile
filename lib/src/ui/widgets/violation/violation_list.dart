@@ -23,20 +23,21 @@ class LatestViolationList extends StatelessWidget {
             child: Column(
           children: [
             Container(
-              child: Text(
-                  S.of(context).THERE_IS_NO + ' ' + S.of(context).VIOLATION),
+              child: Text(S.of(context).THERE_IS_NO +
+                  ' ' +
+                  S.of(context).VIOLATION.toLowerCase()),
             ),
-            ElevatedButton(
-              onPressed: () {
-                BlocProvider.of<ViolationByDemandBloc>(context)
-                    .add(ViolationRequestedByDate(date: DateTime.now()));
-              },
-              child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey[200],
-                onPrimary: Colors.black,
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     BlocProvider.of<ViolationByDemandBloc>(context)
+            //         .add(ViolationRequestedByDate(date: DateTime.now()));
+            //   },
+            //   child: Text(S.of(context).VIOLATION_SCREEN_RELOAD),
+            //   style: ElevatedButton.styleFrom(
+            //     primary: Colors.grey[200],
+            //     onPrimary: Colors.black,
+            //   ),
+            // ),
           ],
         ));
       }

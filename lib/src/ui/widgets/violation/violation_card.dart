@@ -27,6 +27,7 @@ class ViolationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Card(
       elevation: 5,
       child: InkWell(
@@ -56,7 +57,7 @@ class ViolationCard extends StatelessWidget {
             ),
           ),
           child: Container(
-            height: 100,
+            height: size.height * 0.17,
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
@@ -69,45 +70,52 @@ class ViolationCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${violation?.branchName ?? "branch name"}",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontWeight: FontWeight.w600,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: size.width * 0.5,
+                            child: Text(
+                              "${violation?.branchName ?? "branch name"}",
+                              style: TextStyle(
+                                color: Colors.grey[400],
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            "${violation?.status ?? "Status"}",
+                            style: TextStyle(
+                              color: Constant
+                                  .violationStatusColors[violation.status],
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "${violation?.id ?? "id"}",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontWeight: FontWeight.w600,
-                        ),
+                      SizedBox(
+                        height: 8,
                       ),
-                      Text(
-                        "${violation?.status ?? "Status"}",
-                        style: TextStyle(
-                          color:
-                              Constant.violationStatusColors[violation.status],
+                      Container(
+                        height: 48,
+                        child: Text(
+                          "${violation.name ?? 'violation name'}",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
                     height: 8,
-                  ),
-                  Text(
-                    "${violation.regulationName ?? 'Regulation name'}",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,16 +160,7 @@ class ViolationCreateCard extends StatelessWidget {
       elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {
-          // showMaterialModalBottomSheet(
-          //   expand: false,
-          //   context: context,
-          //   backgroundColor: Colors.transparent,
-          //   builder: (context) => ViolationModalFit(
-          //     violation: violation,
-          //   ),
-          // );
-        },
+        onTap: () {},
         child: ClipPath(
           clipper: ShapeBorderClipper(
             shape: RoundedRectangleBorder(
@@ -180,7 +179,6 @@ class ViolationCreateCard extends StatelessWidget {
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Expanded(
                         flex: 3,
@@ -189,6 +187,7 @@ class ViolationCreateCard extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text('#' + (position + 1).toString()),
                               SizedBox(
                                 height: 16,
                               ),

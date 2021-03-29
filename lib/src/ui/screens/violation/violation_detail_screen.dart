@@ -117,11 +117,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                           children: [
                             Container(
                               child: Text(
-                                S.of(context).VIOLATION +
-                                    ' ' +
-                                    S.of(context).OF +
-                                    ' ' +
-                                    '${violation?.regulationName}',
+                                '${violation?.name ?? 'violation name'}',
                                 style: TextStyle(
                                   color: theme.primaryColor,
                                   fontSize: theme.textTheme.headline5.fontSize,

@@ -22,7 +22,6 @@ class ViolationCreateEditForm extends StatefulWidget {
     @required this.isEditing,
     @required this.successCallBack,
     this.bloc,
-    // @required this.destinationScreen,
   }) : super(key: key);
 
   final Violation violation;
@@ -30,7 +29,6 @@ class ViolationCreateEditForm extends StatefulWidget {
   final bool isEditing;
   final Function successCallBack;
   final bloc;
-  // final String destinationScreen;
 
   @override
   _ViolationCreateEditFormState createState() =>
@@ -80,7 +78,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                 ' ' +
                 S.of(context).POPUP_UPDATE_SUCCESS,
           ).then((value) {
-            // Navigator.pop(context);
             if (widget.bloc != null) {
               var bloc = BlocProvider.of<ViolationCreateBloc>(context);
               widget.bloc.add(ViolationByDemandUpdated(
@@ -97,10 +94,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
 
             widget.successCallBack(
               context,
-              // widget.bloc,
             );
-            // Navigator.of(context)
-            //     .popUntil(ModalRoute.withName('/${widget.destinationScreen}'));
           });
         }
         if (state.status.isSubmissionInProgress) {
@@ -136,11 +130,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
               // action button
               Container(
                 child: Text(
-                  S.of(context).VIOLATION +
-                      ' ' +
-                      S.of(context).OF +
-                      ' ' +
-                      '${widget.violation.regulationName}',
+                  '${widget.violation.name}',
                   overflow: TextOverflow.visible,
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,

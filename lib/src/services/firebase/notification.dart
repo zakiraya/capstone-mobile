@@ -13,16 +13,18 @@ class FirebaseNotification {
 
   static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   static List<firebaseMessage.Message> messages = [];
-  static String topic = '';
+  static List<String> topics = List();
   static FlutterLocalNotificationsPlugin notificationPlugin;
 
   static Future notificationSelected(String payload) async {}
 
   static void unsubscribeFromTopic() {
-    if (topic.isNotEmpty) {
+    if (topics.isNotEmpty) {
       print("unsubscribeFromTopic");
-      print(topic);
-      firebaseMessaging.unsubscribeFromTopic(topic);
+      print(topics.toString());
+      topics.forEach((topic) {
+        firebaseMessaging.unsubscribeFromTopic(topic);
+      });
     }
   }
 
@@ -39,11 +41,13 @@ class FirebaseNotification {
   static Future configFirebaseMessaging(NavigatorState navigator) async {
     initilizeNotification();
 
-    if (topic.isNotEmpty) {
+    if (topics.isNotEmpty) {
       print("subscribeToTopic");
-      print(topic);
+      print(topics.length);
 
-      firebaseMessaging.subscribeToTopic(topic);
+      topics.forEach((topic) {
+        firebaseMessaging.subscribeToTopic(topic);
+      });
 
       firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {

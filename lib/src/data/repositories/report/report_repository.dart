@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 import 'package:capstone_mobile/src/data/models/report/report.dart';
 import 'package:capstone_mobile/src/data/repositories/report/report_api.dart';
-import 'package:capstone_mobile/src/data/repositories/violation/violation_repository.dart';
 
 class ReportRepository {
   ReportRepository();
@@ -28,33 +27,6 @@ class ReportRepository {
       date: date,
       sort: sort,
     );
-  }
-
-  Future<String> createReport({
-    @required String token,
-    @required Report report,
-    bool isDraft = true,
-  }) async {
-    if (report == null) {
-      return 'fail';
-    }
-
-    isDraft
-        ? report = report.copyWith(status: 'Draft')
-        : report = report.copyWith(status: 'Pending');
-
-    ViolationRepository violationRepository = ViolationRepository();
-
-    report.violations.forEach((violation) {
-      violation.branchId = report.branchId;
-    });
-
-    var violation = await violationRepository.createViolations(
-      token: token,
-      violations: report.violations,
-    );
-
-    return violation;
   }
 
   Future<String> editReport({

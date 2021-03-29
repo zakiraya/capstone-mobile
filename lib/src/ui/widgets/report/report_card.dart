@@ -21,6 +21,7 @@ class ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Card(
       elevation: 5,
       child: InkWell(
@@ -48,7 +49,7 @@ class ReportCard extends StatelessWidget {
             ),
           ),
           child: Container(
-            height: 100,
+            height: size.height * 0.17,
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
@@ -62,36 +63,42 @@ class ReportCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        // "${report.branchName ?? "branch name"}",
-                        '',
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontWeight: FontWeight.w600,
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '',
+                              style: TextStyle(
+                                color: Colors.grey[400],
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "${report.status ?? "Status"}",
+                              style: TextStyle(
+                                color:
+                                    Constant.reportStatusColors[report.status],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Text(
-                        "${report.status ?? "Status"}",
-                        style: TextStyle(
-                          color: Constant.reportStatusColors[report.status],
+                        SizedBox(
+                          height: 8,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "${report?.name ?? "Report name"}",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                        Text(
+                          "${report?.name ?? "Report name"}",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.visible,
+                        ),
+                      ]),
                   SizedBox(
                     height: 16,
                   ),
