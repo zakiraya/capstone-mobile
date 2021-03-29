@@ -17,6 +17,7 @@ class Violation extends Equatable {
   final String excuse;
   final int reportId;
   final int createdBy;
+  final String creatorName;
 
   Violation({
     this.id,
@@ -34,6 +35,7 @@ class Violation extends Equatable {
     this.excuse,
     this.reportId,
     this.createdBy,
+    this.creatorName,
   });
 
   @override
@@ -51,6 +53,7 @@ class Violation extends Equatable {
         imagePaths,
         assets,
         excuse,
+        creatorName,
         createdBy,
       ];
 
@@ -68,6 +71,8 @@ class Violation extends Equatable {
       excuse: json['excuse'],
       reportId: json['report']['id'] as int,
       createdBy: json['createdBy']['id'] as int,
+      creatorName:
+          json['createdBy']['firstName'] + ' ' + json['createdBy']['lastName'],
       imagePaths:
           List<String>.from(json['evidence'].map((e) => e['imagePath'])),
     );

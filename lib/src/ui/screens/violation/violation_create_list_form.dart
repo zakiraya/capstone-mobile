@@ -70,7 +70,6 @@ class ViolationListForm extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ListView(
             children: [
-              // DropdownFieldBranch(),
               DropdownFieldReport(),
               SizedBox(
                 height: 16,

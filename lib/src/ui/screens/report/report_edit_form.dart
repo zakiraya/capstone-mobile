@@ -123,11 +123,26 @@ class ReportEditForm extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
+                        S.of(context).TOTAL +
+                            ' ' +
+                            S.of(context).MINUS_POINT.toLowerCase() +
+                            ':',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(report.totalMinusPoint != 0
+                        ? report.totalMinusPoint?.toString()
+                        : 'N/A'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(
                         S.of(context).BRANCH + ':',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Text(report.branchName ?? 'branch name'),
+                    Text(report.branchName ?? 'N/A'),
                     SizedBox(
                       height: 16,
                     ),
@@ -135,12 +150,12 @@ class ReportEditForm extends StatelessWidget {
                       child: Text(S.of(context).CREATED_ON + ": ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Text(report?.updatedAt != null
+                    Text(report?.createdAt != null
                         ? DateFormat.yMMMd(
                                 BlocProvider.of<LocalizationBloc>(context)
                                     .state)
                             .format(report.createdAt)
-                        : 'created on'),
+                        : 'N/A'),
                     SizedBox(
                       height: 16,
                     ),
@@ -174,7 +189,7 @@ class ReportEditForm extends StatelessWidget {
                         minHeight: 24,
                       ),
                       child: Container(
-                        child: Text(report?.description ?? ''),
+                        child: Text(report?.description ?? 'N/A'),
                       ),
                     ),
                     SizedBox(
@@ -190,10 +205,11 @@ class ReportEditForm extends StatelessWidget {
                       height: 4,
                     ),
                     BlocProvider.of<AuthenticationBloc>(context)
-                                .state
-                                .user
-                                .roleName ==
-                            Constant.ROLE_QC
+                                    .state
+                                    .user
+                                    .roleName ==
+                                Constant.ROLE_QC &&
+                            report.status == ReportStatusConstant.OPENING
                         ? _ReportQCNote(
                             qcNote: report.qcNote,
                             isEditing: isEditing,
@@ -204,10 +220,29 @@ class ReportEditForm extends StatelessWidget {
                               minHeight: 24,
                             ),
                             child: Container(
-                              child: Text(report?.qcNote ??
-                                  S.of(context).THERE_NOT_QCNOTE_YET),
+                              child: Text(report?.qcNote ?? S.of(context).NA),
                             ),
                           ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      child: Text(
+                        S.of(context).ADMIN_NOTE + ": ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: double.infinity,
+                        minHeight: 24,
+                      ),
+                      child: Container(
+                        child: Text(
+                          report?.adminNote ?? S.of(context).NA,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -215,7 +250,8 @@ class ReportEditForm extends StatelessWidget {
                 height: 16,
               ),
               Container(
-                child: Text(S.of(context).HOME_VIOLATION_LIST + ": ",
+                child: Text(
+                    S.of(context).List + " " + S.of(context).VIOLATION + 's: ',
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               SizedBox(
@@ -306,6 +342,7 @@ class _ReportQCNote extends StatelessWidget {
             ),
           ),
           onChanged: (newValue) {
+            print(newValue);
             context.read<ReportCreateBloc>().add(
                   ReportDescriptionChanged(
                     reportDescription: newValue,

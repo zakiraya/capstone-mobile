@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:capstone_mobile/src/blocs/login/login_bloc.dart';
 import 'package:capstone_mobile/generated/l10n.dart';
-import 'package:capstone_mobile/src/blocs/localization/localization_bloc.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -16,9 +15,11 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                  content: Text(state.message == null
-                      ? 'Authentication Failure'
-                      : state.message)),
+                  content: Text(
+                state.message == null
+                    ? 'Authentication Failure'
+                    : state.message,
+              )),
             );
         }
       },
@@ -110,6 +111,7 @@ class _LoginButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : Container(
+                height: 48,
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 80),
                 child: ElevatedButton(

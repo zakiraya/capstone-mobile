@@ -170,7 +170,8 @@ class ViolationCreateCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: Colors.grey[200], width: 5),
+                left: BorderSide(
+                    color: Constant.violationStatusColors['Opening'], width: 5),
               ),
             ),
             child: Padding(

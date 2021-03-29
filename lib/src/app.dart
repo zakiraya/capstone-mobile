@@ -170,6 +170,8 @@ class _AppViewState extends State<AppView> {
                     ),
                   );
 
+                  print(Localizations.localeOf(context).toString());
+
                   return BlocListener<AuthenticationBloc, AuthenticationState>(
                     listener: (context, state) {
                       switch (state.status) {

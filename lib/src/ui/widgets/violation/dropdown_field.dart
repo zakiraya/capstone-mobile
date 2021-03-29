@@ -108,6 +108,7 @@ class _DropdownFieldReportState extends State<DropdownFieldReport> {
     try {
       var reports = await _branchRepository.fetchReports(
         token: BlocProvider.of<AuthenticationBloc>(context).state.token,
+        status: 'Opening',
       );
 
       if (this.mounted) {

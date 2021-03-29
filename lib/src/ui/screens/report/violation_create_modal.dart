@@ -222,7 +222,7 @@ class _ModalBodyState extends State<ModalBody> {
                               style: ElevatedButton.styleFrom(
                                 elevation: 5.0,
                                 primary: Theme.of(context).primaryColor,
-                                padding: EdgeInsets.symmetric(horizontal: 24),
+                                padding: EdgeInsets.symmetric(horizontal: 48),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
                                 ),
@@ -324,12 +324,21 @@ class _ViolationDescriptionInput extends StatelessWidget {
           return TextFormField(
             initialValue: initValue ?? '',
             key: const Key('violationForm_violationDescriptionInput_textField'),
-            onChanged: (violationDescription) =>
+            onChanged: (violationDescription) {
+              if (violationDescription.isNotEmpty) {
                 context.read<ViolationCreateBloc>().add(
                       ViolationDescriptionChanged(
                         violationDescription: violationDescription,
                       ),
-                    ),
+                    );
+              } else if (violationDescription.isEmpty) {
+                context.read<ViolationCreateBloc>().add(
+                      ViolationDescriptionChanged(
+                        violationDescription: null,
+                      ),
+                    );
+              }
+            },
             decoration: InputDecoration(
               fillColor: Colors.grey[200],
               filled: true,

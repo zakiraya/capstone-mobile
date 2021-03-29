@@ -14,10 +14,13 @@
     "CREATED_ON": "Created on",
     "SUBMITTED_BY": "Submitted by",
     "MONTH": "Month",
+    "MINUS_POINT": "Minus point(s)",
+    "TOTAL": "Total",
     "UPDATED_ON": "Updated on",
     "REGULATION": "Regulation",
     "DESCRIPTION": "Description",
     "COMMENTS": "QC's note",
+    "ADMIN_NOTE": "Admin's note",
     "EVIDENCE": "Evidence",
     "NEW_VIOLATION": "New violation",
     "EDIT_VIOLATION": "Edit violation",
@@ -83,5 +86,7 @@
     "CHANGE_PASSWORD_SCREEN_EMPTY": "must not be empty",
     "THERE_ARE_NO_EVIDENCE": "There are no images for this violation",
     "THIS_FIELD_CANNOT_BE_EMPTY": "This field cannot be empty",
-    "THERE_NOT_QCNOTE_YET": "There is no QC's note yet."
+    "THERE_NOT_QCNOTE_YET": "There is no QC's note yet.",
+    "THERE_NOT_EXCUSE_YET": "There is no excusion note yet.",
+    "NA": "N/A"
 }

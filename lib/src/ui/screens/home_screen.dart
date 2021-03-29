@@ -76,7 +76,6 @@ class HomeView extends StatelessWidget {
     FirebaseNotification.topics.add(user.accountId.toString());
 
     if (user.roleName == Constant.ROLE_BM) {
-      print('user.roleName + user.branchId.toString()');
       FirebaseNotification.topics.add(
           user.roleName.replaceAll(new RegExp(r"\s+"), "") +
               user.branchId.toString());
@@ -125,14 +124,16 @@ class HomeView extends StatelessWidget {
                     transform: Matrix4.translationValues(0.0, 0, 0.0),
                     child: Text(
                       activeTab == AppTab.reports
-                          ? S.of(context).List +
+                          ? S.of(context).List.toUpperCase() +
                               ' ' +
-                              S.of(context).REPORT.toLowerCase()
+                              S.of(context).REPORT.toUpperCase()
                           : activeTab == AppTab.violations
-                              ? S.of(context).List +
+                              ? S.of(context).List.toUpperCase() +
                                   ' ' +
-                                  S.of(context).VIOLATION.toLowerCase()
-                              : '',
+                                  S.of(context).VIOLATION.toUpperCase()
+                              : activeTab == AppTab.settings
+                                  ? S.of(context).SETTINGS.toUpperCase()
+                                  : '',
                       style: TextStyle(
                         color: theme.primaryColor,
                         fontSize: 24,

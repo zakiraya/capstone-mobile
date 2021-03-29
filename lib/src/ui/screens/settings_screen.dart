@@ -111,7 +111,7 @@ class SettingsScreen extends StatelessWidget {
                         S.of(context).CHANGE_PASSWORD,
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
                       ),
@@ -145,8 +145,8 @@ class SettingsScreen extends StatelessWidget {
                           S.of(context).LANGUAGE,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Icon(
@@ -191,7 +191,7 @@ class SettingsScreen extends StatelessWidget {
                     child: Flag(
                       'VN',
                       height: 28,
-                      width: 28,
+                      width: 10,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -218,7 +218,8 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         CircularCheckBox(
                             activeColor: Colors.green,
-                            value: activeLanguage == 'en_US',
+                            value: activeLanguage == 'en_US' ||
+                                activeLanguage == 'en',
                             onChanged: (value) {
                               context
                                   .read<LocalizationBloc>()
@@ -268,7 +269,7 @@ class SettingsScreen extends StatelessWidget {
                         S.of(context).LOGOUT,
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
                       ),

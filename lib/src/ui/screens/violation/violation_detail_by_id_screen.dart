@@ -51,9 +51,6 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.bloc != null) {
-      print(widget.bloc);
-    }
     var theme = Theme.of(context);
     return BlocBuilder<LocalizationBloc, String>(builder: (context, state) {
       return FutureBuilder(
@@ -154,7 +151,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                       children: [
                         Container(
                           child: Text(
-                            '${violation?.name ?? 'violation name'}',
+                            '${violation?.name ?? 'N/A'}',
                             style: TextStyle(
                               color: theme.primaryColor,
                               fontSize: 24,
@@ -195,7 +192,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Text(violation?.branchName ?? ''),
+                              Text(violation?.branchName ?? 'N/A'),
                               SizedBox(
                                 height: 16,
                               ),
@@ -211,7 +208,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                                     context)
                                                 .state)
                                         .format(violation?.createdAt) ??
-                                    '',
+                                    'N/A',
                               ),
                               SizedBox(
                                 height: 16,
@@ -242,7 +239,7 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                 ),
                                 child: Container(
                                   child: Text(violation?.excuse ??
-                                      'There is no excusion yet.'),
+                                      S.of(context).THERE_NOT_EXCUSE_YET),
                                 ),
                               ),
                               SizedBox(
@@ -272,9 +269,9 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                                child: Text(' - ' +
-                                                    S.of(context).EVIDENCE +
-                                                    ' ${index + 1} ')),
+                                              child:
+                                                  Text('#' + ' ${index + 1} '),
+                                            ),
                                             SizedBox(
                                               height: 8,
                                             ),

@@ -63,8 +63,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       NotificationIsRead event) async* {
     final currentState = state;
     if (currentState is NotificationLoadSuccess) {
+      print(event.id);
       notificationRepository.readNotification(
-          token: _authenticationRepository.token, id: event.id);
+        token: _authenticationRepository.token,
+        id: event.id,
+      );
       List<Notification> result = List<Notification>.from((currentState)
           .notifications
           .map((notification) => notification.id != event.id

@@ -117,7 +117,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                           children: [
                             Container(
                               child: Text(
-                                '${violation?.name ?? 'violation name'}',
+                                '${violation?.name ?? 'N/A'}',
                                 style: TextStyle(
                                   color: theme.primaryColor,
                                   fontSize: theme.textTheme.headline5.fontSize,
@@ -126,24 +126,48 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  child: Text(
-                                      S.of(context).VIOLATION_STATUS + ': '),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      child: Text(
+                                        'Created by: ' +
+                                                violation.creatorName ??
+                                            'Mavca',
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(''),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  child: Text(
-                                    "${violation?.status}",
-                                    style: TextStyle(
-                                        color: Constant.violationStatusColors[
-                                            violation?.status]),
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                          S.of(context).VIOLATION_STATUS +
+                                              ': '),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "${violation?.status ?? 'N/A'}",
+                                        style: TextStyle(
+                                            color:
+                                                Constant.violationStatusColors[
+                                                    violation?.status]),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                             Divider(
-                              color: Colors.black,
+                              color: Constant
+                                  .violationStatusColors[violation?.status],
                             ),
                             SizedBox(
                               height: 16,
@@ -159,7 +183,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Text(violation?.branchName ?? ''),
+                                  Text(violation?.branchName ?? 'N/A'),
                                   SizedBox(
                                     height: 16,
                                   ),
@@ -191,8 +215,25 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                                       minWidth: double.infinity,
                                     ),
                                     child: Container(
-                                        child:
-                                            Text(violation?.description ?? '')),
+                                        child: Text(
+                                            violation?.description ?? 'N/A')),
+                                  ),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    child: Text(S.of(context).EXCUSE + ':',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minWidth: double.infinity,
+                                    ),
+                                    child: Container(
+                                      child: Text(violation?.excuse ??
+                                          S.of(context).THERE_NOT_EXCUSE_YET),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 16,
@@ -224,8 +265,7 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                    child: Text(' - ' +
-                                                        S.of(context).EVIDENCE +
+                                                    child: Text('#' +
                                                         ' ${index + 1} ')),
                                                 SizedBox(
                                                   height: 8,

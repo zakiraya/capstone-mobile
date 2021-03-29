@@ -185,6 +185,26 @@ class S {
     );
   }
 
+  /// `Minus point(s)`
+  String get MINUS_POINT {
+    return Intl.message(
+      'Minus point(s)',
+      name: 'MINUS_POINT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get TOTAL {
+    return Intl.message(
+      'Total',
+      name: 'TOTAL',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Updated on`
   String get UPDATED_ON {
     return Intl.message(
@@ -220,6 +240,16 @@ class S {
     return Intl.message(
       'QC\'s note',
       name: 'COMMENTS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admin's note`
+  String get ADMIN_NOTE {
+    return Intl.message(
+      'Admin\'s note',
+      name: 'ADMIN_NOTE',
       desc: '',
       args: [],
     );
@@ -880,6 +910,26 @@ class S {
     return Intl.message(
       'There is no QC\'s note yet.',
       name: 'THERE_NOT_QCNOTE_YET',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no excusion note yet.`
+  String get THERE_NOT_EXCUSE_YET {
+    return Intl.message(
+      'There is no excusion note yet.',
+      name: 'THERE_NOT_EXCUSE_YET',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N/A`
+  String get NA {
+    return Intl.message(
+      'N/A',
+      name: 'NA',
       desc: '',
       args: [],
     );

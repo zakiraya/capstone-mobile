@@ -15,13 +15,14 @@ class LoginScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
         child: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overscroll) {
             overscroll.disallowGlow();
           },
           child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             children: [
               SizedBox(
                 height: size.height * 0.2,
@@ -42,6 +43,14 @@ class LoginScreen extends StatelessWidget {
                   );
                 },
                 child: LoginForm(),
+              ),
+              Container(
+                height: 240,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage('assets/login.png'),
+                )),
               ),
             ],
           ),

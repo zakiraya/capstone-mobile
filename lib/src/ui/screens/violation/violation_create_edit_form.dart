@@ -310,9 +310,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                           images.removeAt(index);
                           _imagePaths.removeAt(index);
                         });
-                        print('String');
-                        print(_imagePaths.length.toString());
-                        print(images.length.toString());
                       }
                     },
                     child: Container(
@@ -358,8 +355,6 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
                     setState(() {
                       images.removeAt(index);
                       _assets.removeAt(images.length - _imagePaths.length - 1);
-                      print('asset');
-                      print((images.length - _imagePaths.length).toString());
                     });
                   },
                   child: Container(
@@ -482,11 +477,19 @@ class __ViolationDescriptionInputState
             initialValue: widget.initValue ?? '',
             key: const Key('violationForm_violationDescriptionInput_textField'),
             onChanged: (violationDescription) {
-              context.read<ViolationCreateBloc>().add(
-                    ViolationDescriptionChanged(
-                      violationDescription: violationDescription,
-                    ),
-                  );
+              if (violationDescription.isEmpty) {
+                context.read<ViolationCreateBloc>().add(
+                      ViolationDescriptionChanged(
+                        violationDescription: null,
+                      ),
+                    );
+              } else if (violationDescription.isNotEmpty) {
+                context.read<ViolationCreateBloc>().add(
+                      ViolationDescriptionChanged(
+                        violationDescription: violationDescription,
+                      ),
+                    );
+              }
             },
             style: TextStyle(fontSize: 14),
             decoration: InputDecoration(

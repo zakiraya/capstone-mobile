@@ -22,9 +22,11 @@ class FirebaseNotification {
     if (topics.isNotEmpty) {
       print("unsubscribeFromTopic");
       print(topics.toString());
-      topics.forEach((topic) {
-        firebaseMessaging.unsubscribeFromTopic(topic);
-      });
+      // topics.forEach((topic) {
+      //   firebaseMessaging.unsubscribeFromTopic(topic);
+      // });
+      topics.clear();
+      // topics = List();
     }
   }
 

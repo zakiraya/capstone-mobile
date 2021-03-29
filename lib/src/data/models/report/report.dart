@@ -13,6 +13,9 @@ class Report extends Equatable {
   final int createdBy;
   final List<Violation> violations;
   final String qcNote;
+  final int totalMinusPoint;
+  final String assigneeName;
+  final String adminNote;
 
   Report({
     this.id,
@@ -26,6 +29,9 @@ class Report extends Equatable {
     this.createdBy,
     this.violations,
     this.qcNote,
+    this.totalMinusPoint,
+    this.assigneeName,
+    this.adminNote,
   });
 
   List<Map<String, dynamic>> convertListViolationToMap(
@@ -79,6 +85,11 @@ class Report extends Equatable {
       status: json['status'],
       violations: json['violationCreate'],
       qcNote: json['qcNote'],
+      totalMinusPoint: json['totalMinusPoint'],
+      assigneeName: json['assigneeNavigation']['firstName'] +
+          ' ' +
+          json['assigneeNavigation']['lastName'],
+      adminNote: json['adminNote'],
     );
   }
 
@@ -100,6 +111,7 @@ class Report extends Equatable {
       violations: violations ?? this.violations,
       id: id ?? this.id,
       qcNote: qcNote ?? this.qcNote,
+      totalMinusPoint: this.totalMinusPoint,
     );
   }
 
@@ -112,5 +124,6 @@ class Report extends Equatable {
         description,
         createdBy,
         qcNote,
+        totalMinusPoint,
       ];
 }

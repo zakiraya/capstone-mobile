@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Thêm hình"),
+    "ADMIN_NOTE" : MessageLookupByLibrary.simpleMessage("Admin ghi chú"),
     "BACK" : MessageLookupByLibrary.simpleMessage("Quay về"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("thuộc"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Chi nhánh"),
@@ -62,7 +63,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "LOGIN" : MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "LOGOUT" : MessageLookupByLibrary.simpleMessage("Đăng xuất"),
     "List" : MessageLookupByLibrary.simpleMessage("Danh sách"),
+    "MINUS_POINT" : MessageLookupByLibrary.simpleMessage("điểm trừ"),
     "MONTH" : MessageLookupByLibrary.simpleMessage("Tháng"),
+    "NA" : MessageLookupByLibrary.simpleMessage("N/A"),
     "NEW_VIOLATION" : MessageLookupByLibrary.simpleMessage("Thêm vi phạm"),
     "NO" : MessageLookupByLibrary.simpleMessage("Hủy"),
     "NOTIFICATION" : MessageLookupByLibrary.simpleMessage("Thông báo"),
@@ -87,8 +90,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "SUCCESS" : MessageLookupByLibrary.simpleMessage("thành công"),
     "THERE_ARE_NO_EVIDENCE" : MessageLookupByLibrary.simpleMessage("Không có hình ảnh cho vi phạm này"),
     "THERE_IS_NO" : MessageLookupByLibrary.simpleMessage("Không có"),
+    "THERE_NOT_EXCUSE_YET" : MessageLookupByLibrary.simpleMessage("Chưa có bào chữa."),
     "THERE_NOT_QCNOTE_YET" : MessageLookupByLibrary.simpleMessage("Chưa có ghi chú của QC."),
     "THIS_FIELD_CANNOT_BE_EMPTY" : MessageLookupByLibrary.simpleMessage("Trường này không được để trống!"),
+    "TOTAL" : MessageLookupByLibrary.simpleMessage("Tổng"),
     "UPDATED_ON" : MessageLookupByLibrary.simpleMessage("Ngày sửa đổi"),
     "VIOLATION" : MessageLookupByLibrary.simpleMessage("Vi phạm"),
     "VIOLATION_CREATE_MODAL_ADD" : MessageLookupByLibrary.simpleMessage("Thêm"),

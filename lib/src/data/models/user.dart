@@ -19,7 +19,7 @@ class User extends Equatable {
     this.accountId,
   });
 
-  final String id;
+  final int id;
   final String email;
   final String code;
   final String firstName;
@@ -45,6 +45,7 @@ class User extends Equatable {
   static User fromJson(dynamic json) {
     final userInfo = json['data'];
     return User(
+      id: userInfo['id'] as int,
       accountId: userInfo['account']['id'],
       email: userInfo['email'],
       code: userInfo['code'],

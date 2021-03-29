@@ -72,14 +72,14 @@ class ReportCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '',
+                              '${report.assigneeName ?? 'N/A'}',
                               style: TextStyle(
-                                color: Colors.grey[400],
+                                color: Color(0xffBDBDBD),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              "${report.status ?? "Status"}",
+                              "${report.status ?? "N/A"}",
                               style: TextStyle(
                                 color:
                                     Constant.reportStatusColors[report.status],
@@ -91,7 +91,7 @@ class ReportCard extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          "${report?.name ?? "Report name"}",
+                          "${report?.name ?? "N/A"}",
                           style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
@@ -105,13 +105,23 @@ class ReportCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(""),
+                      Text(
+                        report.totalMinusPoint > 0
+                            ? '${report.totalMinusPoint}' +
+                                ' ' +
+                                S.of(context).MINUS_POINT.toLowerCase()
+                            : '',
+                        style: TextStyle(
+                          color: Color(0xffEB5757),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Text(
                         report?.createdAt != null
                             ? S.of(context).CREATED_ON +
                                 ': '
-                                    "${DateFormat.yMMMd(BlocProvider.of<LocalizationBloc>(context).state).format(report?.createdAt)}"
-                            : '',
+                                    "${DateFormat.yMd(BlocProvider.of<LocalizationBloc>(context).state).format(report?.createdAt)}"
+                            : 'N/A',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[400],

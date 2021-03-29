@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "ADD_IMAGE" : MessageLookupByLibrary.simpleMessage("Add image"),
+    "ADMIN_NOTE" : MessageLookupByLibrary.simpleMessage("Admin\'s note"),
     "BACK" : MessageLookupByLibrary.simpleMessage("Back"),
     "BELONGS_TO" : MessageLookupByLibrary.simpleMessage("belongs to"),
     "BRANCH" : MessageLookupByLibrary.simpleMessage("Branch"),
@@ -62,7 +63,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "LOGIN" : MessageLookupByLibrary.simpleMessage("Log in"),
     "LOGOUT" : MessageLookupByLibrary.simpleMessage("Log out"),
     "List" : MessageLookupByLibrary.simpleMessage("List"),
+    "MINUS_POINT" : MessageLookupByLibrary.simpleMessage("Minus point(s)"),
     "MONTH" : MessageLookupByLibrary.simpleMessage("Month"),
+    "NA" : MessageLookupByLibrary.simpleMessage("N/A"),
     "NEW_VIOLATION" : MessageLookupByLibrary.simpleMessage("New violation"),
     "NO" : MessageLookupByLibrary.simpleMessage("No"),
     "NOTIFICATION" : MessageLookupByLibrary.simpleMessage("Notifications"),
@@ -87,8 +90,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "SUCCESS" : MessageLookupByLibrary.simpleMessage("success"),
     "THERE_ARE_NO_EVIDENCE" : MessageLookupByLibrary.simpleMessage("There are no images for this violation"),
     "THERE_IS_NO" : MessageLookupByLibrary.simpleMessage("There is no"),
+    "THERE_NOT_EXCUSE_YET" : MessageLookupByLibrary.simpleMessage("There is no excusion note yet."),
     "THERE_NOT_QCNOTE_YET" : MessageLookupByLibrary.simpleMessage("There is no QC\'s note yet."),
     "THIS_FIELD_CANNOT_BE_EMPTY" : MessageLookupByLibrary.simpleMessage("This field cannot be empty"),
+    "TOTAL" : MessageLookupByLibrary.simpleMessage("Total"),
     "UPDATED_ON" : MessageLookupByLibrary.simpleMessage("Updated on"),
     "VIOLATION" : MessageLookupByLibrary.simpleMessage("Violation"),
     "VIOLATION_CREATE_MODAL_ADD" : MessageLookupByLibrary.simpleMessage("Add"),

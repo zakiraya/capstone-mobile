@@ -16,7 +16,10 @@
     "UPDATED_ON": "Ngày sửa đổi",
     "SUBMITTED_BY": "Được gửi bởi",
     "MONTH": "Tháng",
+    "MINUS_POINT": "điểm trừ",
+    "TOTAL": "Tổng",
     "COMMENTS": "QC ghi chú",
+    "ADMIN_NOTE": "Admin ghi chú",
     "DESCRIPTION": "Mô tả",
     "EVIDENCE": "Bằng chứng",
     "NEW_VIOLATION": "Thêm vi phạm",
@@ -83,5 +86,7 @@
     "CHANGE_PASSWORD_SCREEN_EMPTY": "không được để trống",
     "THERE_ARE_NO_EVIDENCE": "Không có hình ảnh cho vi phạm này",
     "THIS_FIELD_CANNOT_BE_EMPTY": "Trường này không được để trống!",
-    "THERE_NOT_QCNOTE_YET": "Chưa có ghi chú của QC."
+    "THERE_NOT_QCNOTE_YET": "Chưa có ghi chú của QC.",
+    "THERE_NOT_EXCUSE_YET": "Chưa có bào chữa.",
+    "NA": "N/A"
 }
