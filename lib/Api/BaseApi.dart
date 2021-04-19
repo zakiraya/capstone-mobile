@@ -7,7 +7,7 @@ import 'Exceptions.dart';
 
 class BaseApi {
   // final String _baseUrl = "https://api-mavca.azurewebsites.net/v1/";
-  final String _baseUrl = "https://mavca-api.azurewebsites.net/v1/";
+  final String _baseUrl = "https://mavcahub-api.azurewebsites.net/v1/";
 
   Map<String, String> generateHeader(
     String token, [

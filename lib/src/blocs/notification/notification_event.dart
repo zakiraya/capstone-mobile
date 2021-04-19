@@ -8,9 +8,11 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class NotificationRequested extends NotificationEvent {
-  NotificationRequested();
+  NotificationRequested({this.isRefresh = false});
+
+  final bool isRefresh;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isRefresh];
 
   @override
   String toString() => ' NotificationRequested ';

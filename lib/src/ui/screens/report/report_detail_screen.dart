@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReportDetailScreen extends StatelessWidget {
-  // final Report report;
   final int id;
   final ReportByDemandBloc reportByDemandBloc;
 
@@ -31,7 +30,6 @@ class ReportDetailScreen extends StatelessWidget {
           name: "/ReportDetailScreen",
         ),
         builder: (_) => ReportDetailScreen(
-              // report: report,
               id: id,
               reportByDemandBloc: reportByDemandBloc,
             ));

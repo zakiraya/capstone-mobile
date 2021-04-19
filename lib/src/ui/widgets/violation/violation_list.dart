@@ -51,10 +51,15 @@ class LatestViolationList extends StatelessWidget {
           );
         }
 
-        return buildViolationList(
-          violations,
-          bloc: BlocProvider.of<ViolationByDemandBloc>(context),
-          screen: 'Home',
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...buildViolationList(
+              violations,
+              bloc: BlocProvider.of<ViolationByDemandBloc>(context),
+              screen: 'Home',
+            ),
+          ],
         );
       }
       return Container();
@@ -112,10 +117,25 @@ class ViolationByReportList extends StatelessWidget {
           );
         }
 
-        return buildViolationList(
-          violations,
-          bloc: BlocProvider.of<ViolationByDemandBloc>(context),
-          screen: screen,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text(
+                  S.of(context).THERE_ARE +
+                      " " +
+                      violations.length.toString() +
+                      ' ' +
+                      S.of(context).VIOLATIONS.toLowerCase() +
+                      ': ',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            ...buildViolationList(
+              violations,
+              bloc: BlocProvider.of<ViolationByDemandBloc>(context),
+              screen: screen,
+            ),
+          ],
         );
       }
       return Container();
@@ -123,7 +143,7 @@ class ViolationByReportList extends StatelessWidget {
   }
 }
 
-Widget buildViolationList(
+List<Widget> buildViolationList(
   List<Violation> violations, {
   bloc,
   screen,
@@ -138,10 +158,5 @@ Widget buildViolationList(
     );
     violationCards.add(card);
   }
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    child: Column(
-      children: [...violationCards],
-    ),
-  );
+  return violationCards;
 }

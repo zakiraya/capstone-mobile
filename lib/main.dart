@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
+  // SystemChrome.setEnabledSystemUIOverlays([]);
 
   runApp(App(
     authenticationRepository: AuthenticationRepository(

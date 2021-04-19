@@ -89,26 +89,35 @@ class ReportEditForm extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    child: Text(S.of(context).SUBMITTED_BY + ": "),
-                  ),
-                  Container(
-                      child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: S.of(context).VIOLATION_STATUS + ': ',
-                            style: TextStyle(
-                              color: Colors.black,
-                            )),
-                        TextSpan(
-                          text: report.status,
-                          style: TextStyle(
-                            color: Constant.reportStatusColors[report.status],
-                          ),
-                        ),
-                      ],
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Text(
+                      S.of(context).ASSIGNEE + ": " + report.assigneeName,
+                      overflow: TextOverflow.clip,
                     ),
-                  )),
+                  ),
+                  Expanded(
+                    child: Container(
+                        alignment: Alignment.topRight,
+                        child: RichText(
+                          overflow: TextOverflow.clip,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: S.of(context).VIOLATION_STATUS + ': ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  )),
+                              TextSpan(
+                                text: report.status,
+                                style: TextStyle(
+                                  color: Constant
+                                      .reportStatusColors[report.status],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
                 ],
               ),
               Divider(
@@ -249,14 +258,15 @@ class ReportEditForm extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Container(
-                child: Text(
-                    S.of(context).List + " " + S.of(context).VIOLATION + 's: ',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(
-                height: 4,
-              ),
+              // Container(
+              //   child: Text(
+              //       S.of(context).List +
+              //           " " +
+              //           S.of(context).VIOLATIONS.toLowerCase() +
+              //           ': ',
+              //       style: TextStyle(fontWeight: FontWeight.bold)),
+              // ),
+
               BlocProvider(
                 create: (context) => ViolationByDemandBloc(
                   authenticationRepository:

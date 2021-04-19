@@ -7,8 +7,11 @@
     "SETTINGS": "Settings",
     "List": "List",
     "REPORT": "Report",
+    "REPORTS": "Reports",
     "BRANCH": "Branch",
+    "ASSIGNEE": "Assignee",
     "VIOLATION": "Violation",
+    "VIOLATIONS": "Violations",
     "NOTIFICATION": "Notifications",
     "BELONGS_TO": "belongs to",
     "CREATED_ON": "Created on",
@@ -88,5 +91,6 @@
     "THIS_FIELD_CANNOT_BE_EMPTY": "This field cannot be empty",
     "THERE_NOT_QCNOTE_YET": "There is no QC's note yet.",
     "THERE_NOT_EXCUSE_YET": "There is no excusion note yet.",
+    "THERE_ARE": "There are",
     "NA": "N/A"
 }

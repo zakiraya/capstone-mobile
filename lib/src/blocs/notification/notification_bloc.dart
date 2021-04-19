@@ -36,16 +36,72 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> mapEventToState(
     NotificationEvent event,
   ) async* {
+    final currentState = state;
     if (event is NotificationRequested) {
-      try {
-        yield (NotificationLoadInProgress());
-        final notifications = await notificationRepository.fetchNotifications(
-          sort: 'desc createdAt',
-          token: _authenticationRepository.token,
-        );
+      // yield (NotificationLoadInProgress());
 
-        yield NotificationLoadSuccess(notifications: notifications);
+      try {
+        if (currentState is NotificationInitial) {
+          final notifications = await notificationRepository.fetchNotifications(
+            sort: 'desc createdAt',
+            token: _authenticationRepository.token,
+            page: 0,
+          );
+
+          yield NotificationLoadSuccess(
+            notifications: notifications,
+            hasReachedMax: notifications.length < 20 ? true : false,
+          );
+          return;
+        }
+
+        if (currentState is NotificationLoadFailure) {
+          final notifications = await notificationRepository.fetchNotifications(
+            sort: 'desc createdAt',
+            token: _authenticationRepository.token,
+            page: 0,
+          );
+
+          yield NotificationLoadSuccess(
+            notifications: notifications,
+            hasReachedMax: notifications.length < 20 ? true : false,
+          );
+          return;
+        }
+
+        if (currentState is NotificationLoadSuccess &&
+            event.isRefresh == true) {
+          final notifications = await notificationRepository.fetchNotifications(
+            sort: 'desc createdAt',
+            token: _authenticationRepository.token,
+            limit: currentState.notifications.length,
+          );
+
+          yield currentState.copyWith(
+            notifications: notifications,
+          );
+          return;
+        }
+
+        if (currentState is NotificationLoadSuccess &&
+            !_hasReachedMax(currentState)) {
+          final notifications = await notificationRepository.fetchNotifications(
+            sort: 'desc createdAt',
+            token: _authenticationRepository.token,
+          );
+
+          yield notifications.isEmpty
+              ? currentState.copyWith(
+                  hasReachedMax: true,
+                )
+              : currentState.copyWith(
+                  notifications: notifications + currentState.notifications,
+                  hasReachedMax: false,
+                );
+          return;
+        }
       } catch (e) {
+        print(e.toString());
         yield NotificationLoadFailure();
       }
     } else if (event is NotificationAuthenticationStatusChanged) {
@@ -63,7 +119,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       NotificationIsRead event) async* {
     final currentState = state;
     if (currentState is NotificationLoadSuccess) {
-      print(event.id);
       notificationRepository.readNotification(
         token: _authenticationRepository.token,
         id: event.id,
@@ -77,4 +132,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       yield NotificationLoadSuccess(notifications: result);
     }
   }
+
+  bool _hasReachedMax(NotificationLoadSuccess state) =>
+      state is NotificationLoadSuccess && state.hasReachedMax;
 }

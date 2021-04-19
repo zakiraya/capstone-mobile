@@ -12,12 +12,14 @@ class NotificationRepository {
     String sort,
     double page,
     int limit,
+    bool isRead,
   }) async {
     return await _notificationApi.getNotifications(
       token: token,
       page: page,
       limit: limit,
       sort: sort,
+      isRead: isRead,
     );
   }
 

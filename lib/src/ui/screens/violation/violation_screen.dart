@@ -142,7 +142,7 @@ class __ViolationListState extends State<_ViolationList> {
         }
 
         List<Violation> violations = state.violations;
-
+        print(violations.length.toString());
         return Expanded(
             child: NotificationListener<ScrollEndNotification>(
           onNotification: (scrollEnd) {

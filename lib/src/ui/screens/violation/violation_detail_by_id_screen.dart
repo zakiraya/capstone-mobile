@@ -160,18 +160,46 @@ class _ViolationDetailByIdScreenState extends State<ViolationDetailByIdScreen> {
                           ),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              child:
-                                  Text(S.of(context).VIOLATION_STATUS + ': '),
+                            Row(
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Text(
+                                    'Created by: ' + violation.creatorName ??
+                                        'Mavca',
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(''),
+                                ),
+                              ],
                             ),
-                            Container(
-                              child: Text(
-                                "${violation?.status}",
-                                style: TextStyle(
-                                    color: Constant.violationStatusColors[
-                                        violation?.status]),
+                            Expanded(
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                          S.of(context).VIOLATION_STATUS +
+                                              ': '),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "${violation?.status ?? 'N/A'}",
+                                        style: TextStyle(
+                                            color:
+                                                Constant.violationStatusColors[
+                                                    violation?.status]),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

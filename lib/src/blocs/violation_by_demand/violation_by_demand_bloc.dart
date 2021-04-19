@@ -44,8 +44,9 @@ class ViolationByDemandBloc
       yield (ViolationByDemandLoadInProgress());
       final violations = await _violationRepository.fetchViolations(
         token: _authenticationRepository.token,
-        date: event.date,
+        onDate: event.date,
         sort: 'desc createdAt',
+        limit: 50,
       );
       yield (ViolationByDemandLoadSuccess(violations: violations));
     } catch (e) {
@@ -62,6 +63,7 @@ class ViolationByDemandBloc
         token: _authenticationRepository.token,
         sort: 'desc createdAt',
         reportId: event.reportId,
+        limit: 100,
       );
       yield (ViolationByDemandLoadSuccess(violations: violations));
     } catch (e) {

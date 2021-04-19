@@ -35,8 +35,8 @@ class TabSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> _labels = [
       S.of(context).HOME,
-      S.of(context).REPORT,
-      S.of(context).VIOLATION,
+      S.of(context).REPORTS,
+      S.of(context).VIOLATIONS,
       S.of(context).SETTINGS,
     ];
     return BottomNavigationBar(

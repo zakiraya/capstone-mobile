@@ -7,8 +7,11 @@
     "SETTINGS": "Cài đặt",
     "List": "Danh sách",
     "REPORT": "Báo cáo",
+    "REPORTS": "Báo cáo",
     "BRANCH": "Chi nhánh",
+    "ASSIGNEE": "Người sửa đổi",
     "VIOLATION": "Vi phạm",
+    "VIOLATIONS": "Vi phạm",
     "NOTIFICATION": "Thông báo",
     "BELONGS_TO": "thuộc",
     "REGULATION": "Quy định",
@@ -88,5 +91,6 @@
     "THIS_FIELD_CANNOT_BE_EMPTY": "Trường này không được để trống!",
     "THERE_NOT_QCNOTE_YET": "Chưa có ghi chú của QC.",
     "THERE_NOT_EXCUSE_YET": "Chưa có bào chữa.",
+    "THERE_ARE": "Có",
     "NA": "N/A"
 }

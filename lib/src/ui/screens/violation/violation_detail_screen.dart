@@ -126,12 +126,14 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                               ),
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     Container(
-                                      width: 200,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
                                       child: Text(
                                         'Created by: ' +
                                                 violation.creatorName ??
@@ -144,24 +146,28 @@ class _ViolationDetailScreenState extends State<ViolationDetailScreen> {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                          S.of(context).VIOLATION_STATUS +
-                                              ': '),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        "${violation?.status ?? 'N/A'}",
-                                        style: TextStyle(
-                                            color:
-                                                Constant.violationStatusColors[
+                                Expanded(
+                                  child: Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          child: Text(
+                                              S.of(context).VIOLATION_STATUS +
+                                                  ': '),
+                                        ),
+                                        Container(
+                                          child: Text(
+                                            "${violation?.status ?? 'N/A'}",
+                                            style: TextStyle(
+                                                color: Constant
+                                                        .violationStatusColors[
                                                     violation?.status]),
-                                      ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
                             ),

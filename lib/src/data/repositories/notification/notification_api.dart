@@ -15,6 +15,7 @@ class NotificationApi {
     double page,
     int limit,
     String sort,
+    bool isRead,
     Map<String, String> opts,
   }) async {
     String url = notificationUrl + '?';
@@ -27,6 +28,9 @@ class NotificationApi {
     }
     if (limit != null) {
       url += '&Limit=$limit';
+    }
+    if (isRead != null) {
+      url += '&Filter.IsRead=$isRead';
     }
 
     final notificationJson = await _baseApi.get(url, token, opts: opts);

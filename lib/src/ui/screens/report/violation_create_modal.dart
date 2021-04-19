@@ -181,7 +181,7 @@ class _ModalBodyState extends State<ModalBody> {
                         : Container(),
                     buildGridView(_assets),
                     SizedBox(
-                      height: 24,
+                      height: 16,
                     ),
                     Center(
                       child: Builder(builder: (context) {

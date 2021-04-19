@@ -126,11 +126,11 @@ class HomeView extends StatelessWidget {
                       activeTab == AppTab.reports
                           ? S.of(context).List.toUpperCase() +
                               ' ' +
-                              S.of(context).REPORT.toUpperCase()
+                              S.of(context).REPORTS.toUpperCase()
                           : activeTab == AppTab.violations
                               ? S.of(context).List.toUpperCase() +
                                   ' ' +
-                                  S.of(context).VIOLATION.toUpperCase()
+                                  S.of(context).VIOLATIONS.toUpperCase()
                               : activeTab == AppTab.settings
                                   ? S.of(context).SETTINGS.toUpperCase()
                                   : '',

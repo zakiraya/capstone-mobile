@@ -74,7 +74,9 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
         final List<Report> reports = await reportRepository.fetchReports(
           token: _authenticationRepository.token,
           sort: 'desc createdAt',
-          limit: currentState.reports.length,
+          limit: currentState.reports.length == 0
+              ? 20
+              : currentState.reports.length,
           branchId: currentState.activeFilter.branchId,
           status: currentState.activeFilter.status,
           date: currentState.activeFilter.date,

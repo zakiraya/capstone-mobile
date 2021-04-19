@@ -13,19 +13,22 @@ class NotificationLoadInProgress extends NotificationState {}
 
 class NotificationLoadSuccess extends NotificationState {
   final List<Notification> notifications;
+  final bool hasReachedMax;
 
-  NotificationLoadSuccess({@required this.notifications});
+  NotificationLoadSuccess({@required this.notifications, this.hasReachedMax});
 
   NotificationLoadSuccess copyWith({
     List<Notification> notifications,
+    bool hasReachedMax,
   }) {
     return NotificationLoadSuccess(
       notifications: notifications ?? this.notifications,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
-  List<Object> get props => [notifications];
+  List<Object> get props => [notifications, hasReachedMax];
 
   @override
   String toString() =>

@@ -115,6 +115,16 @@ class S {
     );
   }
 
+  /// `Reports`
+  String get REPORTS {
+    return Intl.message(
+      'Reports',
+      name: 'REPORTS',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Branch`
   String get BRANCH {
     return Intl.message(
@@ -125,11 +135,31 @@ class S {
     );
   }
 
+  /// `Assignee`
+  String get ASSIGNEE {
+    return Intl.message(
+      'Assignee',
+      name: 'ASSIGNEE',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Violation`
   String get VIOLATION {
     return Intl.message(
       'Violation',
       name: 'VIOLATION',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Violations`
+  String get VIOLATIONS {
+    return Intl.message(
+      'Violations',
+      name: 'VIOLATIONS',
       desc: '',
       args: [],
     );
@@ -920,6 +950,16 @@ class S {
     return Intl.message(
       'There is no excusion note yet.',
       name: 'THERE_NOT_EXCUSE_YET',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are`
+  String get THERE_ARE {
+    return Intl.message(
+      'There are',
+      name: 'THERE_ARE',
       desc: '',
       args: [],
     );

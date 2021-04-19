@@ -266,7 +266,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
   }
 
   Widget buildGridView(List images) {
-    if (images != null)
+    if (images != null) {
       return GridView.count(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -377,7 +377,7 @@ class _ViolationCreateEditFormState extends State<ViolationCreateEditForm> {
           );
         }),
       );
-    else
+    } else
       return Container(color: Colors.white);
   }
 }
